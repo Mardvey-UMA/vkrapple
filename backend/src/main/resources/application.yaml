@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: backend
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/users_db
+    #url: jdbc:postgresql://auth_db/auth_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+
+webhook:
+  url: https://backend.localhost/api
+bot:
+  token: 6501382603:AAGYDgjoV718Z_1p7PSViCRI8H4zW7RnyB0
