@@ -8,14 +8,10 @@ import org.slf4j.LoggerFactory
 class UserController {
 
     private val logger = LoggerFactory.getLogger(UserController::class.java)
-
-    @GetMapping("/meid")
-    fun getInfo(@RequestHeader("X-Telegram-Init") initData: Any) {
-        logger.info(initData.toString())
-    }
-
+    
     @GetMapping("/me")
-    fun getInfo(@RequestAttribute("X-Telegram-User-Id") telegramId: Long): String {
+    fun getInfo(@RequestHeader("X-Telegram-User-Id") telegramId: Long): String {
+        logger.info("ЗАПРОС")
         logger.info(telegramId.toString())
         return "User ID: $telegramId"
     }

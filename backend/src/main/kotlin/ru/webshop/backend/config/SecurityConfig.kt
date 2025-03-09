@@ -11,14 +11,10 @@ class SecurityConfig {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
-//            allowedOrigins = listOf(
-//                "http://frontend.localhost",
-//                "https://frontend.localhost",
-//                "http://localhost:5173"
-//            )
             allowedOrigins = listOf("*")
             allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
             allowedHeaders = listOf("*")
+            exposedHeaders = listOf("X-Telegram-User-Id")
             allowCredentials = true
             maxAge = 3600
         }

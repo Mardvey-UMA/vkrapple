@@ -1,11 +1,14 @@
+import { initData } from '@telegram-apps/sdk-react'
 import axios from 'axios'
 
 const api = axios.create({ baseURL: '/api' })
 
 api.interceptors.request.use(config => {
-	const initData = localStorage.getItem('tg_init_data')
-	if (initData) {
-		config.headers['X-Telegram-Init'] = initData
+	initData.restore()
+	const rawData = initData.raw()
+	if (rawData) {
+		config.headers['X-Telegram-Init'] = rawData
+		console.log(rawData)
 	}
 	return config
 })
