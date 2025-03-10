@@ -1,7 +1,8 @@
 package ru.webshop.backend.filters
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.slf4j.LoggerFactory
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+// import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import ru.webshop.backend.security.TelegramUserPrincipal
@@ -9,120 +10,98 @@ import java.time.Instant
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.bouncycastle.crypto.digests.SHA256Digest
-import org.bouncycastle.crypto.macs.HMac
-import org.bouncycastle.crypto.params.KeyParameter
-import org.slf4j.Logger
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import ru.webshop.backend.security.TelegramAuthentication
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
+@Component
 class TelegramAuthFilter(
-    private val objectMapper: ObjectMapper,
+    private val objectMapper: ObjectMapper = ObjectMapper().apply {
+        propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
+    },
+    @Value("\${telegram.bot.token}")
     private val botToken: String,
+
 ) : OncePerRequestFilter() {
+
+    private val secretKey by lazy { generateSecretKey() }
+
+    private fun generateSecretKey(): ByteArray {
+        val hmac = Mac.getInstance("HmacSHA256")
+        hmac.init(SecretKeySpec("WebAppData".toByteArray(StandardCharsets.UTF_8), "HmacSHA256"))
+        return hmac.doFinal(botToken.toByteArray(StandardCharsets.UTF_8))
+    }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         chain: FilterChain
     ) {
-        val logger: Logger = LoggerFactory.getLogger(this::class.java)
+        // val logger = LoggerFactory.getLogger(TelegramAuthFilter::class.java)
         try {
             val authHeader = request.getHeader("Authorization")
-            logger.info("Authorization header: $authHeader")
             if (authHeader?.startsWith("tma ") == true) {
                 val initData = authHeader.substringAfter("tma ")
-                logger.debug("Processing Telegram init data: $initData")
+                val params = parseQueryString(initData)
+                val userBody = params["user"]
+                val hash = params["hash"]
 
-                val params = parseQueryParams(initData)
-                if (params["hash"] == null) {
-                    throw SecurityException("Missing hash parameter")
-                }
-                validateParams(params)
-
-                val user = parseUser(params["user"]!!)
-
-                SecurityContextHolder.getContext().authentication = TelegramAuthentication(
-                    TelegramUserPrincipal(
-                        id = user.id,
-                        authDate = Instant.ofEpochSecond(params["auth_date"]!!.toLong()),
-                        userJson = params["user"]!!
+                if (!userBody.isNullOrBlank() && !hash.isNullOrBlank() && validateTelegramAuth(params, hash)) {
+                    val user = objectMapper.readValue(userBody, UserData::class.java)
+                    SecurityContextHolder.getContext().authentication = TelegramAuthentication(
+                        TelegramUserPrincipal(
+                            id = user.id,
+                            authDate = Instant.ofEpochSecond(params["auth_date"]!!.toLong()),
+                            userJson = userBody
+                        )
                     )
-                )
+                } else {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid Telegram authentication")
+                    return
+                }
             }
         } catch (e: Exception) {
-            logger.error("Authentication failed: ${e.message}")
-            response.sendError(401, "Unauthorized: ${e.message}")
+            // logger.error("Authentication failed: ${e.message}", e)
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: ${e.message}")
             return
         }
         chain.doFilter(request, response)
     }
 
-    private fun parseQueryParams(query: String): Map<String, String> {
-        return query.split("&").associate {
+    private fun validateTelegramAuth(paramMap: Map<String, String>, receivedHash: String): Boolean {
+        val dataCheckString = paramMap.entries
+            .filter { it.key != "hash" }
+            .sortedBy { it.key }
+            .joinToString("\n") { "${it.key}=${it.value}" }
+
+//        logger.info("Data check string: $dataCheckString")
+
+        val hmac = Mac.getInstance("HmacSHA256").apply {
+            init(SecretKeySpec(secretKey, "HmacSHA256"))
+        }
+        val calculatedHash = bytesToHex(hmac.doFinal(dataCheckString.toByteArray(StandardCharsets.UTF_8)))
+
+//        logger.info("Calculated hash: $calculatedHash")
+//        logger.info("Received hash: $receivedHash")
+//        logger.info(calculatedHash.equals(receivedHash, ignoreCase = true))
+        return calculatedHash.equals(receivedHash, ignoreCase = true)
+    }
+
+    private fun parseQueryString(queryString: String): Map<String, String> {
+        return queryString.split("&").associate {
             val (key, value) = it.split("=", limit = 2)
-            key to value//URLDecoder.decode(value, "UTF-8")
-        }
-    }
-    private fun validateParams(params: Map<String, String>) {
-        require(params.containsKey("hash")) { "Missing hash in init data" }
-        require(params.containsKey("auth_date")) { "Missing auth_date" }
-        require(params.containsKey("user")) { "Missing user data" }
-
-        val dataCheckString = params
-            .filterKeys { it != "hash" }
-            .toSortedMap()
-            .entries.joinToString("\n") { "${it.key}=${it.value}" }
-
-        val secretKey = generateSecretKey()
-        val computedHash = calculateSignature(dataCheckString, secretKey)
-
-        logger.debug("DataCheckString: $dataCheckString")
-        logger.debug("Computed hash: $computedHash")
-        logger.debug("Received hash: ${params["hash"]}")
-
-        if (computedHash != params["hash"]) {
-            logger.info(computedHash)
-            logger.info(params["hash"])
-            logger.info(params["signature"])
-            throw SecurityException("Invalid signature")
-        }
-
-        val authDate = Instant.ofEpochSecond(params["auth_date"]!!.toLong())
-        if (authDate.isBefore(Instant.now().minusSeconds(3600))) {
-            throw SecurityException("Init data expired")
+            URLDecoder.decode(key, StandardCharsets.UTF_8) to
+                    URLDecoder.decode(value, StandardCharsets.UTF_8)
         }
     }
 
-    private fun parseUser(userJson: String): UserData {
-        logger.info(userJson)
-        return try {
-            objectMapper.readValue(userJson, UserData::class.java)
-        } catch (e: Exception) {
-            throw IllegalArgumentException("Invalid user JSON format")
-        }
+    private fun bytesToHex(bytes: ByteArray): String {
+        return bytes.joinToString("") { "%02x".format(it) }
     }
-    private fun generateSecretKey(): ByteArray {
-        val hmac = HMac(SHA256Digest())
-        hmac.init(KeyParameter("WebAppData".toByteArray(StandardCharsets.UTF_8)))
-        hmac.update(botToken.toByteArray(StandardCharsets.UTF_8), 0, botToken.length)
-        val secret = ByteArray(hmac.macSize)
-        hmac.doFinal(secret, 0)
-        return secret
-    }
-
-    private fun calculateSignature(dataCheckString: String, secretKey: ByteArray): String {
-        val hmac = HMac(SHA256Digest())
-        hmac.init(KeyParameter(secretKey))
-        hmac.update(dataCheckString.toByteArray(StandardCharsets.UTF_8), 0, dataCheckString.length)
-        val hash = ByteArray(hmac.macSize)
-        hmac.doFinal(hash, 0)
-        return hash.toHex()
-    }
-
-    fun ByteArray.toHex(): String =
-        joinToString("") { "%02x".format(it) }
 
     private data class UserData(val id: Long)
 }

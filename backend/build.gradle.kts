@@ -24,9 +24,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    implementation("org.bouncycastle:bcprov-jdk18on:1.77")
-    implementation("commons-codec:commons-codec:1.16.1")
-
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
