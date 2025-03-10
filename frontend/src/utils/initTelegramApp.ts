@@ -1,9 +1,8 @@
-import { init, initData, viewport } from '@telegram-apps/sdk-react'
+import { init, viewport } from '@telegram-apps/sdk-react'
 
 function initializeTelegramApp() {
 	try {
 		init()
-		initData.restore()
 		viewport.mount()
 		viewport.expand()
 	} catch (error) {

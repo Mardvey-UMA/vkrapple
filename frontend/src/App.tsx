@@ -19,9 +19,9 @@ export default function App() {
 	return (
 		<div>
 			{isLoading ? (
-				<div>Sending 3 requests...</div>
+				<div>Sending 1 requests...</div>
 			) : (
-				<div>All 3 requests completed successfully!</div>
+				<div>All 1 requests completed successfully!</div>
 			)}
 		</div>
 	)

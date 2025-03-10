@@ -17,7 +17,6 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_HOST_DOCKER: str
 
-    WEBHOOK_URL: str
     WEBAPP_URL: str
 
     @property

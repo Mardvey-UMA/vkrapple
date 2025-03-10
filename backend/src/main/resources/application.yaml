@@ -19,9 +19,8 @@ spring:
         format_sql: true
     database: postgresql
 
-webhook:
-  url: https://backend.localhost/api
-bot:
-  token: 7543101157:AAESvq4Mu3IHx-2gtkj4xJwktoohT9RbWqE
+telegram:
+  bot:
+    token: 7543101157:AAESvq4Mu3IHx-2gtkj4xJwktoohT9RbWqE
 dev:
   mode: true
