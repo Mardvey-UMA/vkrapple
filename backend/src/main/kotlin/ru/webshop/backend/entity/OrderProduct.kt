@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "_order_product")
 data class OrderProduct(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

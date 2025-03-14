@@ -2,7 +2,6 @@ package ru.webshop.backend.filters
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
-// import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
 import ru.webshop.backend.security.TelegramUserPrincipal
@@ -41,7 +40,6 @@ class TelegramAuthFilter(
         response: HttpServletResponse,
         chain: FilterChain
     ) {
-        // val logger = LoggerFactory.getLogger(TelegramAuthFilter::class.java)
         try {
             val authHeader = request.getHeader("Authorization")
             if (authHeader?.startsWith("tma ") == true) {
@@ -65,7 +63,6 @@ class TelegramAuthFilter(
                 }
             }
         } catch (e: Exception) {
-            // logger.error("Authentication failed: ${e.message}", e)
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: ${e.message}")
             return
         }
@@ -78,16 +75,10 @@ class TelegramAuthFilter(
             .sortedBy { it.key }
             .joinToString("\n") { "${it.key}=${it.value}" }
 
-//        logger.info("Data check string: $dataCheckString")
-
         val hmac = Mac.getInstance("HmacSHA256").apply {
             init(SecretKeySpec(secretKey, "HmacSHA256"))
         }
         val calculatedHash = bytesToHex(hmac.doFinal(dataCheckString.toByteArray(StandardCharsets.UTF_8)))
-
-//        logger.info("Calculated hash: $calculatedHash")
-//        logger.info("Received hash: $receivedHash")
-//        logger.info(calculatedHash.equals(receivedHash, ignoreCase = true))
         return calculatedHash.equals(receivedHash, ignoreCase = true)
     }
 

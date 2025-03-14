@@ -6,6 +6,7 @@ import java.time.Instant
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "cart")
 data class Cart(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

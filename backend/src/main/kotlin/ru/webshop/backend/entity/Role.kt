@@ -6,6 +6,7 @@ import ru.webshop.backend.enums.Roles
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "role")
 data class Role(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

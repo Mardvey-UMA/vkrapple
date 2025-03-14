@@ -9,6 +9,7 @@ import java.time.Instant
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "_order")
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

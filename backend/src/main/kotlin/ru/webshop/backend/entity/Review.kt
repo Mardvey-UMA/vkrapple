@@ -7,6 +7,7 @@ import java.time.Instant
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "review")
 data class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,7 +15,8 @@ import ru.webshop.backend.filters.TelegramHeaderFilter
 @EnableWebSecurity
 class SecurityConfig(
     private val objectMapper: ObjectMapper,
-    @Value("\${telegram.bot.token}") private val botToken: String,
+    @Value("\${telegram.bot.token}")
+    private val botToken: String,
     private val telegramHeaderFilter: TelegramHeaderFilter
 ) {
     @Bean

@@ -7,11 +7,12 @@ import java.time.Instant
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "wish_list")
 data class WishList(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
-    
+
     @Column(name = "add_date", nullable = false, updatable = false)
     val addDate: Instant = Instant.now()
 )

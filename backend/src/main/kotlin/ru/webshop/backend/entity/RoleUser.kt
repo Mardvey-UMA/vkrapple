@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "_user_role")
 data class RoleUser (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

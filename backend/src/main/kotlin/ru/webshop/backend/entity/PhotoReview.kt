@@ -5,6 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
+@Table(name = "photo_review")
 data class PhotoReview (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
