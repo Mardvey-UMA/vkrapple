@@ -27,6 +27,21 @@ data class User (
     @Column(name = "chat_id", nullable = false, unique = true)
     val chatId: Long,
 
+    @Column(name = "phone_number", nullable = true, unique = true)
+    val phoneNumber: String? = null,
+
+    @Column(name = "first_name", nullable = true, unique = true)
+    val firstName: String? = null,
+
+    @Column(name = "last_name", nullable = true, unique = true)
+    val lastName: String? = null,
+
+    @Column(name = "email", nullable = true, unique = true)
+    val email: String? = null,
+
+    @Column(name = "address", nullable = true)
+    val address: String? = null,
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: Instant = Instant.now()
