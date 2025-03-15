@@ -21,5 +21,13 @@ data class Photo (
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
+
+    // Связи
+
+    @OneToMany(mappedBy = "photo")
+    val productPhotos: List<PhotoProduct> = mutableListOf(),
+
+    @OneToMany(mappedBy = "photo")
+    val reviewPhotos: List<PhotoReview> = mutableListOf()
 )

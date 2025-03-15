@@ -44,5 +44,22 @@ data class User (
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
+
+    // Связи
+
+    @OneToMany(mappedBy = "_user")
+    val roles: List<RoleUser> = mutableListOf(),
+
+    @OneToMany(mappedBy = "_user")
+    val orders: List<Order> = mutableListOf(),
+
+    @OneToMany(mappedBy = "_user")
+    val reviews: List<Review> = mutableListOf(),
+
+    @OneToOne(mappedBy = "_user")
+    val cart: Cart? = null,
+
+    @OneToOne(mappedBy = "_user")
+    val wishList: WishList? = null
 )

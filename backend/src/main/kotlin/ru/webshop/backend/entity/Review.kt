@@ -21,5 +21,18 @@ data class Review(
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
+
+    // Связи
+
+    @OneToMany(mappedBy = "reciew")
+    val reviewPhotos: List<PhotoReview> = mutableListOf(),
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    val product: Product,
+
+    @ManyToOne
+    @JoinColumn(name = "_user_id")
+    val user: User,
 )

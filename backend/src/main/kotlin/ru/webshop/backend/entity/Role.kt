@@ -17,4 +17,9 @@ data class Role(
 
     @Column(name = "description")
     val description: String,
+
+    // Связи
+
+    @OneToMany(mappedBy = "role")
+    val roleUser: List<RoleUser> = mutableListOf(),
 )

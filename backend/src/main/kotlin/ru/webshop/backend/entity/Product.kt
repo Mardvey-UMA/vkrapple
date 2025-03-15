@@ -32,5 +32,27 @@ data class Product(
     @Column(name = "number_of_orders")
     var numberOfOrders: Int = 0,
 
+    // Связи
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    val category: Category,
+
+    @OneToMany(mappedBy = "product")
+    val photos: List<PhotoProduct> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product")
+    val values: List<Value> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product")
+    val orderProducts: List<OrderProduct> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product")
+    val reviews: List<Review> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product")
+    val carts: List<Cart> = mutableListOf(),
+
+    @OneToMany(mappedBy = "product")
+    val wishLists: List<WishList> = mutableListOf(),
     )

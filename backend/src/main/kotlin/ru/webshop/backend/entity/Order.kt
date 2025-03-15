@@ -32,5 +32,14 @@ data class Order(
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
+
+    // Связи
+
+    @OneToMany(mappedBy = "_order")
+    val orderProducts: MutableList<OrderProduct> = mutableListOf(),
+
+    @ManyToOne
+    @JoinColumn(name = "_user_id")
+    val user: User,
 )

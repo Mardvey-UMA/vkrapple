@@ -13,4 +13,14 @@ data class Value(
 
     @Column(name = "value", nullable = false)
     val value: String,
+
+    // Связи
+
+    @ManyToOne
+    @JoinColumn(name = "attribute_id")
+    val attribute: Attribute,
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    val product: Product,
 )

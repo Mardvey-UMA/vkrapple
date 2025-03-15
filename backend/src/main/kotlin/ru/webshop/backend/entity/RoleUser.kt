@@ -10,4 +10,14 @@ data class RoleUser (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
+
+    // Связи
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    val role: Role,
+
+    @ManyToOne
+    @JoinColumn(name = "_user_id")
+    val user: User,
 )

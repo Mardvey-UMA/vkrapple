@@ -17,4 +17,14 @@ data class Cart(
 
     @Column(name = "add_date")
     val addDate: Instant = Instant.now(),
+
+    // Связи
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    val product: Product,
+
+    @OneToOne
+    @JoinColumn(name = "_user_id")
+    val user: User
 )

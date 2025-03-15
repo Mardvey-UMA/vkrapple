@@ -13,5 +13,13 @@ data class Attribute (
 
     @Column(name = "attribute_name", nullable = false)
     val attributeName: String,
+
+    // Связи
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    val category: Category,
+
+    @OneToMany(mappedBy = "attribute")
+    val values: List<Value> = mutableListOf()
 )
-// TODO Связи

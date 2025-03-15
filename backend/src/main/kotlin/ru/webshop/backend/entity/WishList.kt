@@ -14,5 +14,15 @@ data class WishList(
     val id: Long,
 
     @Column(name = "add_date", nullable = false, updatable = false)
-    val addDate: Instant = Instant.now()
+    val addDate: Instant = Instant.now(),
+
+    // Связи
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    val product: Product,
+
+    @OneToOne
+    @JoinColumn(name = "_user_id")
+    val user: User
 )
