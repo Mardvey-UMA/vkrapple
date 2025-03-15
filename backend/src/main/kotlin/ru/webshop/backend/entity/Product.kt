@@ -2,10 +2,18 @@ package ru.webshop.backend.entity
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.math.BigDecimal
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-@Table(name = "product")
+@Table(
+    name = "product",
+    indexes = [
+        Index(name = "idx_product_category", columnList = "category_id"),
+        Index(name = "idx_product_rating", columnList = "rating"),
+        Index(name = "idx_product_article", columnList = "article_number", unique = true),
+        Index(name = "idx_product_price", columnList = "price")
+    ])
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +23,7 @@ data class Product(
     var name: String,
 
     @Column(name = "product_price", nullable = false)
-    var price: Double,
+    var price: BigDecimal,
 
     @Column(name = "balance_in_stock", nullable = false)
     val balanceInStock: Long,
@@ -34,7 +42,7 @@ data class Product(
 
     // Связи
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     val category: Category,
 

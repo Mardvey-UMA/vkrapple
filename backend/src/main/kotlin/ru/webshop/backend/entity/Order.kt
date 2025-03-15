@@ -5,11 +5,18 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import ru.webshop.backend.enums.OrderStatus
 import ru.webshop.backend.enums.PaymentMethods
+import java.math.BigDecimal
 import java.time.Instant
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-@Table(name = "_order")
+@Table(
+    name = "_order",
+    indexes = [
+        Index(name = "idx_order_user", columnList = "user_id"),
+        Index(name = "idx_order_created", columnList = "created_at"),
+        Index(name = "idx_order_status", columnList = "status")
+    ])
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,7 +26,7 @@ data class Order(
     var status: OrderStatus,
 
     @Column(name = "order_amount", nullable = false)
-    val orderAmount: Double,
+    val orderAmount: BigDecimal,
 
     @Column(name = "payment_method", nullable = false)
     val paymentMethod: PaymentMethods,
@@ -39,7 +46,7 @@ data class Order(
     @OneToMany(mappedBy = "_order")
     val orderProducts: MutableList<OrderProduct> = mutableListOf(),
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "_user_id")
     val user: User,
 )

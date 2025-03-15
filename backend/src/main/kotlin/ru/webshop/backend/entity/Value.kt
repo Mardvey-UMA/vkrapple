@@ -16,11 +16,11 @@ data class Value(
 
     // Связи
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attribute_id")
     val attribute: Attribute,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val product: Product,
 )

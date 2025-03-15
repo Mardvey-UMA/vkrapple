@@ -13,11 +13,11 @@ data class RoleUser (
 
     // Связи
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     val role: Role,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "_user_id")
     val user: User,
 )

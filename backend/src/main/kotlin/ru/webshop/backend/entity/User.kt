@@ -57,9 +57,9 @@ data class User (
     @OneToMany(mappedBy = "_user")
     val reviews: List<Review> = mutableListOf(),
 
-    @OneToOne(mappedBy = "_user")
+    @OneToOne(mappedBy = "_user", fetch = FetchType.LAZY)
     val cart: Cart? = null,
 
-    @OneToOne(mappedBy = "_user")
+    @OneToOne(mappedBy = "_user", fetch = FetchType.LAZY)
     val wishList: WishList? = null
 )

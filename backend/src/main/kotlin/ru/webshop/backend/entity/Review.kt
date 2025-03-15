@@ -25,14 +25,14 @@ data class Review(
 
     // Связи
 
-    @OneToMany(mappedBy = "reciew")
+    @OneToMany(mappedBy = "review")
     val reviewPhotos: List<PhotoReview> = mutableListOf(),
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val product: Product,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "_user_id")
     val user: User,
 )

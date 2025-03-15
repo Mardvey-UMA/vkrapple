@@ -16,7 +16,7 @@ data class Attribute (
 
     // Связи
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     val category: Category,
 

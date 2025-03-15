@@ -2,6 +2,7 @@ package ru.webshop.backend.entity
 
 import jakarta.persistence.*
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import java.math.BigDecimal
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
@@ -15,15 +16,15 @@ data class OrderProduct(
     val quantity: Long = 1,
 
     @Column(name = "amount", nullable = false)
-    val amount: Double,
+    val amount: BigDecimal,
 
     // Связи
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val product: Product,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     val order: Order,
 )
