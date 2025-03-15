@@ -28,7 +28,7 @@ data class Review(
     @OneToMany(mappedBy = "review")
     val reviewPhotos: List<PhotoReview> = mutableListOf(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     val product: Product,
 

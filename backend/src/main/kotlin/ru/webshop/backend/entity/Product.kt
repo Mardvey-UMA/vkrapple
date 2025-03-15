@@ -46,21 +46,21 @@ data class Product(
     @JoinColumn(name = "category_id")
     val category: Category,
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     val photos: List<PhotoProduct> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     val values: List<Value> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     val orderProducts: List<OrderProduct> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     val reviews: List<Review> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     val carts: List<Cart> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     val wishLists: List<WishList> = mutableListOf(),
     )

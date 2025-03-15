@@ -46,7 +46,7 @@ data class Order(
     @OneToMany(mappedBy = "_order")
     val orderProducts: MutableList<OrderProduct> = mutableListOf(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "_user_id")
     val user: User,
 )

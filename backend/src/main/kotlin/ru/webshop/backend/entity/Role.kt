@@ -20,6 +20,6 @@ data class Role(
 
     // Связи
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role",  fetch = FetchType.LAZY)
     val roleUser: List<RoleUser> = mutableListOf(),
 )
