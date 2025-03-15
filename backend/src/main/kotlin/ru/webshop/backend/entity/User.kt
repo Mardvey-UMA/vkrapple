@@ -48,8 +48,10 @@ data class User (
 
     // Связи
 
-    @OneToMany(mappedBy = "_user")
-    val roles: List<RoleUser> = mutableListOf(),
+        // Роли
+
+        @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+        var roles: MutableSet<Role> = mutableSetOf(),
 
     @OneToMany(mappedBy = "_user")
     val orders: List<Order> = mutableListOf(),
@@ -61,5 +63,10 @@ data class User (
     val cart: Cart? = null,
 
     @OneToOne(mappedBy = "_user", fetch = FetchType.LAZY)
-    val wishList: WishList? = null
+    val wishList: WishList? = null,
+
+    // Токены
+
+    @OneToMany(mappedBy = "_user", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val tokens: MutableSet<Token> = mutableSetOf(),
 )

@@ -1,5 +1,6 @@
 package ru.webshop.backend.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import ru.webshop.backend.enums.Roles
@@ -20,6 +21,9 @@ data class Role(
 
     // Связи
 
-    @OneToMany(mappedBy = "role",  fetch = FetchType.LAZY)
-    val roleUser: List<RoleUser> = mutableListOf(),
+        // Роли
+
+        @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "roles")
+        @JsonIgnore
+        private var users: MutableList<User> = mutableListOf(),
 )

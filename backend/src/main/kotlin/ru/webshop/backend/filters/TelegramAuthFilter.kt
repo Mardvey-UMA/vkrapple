@@ -11,7 +11,10 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import ru.webshop.backend.entity.User
 import ru.webshop.backend.security.TelegramAuthentication
+import ru.webshop.backend.service.UserService
+import ru.webshop.backend.utils.TelegramCodeUtils
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 import java.net.URLDecoder
@@ -22,18 +25,13 @@ class TelegramAuthFilter(
     private val objectMapper: ObjectMapper = ObjectMapper().apply {
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     },
-    @Value("\${telegram.bot.token}")
-    private val botToken: String,
+    private val userService: UserService,
 
-) : OncePerRequestFilter() {
+    private val telegramCodeUtils: TelegramCodeUtils,
 
-    private val secretKey by lazy { generateSecretKey() }
+    ) : OncePerRequestFilter() {
 
-    private fun generateSecretKey(): ByteArray {
-        val hmac = Mac.getInstance("HmacSHA256")
-        hmac.init(SecretKeySpec("WebAppData".toByteArray(StandardCharsets.UTF_8), "HmacSHA256"))
-        return hmac.doFinal(botToken.toByteArray(StandardCharsets.UTF_8))
-    }
+    private val secretKey by lazy { telegramCodeUtils.generateSecretKey() }
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -44,15 +42,25 @@ class TelegramAuthFilter(
             val authHeader = request.getHeader("Authorization")
             if (authHeader?.startsWith("tma ") == true) {
                 val initData = authHeader.substringAfter("tma ")
-                val params = parseQueryString(initData)
+                val params = telegramCodeUtils.parseQueryString(initData)
                 val userBody = params["user"]
                 val hash = params["hash"]
 
-                if (!userBody.isNullOrBlank() && !hash.isNullOrBlank() && validateTelegramAuth(params, hash)) {
-                    val user = objectMapper.readValue(userBody, UserData::class.java)
+                if (!userBody.isNullOrBlank() && !hash.isNullOrBlank() && telegramCodeUtils.validateTelegramAuth(secretKey, params, hash)) {
+                    val userCurrent = objectMapper.readValue(userBody, UserData::class.java)
+                    val user: User? = userService.findByTelegramId(userCurrent.id)
+                    if (user == null) {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not found")
+                        return
+                    }
+                    ///
+                    //TODO Добавить проверку на наличие в БД + вытащить роли ✅
+                    // роли будут добавлять при реге через тг бота, и добавить список админов и селлеров
+                    ///
+
                     SecurityContextHolder.getContext().authentication = TelegramAuthentication(
                         TelegramUserPrincipal(
-                            id = user.id,
+                            id = userCurrent.id,
                             authDate = Instant.ofEpochSecond(params["auth_date"]!!.toLong()),
                             userJson = userBody
                         )
@@ -67,31 +75,6 @@ class TelegramAuthFilter(
             return
         }
         chain.doFilter(request, response)
-    }
-
-    private fun validateTelegramAuth(paramMap: Map<String, String>, receivedHash: String): Boolean {
-        val dataCheckString = paramMap.entries
-            .filter { it.key != "hash" }
-            .sortedBy { it.key }
-            .joinToString("\n") { "${it.key}=${it.value}" }
-
-        val hmac = Mac.getInstance("HmacSHA256").apply {
-            init(SecretKeySpec(secretKey, "HmacSHA256"))
-        }
-        val calculatedHash = bytesToHex(hmac.doFinal(dataCheckString.toByteArray(StandardCharsets.UTF_8)))
-        return calculatedHash.equals(receivedHash, ignoreCase = true)
-    }
-
-    private fun parseQueryString(queryString: String): Map<String, String> {
-        return queryString.split("&").associate {
-            val (key, value) = it.split("=", limit = 2)
-            URLDecoder.decode(key, StandardCharsets.UTF_8) to
-                    URLDecoder.decode(value, StandardCharsets.UTF_8)
-        }
-    }
-
-    private fun bytesToHex(bytes: ByteArray): String {
-        return bytes.joinToString("") { "%02x".format(it) }
     }
 
     private data class UserData(val id: Long)

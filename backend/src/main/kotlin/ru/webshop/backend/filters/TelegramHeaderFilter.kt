@@ -1,6 +1,5 @@
 package ru.webshop.backend.filters
 
-//import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import ru.webshop.backend.security.TelegramUserPrincipal
@@ -10,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import java.util.*
-//import org.slf4j.Logger
 
 @Component
 class TelegramHeaderFilter : OncePerRequestFilter() {
@@ -20,7 +18,6 @@ class TelegramHeaderFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         chain: FilterChain
     ) {
-        // val logger: Logger = LoggerFactory.getLogger(this::class.java)
         val authentication = SecurityContextHolder.getContext().authentication
         if (authentication?.principal is TelegramUserPrincipal) {
             val user = authentication.principal as TelegramUserPrincipal
@@ -43,7 +40,6 @@ class TelegramHeaderFilter : OncePerRequestFilter() {
                     return Collections.enumeration(original + "X-Telegram-User-Id")
                 }
             }
-            //logger.debug("Added X-Telegram-User-ID header: {}", user.id)
             chain.doFilter(wrappedRequest, response)
         } else {
             chain.doFilter(request, response)

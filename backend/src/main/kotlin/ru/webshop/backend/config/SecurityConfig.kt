@@ -10,20 +10,27 @@ import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
 import ru.webshop.backend.filters.TelegramAuthFilter
 import ru.webshop.backend.filters.TelegramHeaderFilter
+import ru.webshop.backend.service.UserService
+import ru.webshop.backend.utils.TelegramCodeUtils
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     private val objectMapper: ObjectMapper,
     @Value("\${telegram.bot.token}")
-    private val botToken: String,
+    private val userService: UserService,
+    private val telegramCodeUtils: TelegramCodeUtils,
     private val telegramHeaderFilter: TelegramHeaderFilter
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .addFilterBefore(
-                TelegramAuthFilter(objectMapper, botToken),
+                TelegramAuthFilter(
+                    objectMapper,
+                    userService,
+                    telegramCodeUtils
+                ),
                 AnonymousAuthenticationFilter::class.java
             )
             .addFilterAfter(telegramHeaderFilter, TelegramAuthFilter::class.java)
