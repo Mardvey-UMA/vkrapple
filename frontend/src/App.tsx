@@ -4,13 +4,16 @@ import initializeTelegramApp from './utils/initTelegramApp'
 
 export default function App() {
 	initializeTelegramApp()
+
 	const sendAuthRequest = async () => {
-		await api.post('/auth/authenticate')
+		const response = await api.post('/auth/authenticate')
+		console.log('Auth Request Response:', response)
 		return null
 	}
 
 	const sendTestRequest = async () => {
-		await api.get('/me')
+		const response = await api.get('/me')
+		console.log('Test Request Response:', response)
 		return null
 	}
 
