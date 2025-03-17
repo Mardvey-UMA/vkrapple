@@ -4,18 +4,31 @@ import initializeTelegramApp from './utils/initTelegramApp'
 
 export default function App() {
 	initializeTelegramApp()
-	const sendMeRequest = async () => {
+	const sendAuthRequest = async () => {
+		await api.post('/auth/authenticate')
+		return null
+	}
+
+	const sendTestRequest = async () => {
 		await api.get('/me')
 		return null
 	}
 
-	const { isPending: isPending1 } = useQuery({
+	const { isPending: isPending2 } = useQuery({
 		queryKey: ['me', 1],
-		queryFn: sendMeRequest,
+		queryFn: sendTestRequest,
+		retry: 3,
+		staleTime: Infinity,
+	})
+
+	const { isPending: isPending1 } = useQuery({
+		queryKey: ['authenticate', 1],
+		queryFn: sendAuthRequest,
 		retry: 0,
 		staleTime: Infinity,
 	})
-	const isLoading = isPending1
+
+	const isLoading = isPending1 || isPending2
 	return (
 		<div>
 			{isLoading ? (
