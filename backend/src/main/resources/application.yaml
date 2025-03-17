@@ -2,14 +2,38 @@ server:
   port: 8080
 
 spring:
+  session:
+    cookie:
+      same-site: none
+      secure: true
   application:
     name: backend
+  public-urls:
+    - "/api/auth/**"
+    - "/api/password/**"
+    - "/api/token/**"
+    - "/api/activate-account"
+    - "/v3/api-docs/**"
+    - "/swagger-ui.html"
+    - "/swagger-ui/**"
+    - "/swagger-resources/**"
+    - "/webjars/**"
+    - "/v2/api-docs"
+    - "/v2/api-docs/**"
+    - "/webjars/swagger-ui/**"
+    - "/v3/api-docs"
+    - "/swagger-ui/index.html"
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/users_db
     #url: jdbc:postgresql://auth_db/auth_db
     username: postgres
     password: postgres
+  security:
+    jwt:
+      secret-key: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
+      expiration: 3600
+      refresh-expiration: 604800
   jpa:
     hibernate:
       ddl-auto: create

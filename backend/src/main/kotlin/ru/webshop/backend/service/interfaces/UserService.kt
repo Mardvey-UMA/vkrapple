@@ -1,4 +1,4 @@
-package ru.webshop.backend.service
+package ru.webshop.backend.service.interfaces
 
 import ru.webshop.backend.entity.User
 

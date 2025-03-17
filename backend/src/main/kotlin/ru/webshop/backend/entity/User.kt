@@ -2,15 +2,20 @@ package ru.webshop.backend.entity
 
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedDate
+import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
+import java.security.Principal
 import java.time.Instant
+import java.time.LocalDateTime
 
 @Entity
 @Table(
     name = "_user",
     indexes = [
-        Index(name = "idx_telegram_id", columnList = "telegram_id"),
-        Index(name = "idx_username", columnList = "username")
+        Index(name = "idx_telegram_id", columnList = "telegram_id")
     ])
 @EntityListeners(AuditingEntityListener::class)
 data class User (
@@ -18,8 +23,8 @@ data class User (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(length = 64, nullable = true, unique = true)
-    var username: String? = null,
+    @Column(name = "username_telegram", length = 64, nullable = true, unique = true)
+    var usernameTelegram: String = "",
 
     @Column(name = "telegram_id", nullable = false, unique = true)
     val telegramId: Long,
@@ -42,9 +47,19 @@ data class User (
     @Column(name = "address", nullable = true)
     val address: String? = null,
 
+    @Column(nullable = false)
+    var enabled: Boolean,
+
+    @Column(nullable = false)
+    private var accountLocked: Boolean,
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     val createdAt: Instant = Instant.now(),
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private var updatedAt: LocalDateTime? = null,
 
     // Связи
 
@@ -69,4 +84,21 @@ data class User (
 
     @OneToMany(mappedBy = "_user", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val tokens: MutableSet<Token> = mutableSetOf(),
-)
+
+): UserDetails, Principal{
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles.map { SimpleGrantedAuthority(it.roleName) }.toMutableSet()
+
+    override fun isEnabled(): Boolean = enabled
+
+    override fun isCredentialsNonExpired(): Boolean = true
+
+    override fun isAccountNonExpired(): Boolean = true
+
+    override fun isAccountNonLocked(): Boolean = !accountLocked
+
+    override fun getPassword() = null
+
+    override fun getUsername(): String = telegramId.toString()
+
+    override fun getName(): String = telegramId.toString()
+}

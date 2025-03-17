@@ -23,7 +23,7 @@ class JwtService(private val jwtConfig: JwtConfig) {
         return Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun extractUsername(token: String): String? = extractClaim(token) { claims: Claims -> claims.subject }
+    fun extractTelegramId(token: String): String? = extractClaim(token) { claims: Claims -> claims.subject }
 
     fun <T> extractClaim(token: String, claimsResolver: (Claims) -> T): T {
         val claims = extractAllClaims(token)
@@ -45,7 +45,7 @@ class JwtService(private val jwtConfig: JwtConfig) {
         val now = Instant.now()
         return Jwts.builder()
             .claims(extraClaims)
-            .subject(userDetails.username)
+            .subject(userDetails.getUsername()) // Тонкий момент здесь это telegramId
             .issuedAt(Date.from(now))
             .expiration(Date.from(now.plusSeconds(jwtExpiration)))
             .signWith(getSignInKey())
@@ -53,9 +53,9 @@ class JwtService(private val jwtConfig: JwtConfig) {
     }
 
     fun isTokenValid(token: String, userDetails: UserDetails): Boolean {
-        val username = extractUsername(token)
-        return username != null &&
-                username == userDetails.username &&
+        val telegramId: String? = extractTelegramId(token)
+        return telegramId != null &&
+                telegramId == userDetails.getUsername() &&
                 !isTokenExpired(token)
     }
 
@@ -73,13 +73,14 @@ class JwtService(private val jwtConfig: JwtConfig) {
 
     fun generateAccessToken(user: UserDetails): String {
         val userEntity = user as User
-        val claims = mapOf<String, Any>(
-            "roles" to user.authorities.map { it.authority },
-            "token_type" to "ACCESS",
-            "username" to userEntity.username, // Ошибка
-            "user_id" to userEntity.id!!,
-            "sub" to userEntity.username
-        )
+        val claims = ("telegram_id" to userEntity.telegramId).let {
+            mapOf<String, Any>(
+                "telegram_id" to (user as User).telegramId,
+                "roles" to user.authorities.map { it.authority },
+                "token_type" to "ACCESS",
+                "sub" to userEntity.telegramId.toString()
+            )
+        }
         return buildToken(claims, user, jwtConfig.expiration)
     }
 
