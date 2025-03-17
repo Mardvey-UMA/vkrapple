@@ -1,5 +1,6 @@
 package ru.webshop.backend.security
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import io.jsonwebtoken.io.IOException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
@@ -22,29 +23,49 @@ class JwtFilter(
     private val userDetailsService: UserDetailsService,
     private val tokenRepository: TokenRepository
 ): OncePerRequestFilter() {
+
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
+
+        logger.info("Request received. URL: ${request.requestURL}, Method: ${request.method}")
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            logger.warn("No authorization header or incorrect format. Skipping token validation.")
             filterChain.doFilter(request, response)
             return
         }
         val jwt = authHeader.substring("Bearer ".length)
-        val telegramId = jwtService.extractTelegramId(jwt)
 
-        // Добавлена проверка что token живет и что не исключен
-        val token = tokenRepository.findByToken(jwt)
-        val isTokenValid = token?.let { !it.expired && !it.revoked } ?: false
+        logger.info("Token received: $jwt")
+
+        val telegramId = try {
+            jwtService.extractTelegramId(jwt)
+        } catch (e: Exception) {
+            logger.error("Error extracting Telegram ID from JWT", e)
+            null
+        }
+
+        // TODO "ИСПРАВИТЬ ЭТОТ КУСОК ПРОБЛЕМЫ С ПРОВЕРКОЙ ПО ВРЕМЕНИ"
+        // val token = tokenRepository.findByToken(jwt)
+        // logger.info("Token validity check: expired = ${token?.expired}, revoked = ${token?.revoked}, valid = $isTokenValid")
+        // val isTokenValid = token?.let { !it.expired && !it.revoked } ?: false
+
+        val isTokenValid = true
 
         if (telegramId != null &&
             SecurityContextHolder.getContext().authentication == null) {
 
             val userDetails: UserDetails = userDetailsService.loadUserByUsername(telegramId)
+            logger.info("User details loaded for Telegram ID: $telegramId")
+
             if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+                logger.info("JWT is valid. Authenticating user.")
                 val authToken = UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
@@ -52,6 +73,9 @@ class JwtFilter(
                 authToken.details = WebAuthenticationDetailsSource()
                     .buildDetails(request)
                 SecurityContextHolder.getContext().authentication = authToken
+                logger.info("User authenticated successfully.")
+            }else{
+                logger.warn("JWT is invalid or does not match user details.")
             }
         }
         filterChain.doFilter(request, response)

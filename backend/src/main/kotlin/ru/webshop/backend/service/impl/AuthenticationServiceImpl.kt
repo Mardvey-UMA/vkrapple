@@ -24,7 +24,6 @@ class AuthenticationServiceImpl(
     private val objectMapper: ObjectMapper = ObjectMapper().apply {
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     },
-    private val authenticationManager: AuthenticationManager,
     private val authenticationProvider: AuthenticationProvider,
     private val userService: UserService,
     private val jwtService: JwtService,
@@ -39,8 +38,6 @@ class AuthenticationServiceImpl(
         val hash = params["hash"] ?: throw IllegalArgumentException("Hash missing")
 
         if (telegramCodeUtils.validateTelegramAuth(secretKey, params, hash)) {
-            val userCurrent = objectMapper.readValue(userData, UserData::class.java)
-
             val user = parseUserData(userData)
             val authUser = authenticateUser(user)
 

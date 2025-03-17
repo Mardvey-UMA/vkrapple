@@ -25,6 +25,6 @@ data class OrderProduct(
     val product: Product,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     val order: Order,
 )

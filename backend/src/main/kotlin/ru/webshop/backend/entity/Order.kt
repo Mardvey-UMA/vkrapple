@@ -11,7 +11,7 @@ import java.time.Instant
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(
-    name = "order")
+    name = "orders")
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,6 @@ data class Order(
     val orderProducts: MutableList<OrderProduct> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "_user_id")
+    @JoinColumn(name = "user_id")
     val user: User,
 )
