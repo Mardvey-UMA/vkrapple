@@ -27,7 +27,7 @@ class TokenServiceImpl(
         val token = Token(
             user = user,
             token = refreshToken,
-            tokenType = TokenType.REFRESH,
+            tokenType = TokenType.REFRESH.name,
             expired = false,
             revoked = false
         )

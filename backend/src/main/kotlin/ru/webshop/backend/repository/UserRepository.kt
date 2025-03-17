@@ -6,9 +6,6 @@ import ru.webshop.backend.entity.User
 
 interface UserRepository: JpaRepository<User, Long> {
     @EntityGraph(attributePaths = ["roles"])
-    fun findByUsername(username: String): User?
-
-    @EntityGraph(attributePaths = ["roles"])
     fun findByTelegramId(telegramId: Long): User?
 
     @EntityGraph(attributePaths = ["roles"])

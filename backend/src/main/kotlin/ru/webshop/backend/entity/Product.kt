@@ -7,13 +7,7 @@ import java.math.BigDecimal
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(
-    name = "product",
-    indexes = [
-        Index(name = "idx_product_category", columnList = "category_id"),
-        Index(name = "idx_product_rating", columnList = "rating"),
-        Index(name = "idx_product_article", columnList = "article_number", unique = true),
-        Index(name = "idx_product_price", columnList = "price")
-    ])
+    name = "product")
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

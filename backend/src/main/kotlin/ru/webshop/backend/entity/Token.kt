@@ -19,7 +19,7 @@ data class Token (
     private var token: String,
 
     @Column(name = "token_type", nullable = false)
-    var tokenType: TokenType,
+    var tokenType: String,
 
     @Column(nullable = false)
     var revoked: Boolean,

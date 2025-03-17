@@ -16,7 +16,9 @@ import java.util.*
 import javax.crypto.SecretKey
 
 @Service
-class JwtService(private val jwtConfig: JwtConfig) {
+class JwtService(
+    private val jwtConfig: JwtConfig
+) {
 
     fun getSignInKey(): SecretKey {
         val keyBytes = Decoders.BASE64.decode(jwtConfig.secretKey)

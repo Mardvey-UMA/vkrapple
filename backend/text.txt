@@ -5,11 +5,10 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetailsService
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 class BeansConfig (
@@ -18,19 +17,24 @@ class BeansConfig (
 
     @Bean
     fun authenticationProvider(): AuthenticationProvider {
-        val authProvider = DaoAuthenticationProvider()
-        authProvider.setUserDetailsService(userDetailsService)
-        authProvider.setPasswordEncoder(passwordEncoder())
-        return authProvider
+        return object : AuthenticationProvider {
+            override fun authenticate(authentication: Authentication): Authentication {
+                val user = userDetailsService.loadUserByUsername(authentication.name)
+                return UsernamePasswordAuthenticationToken(
+                    user, null, user.authorities
+                )
+            }
+
+            override fun supports(authentication: Class<*>): Boolean {
+                return authentication == UsernamePasswordAuthenticationToken::class.java
+            }
+        }
     }
     @Bean
     fun authenticationManager(
         config: AuthenticationConfiguration
     ) : AuthenticationManager =
         config.getAuthenticationManager()
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 }
 
 package ru.webshop.backend.config
@@ -123,6 +127,24 @@ class SecurityConfig(
             .addFilterAfter(telegramHeaderFilter, JwtFilter::class.java)
 
         return http.build()
+    }
+}
+
+package ru.webshop.backend.config
+
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.session.web.http.DefaultCookieSerializer
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+
+@Configuration
+class WebConfig : WebMvcConfigurer {
+    @Bean
+    fun cookieSerializer(): DefaultCookieSerializer {
+        return DefaultCookieSerializer().apply {
+            setSameSite("None")
+            setUseSecureCookie(true)
+        }
     }
 }
 
@@ -357,7 +379,7 @@ data class User (
 
     override fun isAccountNonLocked(): Boolean = !accountLocked
 
-    override fun getPassword(): String = ""
+    override fun getPassword() = null
 
     override fun getUsername(): String = telegramId.toString()
 
@@ -368,12 +390,12 @@ package ru.webshop.backend.filters
 
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
-import ru.webshop.backend.security.TelegramUserPrincipal
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletRequestWrapper
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
+import ru.webshop.backend.entity.User
 import java.util.*
 
 @Component
@@ -385,17 +407,17 @@ class TelegramHeaderFilter : OncePerRequestFilter() {
         chain: FilterChain
     ) {
         val authentication = SecurityContextHolder.getContext().authentication
-        if (authentication?.principal is TelegramUserPrincipal) {
-            val user = authentication.principal as TelegramUserPrincipal
+        if (authentication?.principal is User) {
+            val user = authentication.principal as User
             val wrappedRequest = object : HttpServletRequestWrapper(request) {
                 override fun getHeader(name: String) = when (name.lowercase()) {
-                    "x-telegram-user-id" -> user.id.toString()
+                    "x-telegram-user-id" -> user.telegramId.toString()
                     else -> super.getHeader(name)
                 }
 
                 override fun getHeaders(name: String): Enumeration<String> {
                     return if (name.equals("x-telegram-user-id", ignoreCase = true)) {
-                        Collections.enumeration(listOf(user.id.toString()))
+                        Collections.enumeration(listOf(user.telegramId.toString()))
                     } else {
                         super.getHeaders(name)
                     }
@@ -411,54 +433,6 @@ class TelegramHeaderFilter : OncePerRequestFilter() {
             chain.doFilter(request, response)
         }
     }
-}
-
-package ru.webshop.backend.repository
-
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Query
-import ru.webshop.backend.entity.Token
-
-interface TokenRepository : JpaRepository<Token, Long> {
-    @Query(
-        value = """
-        select t from Token t
-        where t.user.email = :email and t.expired = false and t.revoked = false
-        """
-    )
-    fun findAllValidTokenByUserEmail (email: String):Set<Token>
-
-    @Query(
-        value = """
-        select t from Token t inner join User u
-        on t.user.id = u.id
-        where u.id = :id and t.expired = false and t.revoked = false
-        """
-    )
-    fun findAllValidTokenByUser (id: Long):Set<Token>
-
-    @Query("SELECT t FROM Token t " +
-            "WHERE t.user.id = :userId AND t.expired = false AND t.revoked = false AND t.tokenType = 'REFRESH'")
-    fun findValidRefreshTokensByUser(userId: Long): Set<Token>
-
-    fun findByToken (token: String): Token?
-}
-
-package ru.webshop.backend.repository
-
-import org.springframework.data.jpa.repository.EntityGraph
-import org.springframework.data.jpa.repository.JpaRepository
-import ru.webshop.backend.entity.User
-
-interface UserRepository: JpaRepository<User, Long> {
-    @EntityGraph(attributePaths = ["roles"])
-    fun findByUsername(username: String): User?
-
-    @EntityGraph(attributePaths = ["roles"])
-    fun findByTelegramId(telegramId: Long): User?
-
-    @EntityGraph(attributePaths = ["roles"])
-    fun existsByTelegramId(telegramId: Long): Boolean
 }
 
 package ru.webshop.backend.security
@@ -491,10 +465,6 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (request.servletPath.contains("/api/auth")) {
-            filterChain.doFilter(request, response)
-            return
-        }
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response)
@@ -528,44 +498,6 @@ class JwtFilter(
 
 package ru.webshop.backend.security
 
-import org.springframework.security.authentication.AbstractAuthenticationToken
-import org.springframework.security.core.GrantedAuthority
-
-
-class TelegramAuthentication(
-    private val principal: TelegramUserPrincipal
-) : AbstractAuthenticationToken(emptyList<GrantedAuthority>()) {
-    override fun getCredentials() = ""
-    override fun getPrincipal() = principal
-    override fun isAuthenticated() = true
-}
-
-package ru.webshop.backend.security
-
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.userdetails.UserDetails
-import java.security.Principal
-import java.time.Instant
-
-data class TelegramUserPrincipal(
-    val id: Long,
-    val authDate: Instant,
-    val userJson: String,
-    val username: String?,
-    val authorities: Collection<GrantedAuthority>
-) : UserDetails, Principal {
-    override fun getAuthorities() = authorities
-    override fun getPassword() = ""
-    override fun getUsername() = id.toString()
-    override fun isAccountNonExpired() = true
-    override fun isAccountNonLocked() = true
-    override fun isCredentialsNonExpired() = true
-    override fun isEnabled() = true
-    override fun getName() = id.toString()
-}
-
-package ru.webshop.backend.security
-
 import jakarta.transaction.Transactional
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -594,6 +526,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -614,6 +547,7 @@ class AuthenticationServiceImpl(
         propertyNamingStrategy = PropertyNamingStrategies.SNAKE_CASE
     },
     private val authenticationManager: AuthenticationManager,
+    private val authenticationProvider: AuthenticationProvider,
     private val userService: UserService,
     private val jwtService: JwtService,
     private val tokenService: TokenService,
@@ -640,16 +574,18 @@ class AuthenticationServiceImpl(
     }
 
     private fun authenticateUser(userData: TelegramUser): User {
+
         val existingUser = userService.findByTelegramId(userData.id)
+
         val user = existingUser ?: userService.createUser(
             telegramId = userData.id,
             chatId = userData.id,
             username = userData.username
         )
-
-        val authentication = authenticationManager.authenticate(
+        val authentication = authenticationProvider.authenticate(
             UsernamePasswordAuthenticationToken(user.telegramId.toString(), null)
         )
+
         return authentication.principal as User
     }
     private fun generateTokens(user: User, response: HttpServletResponse): AuthResponseDTO {
@@ -767,10 +703,6 @@ class TokenServiceImpl(
     }
 }
 
-package ru.webshop.backend.service.impl
-
-data class UserData(val id: Long)
-
 package ru.webshop.backend.service
 
 import io.jsonwebtoken.Claims
@@ -789,7 +721,9 @@ import java.util.*
 import javax.crypto.SecretKey
 
 @Service
-class JwtService(private val jwtConfig: JwtConfig) {
+class JwtService(
+    private val jwtConfig: JwtConfig
+) {
 
     fun getSignInKey(): SecretKey {
         val keyBytes = Decoders.BASE64.decode(jwtConfig.secretKey)
@@ -848,6 +782,7 @@ class JwtService(private val jwtConfig: JwtConfig) {
         val userEntity = user as User
         val claims = ("telegram_id" to userEntity.telegramId).let {
             mapOf<String, Any>(
+                "telegram_id" to (user as User).telegramId,
                 "roles" to user.authorities.map { it.authority },
                 "token_type" to "ACCESS",
                 "sub" to userEntity.telegramId.toString()
@@ -877,6 +812,61 @@ class JwtService(private val jwtConfig: JwtConfig) {
         }
     }
 }
+
+package ru.webshop.backend.service
+
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.web.authentication.logout.LogoutHandler
+import org.springframework.stereotype.Service
+import ru.webshop.backend.enums.CookieName
+import ru.webshop.backend.repository.TokenRepository
+
+@Service
+class LogoutService(
+    private val tokenRepository: TokenRepository
+) : LogoutHandler {
+
+    override fun logout(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        authentication: Authentication?
+    ) {
+        val refreshToken = getCookieValue(request, CookieName.REFRESH_TOKEN.name)
+
+        if (refreshToken != null) {
+            val storedToken = tokenRepository.findByToken(refreshToken)
+            if (storedToken != null && !storedToken.revoked && !storedToken.expired) {
+                storedToken.revoked = true
+                storedToken.expired = true
+                tokenRepository.save(storedToken)
+            }
+        }
+
+        SecurityContextHolder.clearContext()
+
+        clearCookie(response, CookieName.REFRESH_TOKEN.name)
+
+        clearCookie(response, CookieName.ACCESS_TOKEN.name)
+    }
+
+    private fun getCookieValue(request: HttpServletRequest, name: String): String? {
+        return request.cookies?.find { it.name == name }?.value
+    }
+
+    private fun clearCookie(response: HttpServletResponse, name: String) {
+        val cookie = Cookie(name, null).apply {
+            maxAge = 0
+            path = "/"
+            isHttpOnly = true
+        }
+        response.addCookie(cookie)
+    }
+}
+
 package ru.webshop.backend.service
 
 import jakarta.transaction.Transactional
@@ -962,12 +952,30 @@ class TelegramCodeUtils(
         return bytes.joinToString("") { "%02x".format(it) }
     }
 }
+
+package ru.webshop.backend
+
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing
+
+@SpringBootApplication
+@EnableJpaAuditing
+class BackendApplication
+
+fun main(args: Array<String>) {
+    runApplication<BackendApplication>(*args)
+}
 ```
 ```
 server:
   port: 8080
 
 spring:
+  session:
+    cookie:
+      same-site: none
+      secure: true
   application:
     name: backend
   public-urls:
@@ -987,8 +995,8 @@ spring:
     - "/swagger-ui/index.html"
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/users_db
-    #url: jdbc:postgresql://auth_db/auth_db
+    url: jdbc:postgresql://localhost:5432/goods_db
+    #url: jdbc:postgresql://goods_db/goods_db
     username: postgres
     password: postgres
   security:

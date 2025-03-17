@@ -11,12 +11,7 @@ import java.time.Instant
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 @Table(
-    name = "_order",
-    indexes = [
-        Index(name = "idx_order_user", columnList = "user_id"),
-        Index(name = "idx_order_created", columnList = "created_at"),
-        Index(name = "idx_order_status", columnList = "status")
-    ])
+    name = "order")
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +38,7 @@ data class Order(
 
     // Связи
 
-    @OneToMany(mappedBy = "_order")
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     val orderProducts: MutableList<OrderProduct> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.EAGER)
