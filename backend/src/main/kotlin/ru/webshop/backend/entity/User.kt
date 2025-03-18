@@ -12,11 +12,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 
 @Entity
-@Table(
-    name = "_user",
-    indexes = [
-        Index(name = "idx_telegram_id", columnList = "telegram_id")
-    ])
+@Table(name = "_user")
 @EntityListeners(AuditingEntityListener::class)
 data class User (
     @Id

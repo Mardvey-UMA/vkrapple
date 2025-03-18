@@ -6,8 +6,7 @@ import java.math.BigDecimal
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-@Table(
-    name = "product")
+@Table(name = "product")
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

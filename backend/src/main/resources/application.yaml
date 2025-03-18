@@ -1,6 +1,13 @@
 server:
   port: 8080
 
+s3:
+  access-key-id: minioadmin
+  secret-access-key: minioadmin
+  minio-url: http://localhost:9000
+  region: us-east-1
+  bucket: goods_bucket
+
 spring:
   session:
     cookie:

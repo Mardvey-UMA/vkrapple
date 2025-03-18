@@ -37,6 +37,10 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
+    // S3
+    //implementation("io.minio:minio:8.5.17")
+    //implementation("com.amazonaws:aws-java-sdk-s3:1.12.700")
+    implementation("software.amazon.awssdk:s3:2.20.0")
     runtimeOnly("org.postgresql:postgresql")
 }
 
