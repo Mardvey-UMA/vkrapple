@@ -9,7 +9,7 @@ interface ProductService {
     fun createProduct(request: ProductCreateRequestDTO): Long
     fun searchProducts(
         categoryId: Long,
-        attributes: Map<Long, String>,
+        attributes: Map<Long, List<String>>,
         pageable: Pageable
     ): ProductPageResponseDTO
 

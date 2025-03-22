@@ -52,13 +52,11 @@ class ProductsController(
                     .toLongOrNull()
             }
             .filterKeys { it != null }
-            .mapValues { it.value.firstOrNull() ?: "" }
+            .mapValues { (_, values) ->
+                values.filter { value -> value.isNotBlank() }
+            }
+            .filterValues { it.isNotEmpty() }
             .mapKeys { it.key!! }
-
-        logger.info("""
-        Processed attributes: 
-        ${attributes.entries.joinToString { "AttrID=${it.key}, Value=${it.value}" }}
-    """.trimIndent())
 
         return productService.searchProducts(categoryId, attributes, pageable)
     }

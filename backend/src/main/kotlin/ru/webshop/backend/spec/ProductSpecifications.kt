@@ -17,8 +17,8 @@ class ProductSpecifications {
                 cb.equal(root.get<Product>("category").get<Long>("id"), categoryId)
             }
         }
-        // Тут ошибка или не тут
-        fun byAttributes(attributes: Map<Long, String>): Specification<Product> {
+
+        fun byAttributes(attributes: Map<Long, List<String>>): Specification<Product> {
             return Specification { root, query, cb ->
                 logger.info("Processing attributes: $attributes")
                 if (attributes.isEmpty()) {
@@ -26,24 +26,32 @@ class ProductSpecifications {
                     return@Specification null
                 }
 
-                val predicates = attributes.map { (attrId, value) ->
-                    logger.info("Building predicate for attribute: $attrId (Type: ${attrId::class.java}), value: $value (Type: ${value::class.java})")
+                val predicates = attributes
+                    .filter { (_, values) -> values.isNotEmpty() }
+                    .map { (attrId, values) ->
+                        logger.info("Building predicate for attribute: $attrId, values: $values")
 
-                    val subquery = query?.subquery(Long::class.javaObjectType)
-                        ?: throw IllegalStateException("CriteriaQuery is null")
-                    val valueRoot = subquery.from(Value::class.java)
+                        val subquery = query?.subquery(Long::class.javaObjectType)
+                            ?: throw IllegalStateException("CriteriaQuery is null")
 
-                    subquery.select(valueRoot.get<Product>("product").get<Long>("id"))
-                    subquery.where(
-                        cb.and(
-                            cb.equal(valueRoot.get<Attribute>("attribute").get<Long>("id"), attrId),
-                            cb.equal(valueRoot.get<String>("value"), value),
-                            cb.equal(valueRoot.get<Product>("product").get<Long>("id"), root.get<Long>("id"))
+                        val valueRoot = subquery.from(Value::class.java)
+
+                        subquery.select(valueRoot.get<Product>("product").get<Long>("id"))
+                        subquery.where(
+                            cb.and(
+                                cb.equal(valueRoot.get<Attribute>("attribute").get<Long>("id"), attrId),
+                                valueRoot.get<String>("value").`in`(values),
+                                cb.equal(valueRoot.get<Product>("product").get<Long>("id"), root.get<Long>("id"))
+                            )
                         )
-                    )
-                    cb.exists(subquery)
+                        cb.exists(subquery)
+                    }
+
+                if (predicates.isEmpty()) {
+                    null
+                } else {
+                    cb.and(*predicates.toTypedArray())
                 }
-                cb.and(*predicates.toTypedArray())
             }
         }
     }
