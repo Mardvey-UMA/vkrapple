@@ -2,11 +2,11 @@ server:
   port: 8080
 
 s3:
-  accessKeyId: minioadmin
-  secretAccessKey: minioadmin
+  accessKeyId: KFzkrASGUVF0CPAYBI1u
+  secretAccessKey: gYkGKXl1r5b4TuJVc4kDMTitg63fT64aRfDWlnsI
   minioUrl: http://localhost:9000
   region: us-east-1
-  bucket: goods_bucket
+  bucket: goods
 
 spring:
   mvc:

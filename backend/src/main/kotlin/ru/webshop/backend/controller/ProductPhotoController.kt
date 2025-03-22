@@ -15,10 +15,10 @@ class ProductPhotoController(
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     fun uploadPhoto(
         @ModelAttribute request: PhotoUploadRequestDTO,
-        @RequestParam file: MultipartFile
+        @RequestParam("file") file: MultipartFile
     ): ResponseEntity<String> {
         return ResponseEntity.ok(
-            photoUploadService.uploadPhoto(
+            photoUploadService.uploadPhotoForProduct(
                 articleNumber = request.articleNumber,
                 file = file,
                 indexNumber = request.indexNumber

@@ -4,9 +4,11 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import ru.webshop.backend.entity.Photo
 import ru.webshop.backend.entity.PhotoProduct
+import ru.webshop.backend.entity.PhotoReview
 import ru.webshop.backend.exception.GlobalExceptionHandler
 import ru.webshop.backend.repository.PhotoProductRepository
 import ru.webshop.backend.repository.PhotoRepository
+import ru.webshop.backend.repository.PhotoReviewRepository
 import ru.webshop.backend.repository.ProductRepository
 import ru.webshop.backend.service.interfaces.PhotoStorageService
 import ru.webshop.backend.service.interfaces.PhotoUploadService
@@ -17,10 +19,11 @@ class PhotoUploadServiceImpl(
     private val productRepository: ProductRepository,
     private val photoStorageService: PhotoStorageService,
     private val photoRepository: PhotoRepository,
-    private val photoProductRepository: PhotoProductRepository
+    private val photoProductRepository: PhotoProductRepository,
 ) : PhotoUploadService {
 
-    override fun uploadPhoto(articleNumber: Long, file: MultipartFile, indexNumber: Int): String {
+    // Загрузить фотку продукта по артиклю продукта
+    override fun uploadPhotoForProduct(articleNumber: Long, file: MultipartFile, indexNumber: Int): String {
         
         val product = productRepository.findByArticleNumber(articleNumber)
             ?: throw GlobalExceptionHandler.ProductNotFoundException(articleNumber.toString())

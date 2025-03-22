@@ -25,6 +25,7 @@ class PhotoStorageServiceImpl(
     ) : PhotoStorageService {
 
     override  fun uploadPhoto(objectKey: String, content: ByteArray, contentType: String): String {
+
         val request = PutObjectRequest.builder()
             .bucket(bucketName)
             .key(objectKey)
