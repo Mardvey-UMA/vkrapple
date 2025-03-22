@@ -41,6 +41,8 @@ dependencies {
     implementation("software.amazon.awssdk:s3:2.20.0")
 
     runtimeOnly("org.postgresql:postgresql")
+
+    annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.4.Final")
 }
 
 kotlin {
