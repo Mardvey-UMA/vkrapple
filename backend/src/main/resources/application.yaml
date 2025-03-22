@@ -9,6 +9,9 @@ s3:
   bucket: goods_bucket
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   session:
     cookie:
       same-site: none
