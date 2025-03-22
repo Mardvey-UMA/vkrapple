@@ -70,7 +70,7 @@ class ProductServiceImpl (
     // Поиск товаров
     override fun searchProducts(
         categoryId: Long,
-        attributes: Map<Long, String>,
+        attributes: Map<Long, List<String>>,
         pageable: Pageable
     ): ProductPageResponseDTO {
         val spec = Specification.where(ProductSpecifications.byCategory(categoryId))
