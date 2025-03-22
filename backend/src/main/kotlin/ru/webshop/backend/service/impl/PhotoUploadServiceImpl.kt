@@ -6,10 +6,7 @@ import ru.webshop.backend.entity.Photo
 import ru.webshop.backend.entity.PhotoProduct
 import ru.webshop.backend.entity.PhotoReview
 import ru.webshop.backend.exception.GlobalExceptionHandler
-import ru.webshop.backend.repository.PhotoProductRepository
-import ru.webshop.backend.repository.PhotoRepository
-import ru.webshop.backend.repository.PhotoReviewRepository
-import ru.webshop.backend.repository.ProductRepository
+import ru.webshop.backend.repository.*
 import ru.webshop.backend.service.interfaces.PhotoStorageService
 import ru.webshop.backend.service.interfaces.PhotoUploadService
 import java.util.*
@@ -20,6 +17,8 @@ class PhotoUploadServiceImpl(
     private val photoStorageService: PhotoStorageService,
     private val photoRepository: PhotoRepository,
     private val photoProductRepository: PhotoProductRepository,
+    private val photoReviewRepository: PhotoReviewRepository,
+    private val reviewRepository: ReviewRepository,
 ) : PhotoUploadService {
 
     // Загрузить фотку продукта по артиклю продукта
@@ -28,7 +27,7 @@ class PhotoUploadServiceImpl(
         val product = productRepository.findByArticleNumber(articleNumber)
             ?: throw GlobalExceptionHandler.ProductNotFoundException(articleNumber.toString())
 
-        val objectKey = "${articleNumber}/product"
+        val objectKey = "${articleNumber}/product/photo_$indexNumber"
 
         // TODO (Добавить логику для порядка фото)
 
@@ -50,6 +49,39 @@ class PhotoUploadServiceImpl(
                 indexNumber = indexNumber,
                 product = product,
                 photo = photo
+            )
+        )
+
+        return photoUrl
+    }
+
+    override fun uploadPhotoForReview(reviewId: Long, userId: Long, file: MultipartFile, indexNumber: Int): String {
+
+        val review = reviewRepository.findReviewById(reviewId)
+            ?: throw IllegalArgumentException("Review with id $reviewId not found")
+
+        val objectKey = "${review.product.articleNumber}/review/photo_$indexNumber"
+
+        // TODO (Добавить логику для порядка фото)
+
+        val photoUrl = photoStorageService.uploadPhoto(
+            objectKey = objectKey,
+            content = file.bytes,
+            contentType = file.contentType ?: "image/jpeg"
+        )
+
+        val photo = photoRepository.save(
+            Photo(
+                objectKey = objectKey,
+                photoUrl = photoUrl
+            )
+        )
+
+        photoReviewRepository.save(
+            PhotoReview(
+                indexNumber = indexNumber,
+                photo = photo,
+                review = review
             )
         )
 
