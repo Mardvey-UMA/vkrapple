@@ -2,13 +2,13 @@ package ru.webshop.backend.service.impl
 
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Service
-import ru.dating.authservice.exception.GlobalExceptionHandler
 import ru.webshop.backend.config.JwtConfig
 import ru.webshop.backend.dto.AuthResponseDTO
 import ru.webshop.backend.entity.Token
 import ru.webshop.backend.entity.User
 import ru.webshop.backend.enums.CookieName
 import ru.webshop.backend.enums.TokenType
+import ru.webshop.backend.exception.GlobalExceptionHandler
 import ru.webshop.backend.repository.TokenRepository
 import ru.webshop.backend.service.JwtService
 import ru.webshop.backend.service.interfaces.TokenService

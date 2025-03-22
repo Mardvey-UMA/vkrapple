@@ -10,7 +10,7 @@ import java.time.Instant
 data class Cart(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "quantity")
     val quantity: Int = 0,

@@ -7,16 +7,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 @EntityListeners(AuditingEntityListener::class)
 @Table(
     name = "photo_product",
-    uniqueConstraints = [
-        UniqueConstraint(
-            name = "uc_photoproduct_product_index",
-            columnNames = ["product_id", "index_number"]
-        )
-    ])
+    )
 data class PhotoProduct (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "index_number", unique = true, nullable = false)
     var indexNumber: Int = 0,

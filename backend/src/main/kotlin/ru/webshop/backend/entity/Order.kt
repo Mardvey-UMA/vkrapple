@@ -14,7 +14,7 @@ import java.time.Instant
 data class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "status", nullable = false)
     var status: OrderStatus,
@@ -37,10 +37,10 @@ data class Order(
 
     // Связи
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     val orderProducts: MutableList<OrderProduct> = mutableListOf(),
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User,
 )

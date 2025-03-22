@@ -11,33 +11,29 @@ import java.net.URI
 
 @Configuration
 class S3ClientConfig(
-    @Value("\${s3.bucket}")
-    val bucket: String,
     @Value("\${s3.region}")
-    final val region: String,
-    @Value("\${s3.minioUrl")
-    final val minioUrl: String,
+    val region: String,
+    @Value("\${s3.minioUrl}")
+    val minioUrl: String,
     @Value("\${s3.accessKeyId}")
-    final val accessKeyId: String,
+    val accessKeyId: String,
     @Value("\${s3.secretAccessKey}")
-    final val secretAccessKey: String
+    val secretAccessKey: String
 ) {
-    final val credentials = AwsBasicCredentials.create(
-        accessKeyId,
-        secretAccessKey
-    )
-
-    val s3Client = S3Client.builder()
-        .endpointOverride(URI.create(minioUrl))
-        .credentialsProvider(StaticCredentialsProvider.create(credentials))
-        .region(Region.of(region))
-        .forcePathStyle(true)
-        .build()
-
     @Bean
-    fun S3ClientMinio(
+    fun s3Client(): S3Client {
+        val credentials = AwsBasicCredentials.create(accessKeyId, secretAccessKey)
 
-    ): S3Client {
-
+        return S3Client.builder()
+            .apply {
+                if (minioUrl.isNotEmpty()) {
+                    endpointOverride(URI.create(minioUrl))
+                    forcePathStyle(true)
+                }
+            }
+            .credentialsProvider(StaticCredentialsProvider.create(credentials))
+            .region(Region.of(region))
+            .build()
     }
+
 }

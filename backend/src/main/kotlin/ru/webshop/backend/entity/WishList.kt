@@ -11,7 +11,7 @@ import java.time.Instant
 data class WishList(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "add_date", nullable = false, updatable = false)
     val addDate: Instant = Instant.now(),
