@@ -11,7 +11,7 @@ import java.time.Instant
 data class Review(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "rating", nullable = false)
     val rating: Int,
@@ -28,7 +28,7 @@ data class Review(
     @OneToMany(mappedBy = "review")
     val reviewPhotos: List<PhotoReview> = mutableListOf(),
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     val product: Product,
 

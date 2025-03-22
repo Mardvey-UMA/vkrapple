@@ -10,7 +10,7 @@ import java.math.BigDecimal
 data class Product(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "product_name", nullable = false)
     var name: String,
@@ -21,8 +21,8 @@ data class Product(
     @Column(name = "balance_in_stock", nullable = false)
     val balanceInStock: Long,
 
-    @Column(name = "article_number", nullable = false)
-    val articleNumber: Long,
+    @Column(name = "article_number", nullable = false, unique = true)
+    val articleNumber: Long = 0,
 
     @Column(name = "rating", nullable = true)
     var rating: Double,
@@ -39,21 +39,21 @@ data class Product(
     @JoinColumn(name = "category_id")
     val category: Category,
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     val photos: List<PhotoProduct> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     val values: List<Value> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     val orderProducts: List<OrderProduct> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     val reviews: List<Review> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     val carts: List<Cart> = mutableListOf(),
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     val wishLists: List<WishList> = mutableListOf(),
     )

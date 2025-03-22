@@ -1,4 +1,4 @@
-package ru.dating.authservice.exception
+package ru.webshop.backend.exception
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategies

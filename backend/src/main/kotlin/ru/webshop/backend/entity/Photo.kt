@@ -11,7 +11,7 @@ import java.time.Instant
 data class Photo (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "object_key", nullable = false)
     val objectKey: String,

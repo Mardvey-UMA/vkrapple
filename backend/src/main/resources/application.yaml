@@ -2,9 +2,9 @@ server:
   port: 8080
 
 s3:
-  access-key-id: minioadmin
-  secret-access-key: minioadmin
-  minio-url: http://localhost:9000
+  accessKeyId: minioadmin
+  secretAccessKey: minioadmin
+  minioUrl: http://localhost:9000
   region: us-east-1
   bucket: goods_bucket
 
@@ -16,6 +16,7 @@ spring:
   application:
     name: backend
   public-urls:
+    - "/api/**" # для тестирования
     - "/api/auth/**"
     - "/api/password/**"
     - "/api/token/**"
@@ -43,7 +44,7 @@ spring:
       refresh-expiration: 604800
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:

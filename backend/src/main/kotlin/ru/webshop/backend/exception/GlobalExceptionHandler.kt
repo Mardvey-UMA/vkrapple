@@ -1,4 +1,4 @@
-package ru.dating.authservice.exception
+package ru.webshop.backend.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,7 +16,8 @@ class GlobalExceptionHandler {
     class UserAlreadyExistsException(message: String) : RuntimeException(message)
     class InvalidTokenException(message: String) : RuntimeException(message)
     class UserNotFoundException(message: String) : RuntimeException(message)
-
+    class CategoryNotFoundException(message: String) : RuntimeException(message)
+    class ProductNotFoundException(message: String) : RuntimeException(message)
     @ExceptionHandler(InvalidTokenException::class)
     fun handleInvalidTokenException(exp: InvalidTokenException): ResponseEntity<ExceptionResponse> =
         ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -107,4 +108,16 @@ class GlobalExceptionHandler {
                     error = exp.message
                 )
             )
+
+    @ExceptionHandler(CategoryNotFoundException::class)
+    fun handleCategoryNotFound(ex: CategoryNotFoundException): ResponseEntity<ExceptionResponse> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(ExceptionResponse(error = "Category not found"))
+    }
+
+    @ExceptionHandler(ProductNotFoundException::class)
+    fun handleProductNotFound(ex: ProductNotFoundException): ResponseEntity<ExceptionResponse> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(ExceptionResponse(error = "Product with article not found"))
+    }
 }

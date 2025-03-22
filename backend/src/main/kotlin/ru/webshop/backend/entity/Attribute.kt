@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener
 data class Attribute (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "attribute_name", nullable = false)
     val attributeName: String,
