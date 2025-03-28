@@ -18,8 +18,6 @@ import ru.webshop.backend.spec.ProductSpecifications
 class ProductsController(
     private val productService: ProductService
 ) {
-    private val logger = LoggerFactory.getLogger(ProductsController::class.java)
-
     @PostMapping
     fun createProduct(@RequestBody request: ProductCreateRequestDTO
     ) = productService.createProduct(request)

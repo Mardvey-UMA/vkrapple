@@ -6,14 +6,14 @@ import java.time.Instant
 
 @Entity
 @EntityListeners(AuditingEntityListener::class)
-@Table(name = "cart")
-data class Cart(
+@Table(name = "cart_item")
+data class CartItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
     @Column(name = "quantity")
-    val quantity: Int = 0,
+    var quantity: Int = 0,
 
     @Column(name = "add_date")
     val addDate: Instant = Instant.now(),
@@ -24,7 +24,7 @@ data class Cart(
     @JoinColumn(name = "product_id")
     val product: Product,
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "_user_id")
     val user: User
 )

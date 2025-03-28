@@ -61,7 +61,7 @@ data class User (
 
         // Роли
 
-        @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
         var roles: MutableSet<Role> = mutableSetOf(),
 
     @OneToMany(mappedBy = "user")
@@ -70,18 +70,18 @@ data class User (
     @OneToMany(mappedBy = "user")
     val reviews: List<Review> = mutableListOf(),
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    val cart: Cart? = null,
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    val cartItems: List<CartItem> = mutableListOf(),
 
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    val wishList: WishList? = null,
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    val wishListItems: List<WishListItem> = mutableListOf(),
 
     // Токены
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val tokens: MutableSet<Token> = mutableSetOf(),
 
-): UserDetails, Principal{
+    ): UserDetails, Principal{
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> = roles.map { SimpleGrantedAuthority(it.roleName) }.toMutableSet()
 
     override fun isEnabled(): Boolean = enabled

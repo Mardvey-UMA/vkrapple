@@ -38,7 +38,7 @@ data class Order(
     // Связи
 
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    val orderProducts: MutableList<OrderProduct> = mutableListOf(),
+    var orderProducts: MutableList<OrderProduct> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
