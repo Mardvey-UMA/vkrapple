@@ -19,7 +19,7 @@ data class Product(
     var price: BigDecimal,
 
     @Column(name = "balance_in_stock", nullable = false)
-    val balanceInStock: Long,
+    var balanceInStock: Long,
 
     @Column(name = "article_number", nullable = false, unique = true)
     val articleNumber: Long = 0,
@@ -31,7 +31,7 @@ data class Product(
     var description: String,
 
     @Column(name = "number_of_orders")
-    var numberOfOrders: Int = 0,
+    var numberOfOrders: Long = 0,
 
     // Связи
 
@@ -52,8 +52,8 @@ data class Product(
     val reviews: List<Review> = mutableListOf(),
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    val carts: List<Cart> = mutableListOf(),
+    val carts: List<CartItem> = mutableListOf(),
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
-    val wishLists: List<WishList> = mutableListOf(),
+    val wishLists: List<WishListItem> = mutableListOf(),
     )

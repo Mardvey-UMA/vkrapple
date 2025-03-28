@@ -7,5 +7,5 @@ data class ReviewDTO(
     val rating: Int,
     val text: String,
     val createdAt: Instant?,
-    val userName: String?
+    val photos: List<String>?
 )

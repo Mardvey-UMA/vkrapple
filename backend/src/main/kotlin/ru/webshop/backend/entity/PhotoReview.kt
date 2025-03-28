@@ -13,7 +13,7 @@ data class PhotoReview (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(name = "index_number", unique = true, nullable = false)
+    @Column(name = "index_number", nullable = false)
     var indexNumber: Int = 0,
 
     // Связи

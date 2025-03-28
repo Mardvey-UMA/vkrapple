@@ -108,13 +108,15 @@ class ProductServiceImpl (
             categoryName = category.categoryName,
             photos = photos.sortedBy { it.indexNumber }
                 .map { it.photo.photoUrl },
-            reviews = reviews.map {
+            reviews = reviews.map { review ->
                 ReviewDTO(
-                    id = it.id,
-                    rating = it.rating,
-                    text = it.reviewText,
-                    createdAt = it.createdAt,
-                    userName = it.user.username
+                    id = review.id,
+                    rating = review.rating,
+                    text = review.reviewText,
+                    createdAt = review.createdAt,
+                    photos = review.reviewPhotos
+                        .sortedBy { it.indexNumber }
+                        .map { it.photo.photoUrl }
                 )
             }
         )

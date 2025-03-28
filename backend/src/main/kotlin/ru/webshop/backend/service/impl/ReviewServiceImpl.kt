@@ -2,6 +2,7 @@ package ru.webshop.backend.service.impl
 
 import org.springframework.stereotype.Service
 import ru.webshop.backend.dto.ReviewDTO
+import ru.webshop.backend.dto.ReviewResponseDTO
 import ru.webshop.backend.entity.Review
 import ru.webshop.backend.repository.ProductRepository
 import ru.webshop.backend.repository.ReviewRepository
@@ -14,7 +15,7 @@ class ReviewServiceImpl(
     private val productRepository: ProductRepository,
     private val userRepository: UserRepository
 ) : ReviewService {
-    override fun createReview(reviewDTO: ReviewDTO, userId: Long, productArticle: Long) {
+    override fun createReview(reviewDTO: ReviewDTO, userId: Long, productArticle: Long) : ReviewResponseDTO {
 
         val newReview = productRepository.findByArticleNumber(productArticle)?.let {
             userRepository.findByTelegramId(userId)?.let { it1 ->
@@ -28,8 +29,12 @@ class ReviewServiceImpl(
         }
         if (newReview != null) {
             reviewRepository.save(newReview)
+            return ReviewResponseDTO(
+                newReview.id,
+            )
         }else{
             throw IllegalArgumentException("Review not found")
         }
+
     }
 }
