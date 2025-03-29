@@ -34,11 +34,10 @@ class BackendApplication {
             }
             // Создание категорий и атрибутов
             val categoriesToCreate = listOf(
-                "Ручка" to listOf("Производитель", "Толщина стержня", "Модель", "Цвет", "Кол-во в упаковке"),
-                "Тетрадь" to listOf("Производитель", "Линовка", "Кол-во в упаковке", "Кол-во страниц"),
-                "Ластик" to listOf("Производитель", "Кол-во в упаковке", "Твердость", "Тип ластика", "Цвет"),
-                "Карандаш" to listOf("Производитель", "Твердость", "Цвет", "Кол-во в упаковке", "Ластик на конце"),
-                "Фломастер" to listOf("Производитель", "Кол-во в упаковке", "Кол-во цветов", "Тип краски"),
+                "Ручка" to listOf("Производитель", "Толщина стержня", "Коллекция", "Цвет", "Кол-во в упаковке"),
+                "Блокнот" to listOf("Производитель", "Линовка", "Кол-во страниц", "Коллекция", "Цвет"),
+                "Ластик" to listOf("Производитель", "Коллекция", "Твердость"),
+                "Стикер" to listOf("Производитель", "Коллекция", "Кол-во в наборе"),
             )
 
             categoriesToCreate.forEach { (categoryName, attributes) ->
@@ -50,7 +49,6 @@ class BackendApplication {
 
                 attributes.forEach { attributeName ->
                     try {
-                        //logger.info("Adding attribute {} to category {}", attributeName, category.id)
                         attributeService.createAttributeToCategory(category.id, attributeName)
                     } catch (_: RuntimeException) {
                     }

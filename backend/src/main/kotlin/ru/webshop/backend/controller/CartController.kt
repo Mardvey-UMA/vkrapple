@@ -19,13 +19,13 @@ class CartController(
     fun addToCart(@RequestBody request: AddToCartRequestDTO,
                   @RequestHeader("X-Telegram-User-Id") telegramId: Long){
         cartService.addToCart(telegramId, request)
-    }
+    } // Добавить возврат чего-то
 
     @DeleteMapping("/remove")
     fun removeFromCart(@RequestParam("article") articleNumber: Long,
                        @RequestHeader("X-Telegram-User-Id") telegramId: Long){
         cartService.removeFromCart(articleNumber, telegramId)
-    }
+    } // Добавить возврат чего-то
 
     @GetMapping("/list")
     fun getCart(@PageableDefault(size = 20) pageable: Pageable,

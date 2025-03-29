@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import ru.webshop.backend.dto.*
 import ru.webshop.backend.entity.Product
+import ru.webshop.backend.exception.GlobalExceptionHandler
 import ru.webshop.backend.repository.ProductRepository
 import ru.webshop.backend.service.IdGeneratorService
 import ru.webshop.backend.service.interfaces.AttributeService
@@ -23,6 +24,11 @@ class ProductServiceImpl (
     private val idGeneratorService: IdGeneratorService,
 ): ProductService {
 
+    override fun getProduct(article: Long): ProductResponseDTO {
+        val product: Product = productRepository.findByArticleNumber(article)
+            ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found: $article")
+        return product.toResponseDTO()
+    }
 
     // Список всех товаров
     override fun getAllProducts(pageable: Pageable): ProductPageResponseDTO {
