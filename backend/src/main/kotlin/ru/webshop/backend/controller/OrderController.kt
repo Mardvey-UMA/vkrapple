@@ -25,7 +25,7 @@ class OrderController(
     fun cancelOrder(@RequestParam("orderId") orderId: Long,
                     @RequestHeader("X-Telegram-User-Id") telegramId: Long){
         orderService.cancelOrder(telegramId, orderId)
-    }
+    } // Добавить возврат чего-то
 
     @GetMapping("/list")
     fun getOrders(@PageableDefault(size = 20) pageable: Pageable,
