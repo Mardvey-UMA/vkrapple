@@ -4,15 +4,15 @@ import api from './utils/initApi'
 import initializeTelegramApp from './utils/initTelegramApp'
 
 interface AuthResponse {
-	
-	accessToken: string
-	refreshToken: string
+	access_token: string
+	access_expires_at: string
+	issued_at: string
+	refresh_token: string
+	refresh_expires_at: string
 }
 
 interface UserData {
-	// Добавьте правильные типы для вашего ответа /me
-	id: string
-	username: string
+	id: number
 }
 
 export default function App() {
@@ -22,14 +22,13 @@ export default function App() {
 		me: 'pending' | 'success' | 'error'
 	}>({ auth: 'pending', me: 'pending' })
 
-	// Запрос для аутентификации
 	const { data: authData, error: authError } = useQuery<AuthResponse>({
 		queryKey: ['authenticate'],
 		queryFn: async () => {
 			try {
 				const response = await api.post<AuthResponse>('/auth/authenticate')
-				localStorage.setItem('accessToken', response.data.accessToken)
-				localStorage.setItem('refreshToken', response.data.refreshToken)
+				localStorage.setItem('accessToken', response.data.access_token)
+				localStorage.setItem('refreshToken', response.data.refresh_token)
 				setRequestsStatus(prev => ({ ...prev, auth: 'success' }))
 				return response.data
 			} catch (error) {
@@ -41,7 +40,6 @@ export default function App() {
 		staleTime: Infinity,
 	})
 
-	// Запрос для получения данных пользователя
 	const { data: userData, error: userError } = useQuery<UserData>({
 		queryKey: ['me'],
 		queryFn: async () => {
@@ -54,8 +52,8 @@ export default function App() {
 				throw error
 			}
 		},
-		retry: 3,
-		enabled: !!authData, // Запускаем только после успешной аутентификации
+		retry: 0,
+		enabled: !!authData,
 		staleTime: Infinity,
 	})
 

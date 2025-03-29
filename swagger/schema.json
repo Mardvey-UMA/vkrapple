@@ -1,0 +1,23 @@
+// Загрузить товар добавить товар
+
+{
+	"name": "имя товара",
+	"price": 123.2,
+	"balance_in_stock": 12,
+	"description": "описание товара",
+	"category_name": "название категории",
+	"attributes": {
+		"attribute_1": "value_1",
+		"attribute_2": "value_2",
+		"attribute_3": "value_3",
+		"attribute_n": "value_n"
+	}
+}
+// return артикул товара
+
+// Добавить фотку на товар
+ 
+{
+	"article_number" : 123342354,
+	"file" : "multipartFile"
+}
