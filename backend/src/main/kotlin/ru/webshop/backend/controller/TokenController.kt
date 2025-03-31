@@ -1,5 +1,7 @@
 package ru.webshop.backend.controller
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.CookieValue
@@ -11,9 +13,12 @@ import ru.webshop.backend.service.interfaces.TokenService
 
 @RequestMapping("/api/auth/token")
 @RestController
+@Tag(name = "Security")
 class TokenController(
     private val tokenService: TokenService
 ) {
+    @Operation(summary = "Обновить токен",
+        description = "Обновляет токен, рефреш берется из Cookies")
     @PostMapping("/refresh")
     fun refreshToken(
         @CookieValue("REFRESH_TOKEN") refreshToken: String,

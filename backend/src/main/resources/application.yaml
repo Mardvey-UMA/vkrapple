@@ -7,6 +7,24 @@ s3:
   minioUrl: http://localhost:9000
   region: us-east-1
   bucket: goods
+logging:
+  level:
+    org.springdoc: DEBUG
+    org.springframework: WARN
+    ru.webshop: DEBUG
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+    doc-expansion: none
+  api-docs:
+    path: /v3/api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  cache:
+    disabled: true
+
 
 spring:
   mvc:
@@ -20,6 +38,9 @@ spring:
     name: backend
   public-urls:
     - "/api/**" # для тестирования
+    - "/v3/api-docs/**"
+    - "/swagger-ui/**"
+    - "/swagger-ui.html"
     - "/api/auth/**"
     - "/api/password/**"
     - "/api/token/**"

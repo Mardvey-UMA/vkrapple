@@ -1,5 +1,7 @@
 package ru.webshop.backend.controller
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
@@ -11,9 +13,12 @@ import ru.webshop.backend.service.LogoutService
 
 @RestController
 @RequestMapping("/logout")
+@Tag(name = "Security")
 class LogoutController(
     private val logoutService: LogoutService
 ) {
+    @Operation(summary = "Выход пользователя",
+        description = "Выход пользователя, очистка куков, сброс токенов (выполнять при закрытии приложения)")
     @PostMapping()
     fun logout(
         request: HttpServletRequest,
