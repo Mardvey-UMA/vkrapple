@@ -43,6 +43,10 @@ dependencies {
     runtimeOnly("org.postgresql:postgresql")
 
     annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.4.Final")
+
+    // Swagger
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 }
 
 kotlin {

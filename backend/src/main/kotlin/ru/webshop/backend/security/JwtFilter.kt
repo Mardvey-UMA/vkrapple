@@ -31,6 +31,12 @@ class JwtFilter(
         filterChain: FilterChain
     ) {
 
+        if (request.requestURI.startsWith("/swagger-ui")
+            || request.requestURI.startsWith("/v3/api-docs")) {
+            filterChain.doFilter(request, response)
+            return
+        }
+
         val authHeader = request.getHeader(HttpHeaders.AUTHORIZATION)
 
         logger.info("Request received. URL: ${request.requestURL}, Method: ${request.method}")
