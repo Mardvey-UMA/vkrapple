@@ -2,6 +2,7 @@ package ru.webshop.backend.service.impl
 
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.webshop.backend.dto.AddToCartRequestDTO
 import ru.webshop.backend.dto.CartItemDTO
 import ru.webshop.backend.dto.CartPageResponseDTO
@@ -23,38 +24,48 @@ class CartServiceImpl(
 
     // Добавляет товар в корзину, если товар уже есть то прибавит количества
     // (убавить из корзины тогда можно будет передав quantity как -1)
-    override fun addToCart(telegramId: Long, request: AddToCartRequestDTO) {
-        val user: User = userRepository.findByTelegramId(telegramId)
+    override fun addToCart(telegramId: Long, request: AddToCartRequestDTO): CartItemDTO {
+        val user = userRepository.findByTelegramId(telegramId)
             ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
-        val product: Product = productRepository.findByArticleNumber(request.articleNumber)
+        val product = productRepository.findByArticleNumber(request.articleNumber)
             ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found")
-        val cartItem: CartItem? = cartItemRepository.findByUserAndProductArticleNumber(user, request.articleNumber)
-        cartItem?.let {
-            if (it.quantity + request.quantity > 0) it.quantity += request.quantity // если вдруг закинут слишком большое отрицательное
-            else cartItemRepository.deleteByUserAndProductArticleNumber(user, request.articleNumber)
-            cartItemRepository.save(it)
-        } ?: run {
-            var validatedQuantity = 1
-            if (request.quantity > 0) {
-                validatedQuantity = request.quantity
+
+        return cartItemRepository.findByUserAndProductArticleNumber(user, request.articleNumber)?.let { existingItem ->
+            val newQuantity = existingItem.quantity + request.quantity
+            if (newQuantity > 0) {
+                existingItem.quantity = newQuantity
+                cartItemRepository.save(existingItem)
+                existingItem.toDTO()
+            } else {
+                cartItemRepository.delete(existingItem)
+                existingItem.toDTO()
             }
+        } ?: run {
+            val validatedQuantity = if (request.quantity > 0) request.quantity else 1
             val newItem = CartItem(
                 product = product,
                 user = user,
                 quantity = validatedQuantity
             )
             cartItemRepository.save(newItem)
+            newItem.toDTO()
         }
     }
 
     // Удалить из корзины товар
-    override fun removeFromCart(telegramId: Long, articleNumber: Long) {
-        val user: User = userRepository.findByTelegramId(telegramId)
+    @Transactional
+    override fun removeFromCart(telegramId: Long, articleNumber: Long): CartItemDTO {
+        val user = userRepository.findByTelegramId(telegramId)
             ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
-        val product: Product = productRepository.findByArticleNumber(articleNumber)
+
+        val product = productRepository.findByArticleNumber(articleNumber)
             ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found")
-        val cartItem: CartItem? = cartItemRepository.findByUserAndProductArticleNumber(user, articleNumber)
-        cartItem?.let { cartItemRepository.deleteByUserAndProductArticleNumber(user, articleNumber) }
+
+        val cartItem = cartItemRepository.findByUserAndProductArticleNumber(user, articleNumber)
+            ?: throw IllegalStateException("CartItem not found")
+
+        cartItemRepository.deleteByUserAndProductArticleNumber(user, articleNumber)
+        return cartItem.toDTO()
     }
 
     override fun getCart(telegramId: Long, pageable: Pageable): CartPageResponseDTO {

@@ -7,11 +7,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.webshop.backend.dto.CreateOrderRequestDTO
 import ru.webshop.backend.dto.OrderDTO
+import ru.webshop.backend.dto.OrderPageResponseDTO
 import ru.webshop.backend.entity.User
 import ru.webshop.backend.service.interfaces.OrderService
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 class OrderController(
     private val orderService: OrderService
 ) {
@@ -23,13 +24,12 @@ class OrderController(
 
     @DeleteMapping("/cancel")
     fun cancelOrder(@RequestParam("orderId") orderId: Long,
-                    @RequestHeader("X-Telegram-User-Id") telegramId: Long){
-        orderService.cancelOrder(telegramId, orderId)
-    } // Добавить возврат чего-то
+                    @RequestHeader("X-Telegram-User-Id") telegramId: Long) : OrderDTO
+        = orderService.cancelOrder(telegramId, orderId)
 
     @GetMapping("/list")
     fun getOrders(@PageableDefault(size = 20) pageable: Pageable,
-        @RequestHeader("X-Telegram-User-Id") telegramId: Long)
+        @RequestHeader("X-Telegram-User-Id") telegramId: Long) : OrderPageResponseDTO
     = orderService.getOrders(telegramId, pageable)
 
 }

@@ -7,6 +7,6 @@ import ru.webshop.backend.entity.User
 
 interface OrderService {
     fun createOrder(telegramId: Long, request: CreateOrderRequestDTO): OrderDTO
-    fun cancelOrder(telegramId: Long, orderId: Long)
+    fun cancelOrder(telegramId: Long, orderId: Long): OrderDTO
     fun getOrders(telegramId: Long, pageable: Pageable): OrderPageResponseDTO
 }

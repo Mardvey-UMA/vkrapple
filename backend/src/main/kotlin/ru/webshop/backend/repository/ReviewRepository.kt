@@ -10,4 +10,5 @@ import ru.webshop.backend.entity.Review
 interface ReviewRepository: JpaRepository<Review, Long> {
     //override fun findAll(pageable: Pageable): Page<Review> ?
     fun findReviewById(id: Long): Review?
+    fun findAllByProduct(product: Product): List<Review>
 }

@@ -25,7 +25,7 @@ data class Product(
     val articleNumber: Long = 0,
 
     @Column(name = "rating", nullable = true)
-    var rating: Double,
+    var rating: BigDecimal = BigDecimal.ZERO,
 
     @Column(name = "description", nullable = true)
     var description: String,
@@ -33,6 +33,8 @@ data class Product(
     @Column(name = "number_of_orders")
     var numberOfOrders: Long = 0,
 
+    @Column(name = "total_reviews")
+    var totalReviews: Long = 0,
     // Связи
 
     @ManyToOne(fetch = FetchType.LAZY)
