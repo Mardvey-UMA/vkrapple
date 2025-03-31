@@ -1,0 +1,190 @@
+{
+  "products": [
+    {
+      "id": 4,
+      "articleNumber": 6010031348,
+      "name": "Стикерпарк Пейзажи СГУ",
+      "price": 250.0,
+      "rating": 2.67,
+      "attributes": [
+        {
+          "attributeId": 14,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 15,
+          "attributeName": "Коллекция",
+          "value": "Юбилей СГУ"
+        },
+        {
+          "attributeId": 16,
+          "attributeName": "Кол-во в наборе",
+          "value": "4"
+        }
+      ],
+      "categoryId": 4,
+      "categoryName": "Стикер",
+      "photos": [
+        "http://localhost:9000/goods/6010031348/product/photo_0"
+      ],
+      "reviews": [
+        {
+          "id": 10,
+          "rating": 5,
+          "text": "Прошептать выражение похороны мрачно. Очередной полностью разуметься рот пересечь район. Валюта поговорить выкинуть ремень уронить решетка металл.",
+          "createdAt": "2025-03-31T08:03:17.897949Z",
+          "photos": [
+            "http://localhost:9000/goods/6010031348/review/photo_0",
+            "http://localhost:9000/goods/6010031348/review/photo_1",
+            "http://localhost:9000/goods/6010031348/review/photo_2"
+          ]
+        },
+        {
+          "id": 11,
+          "rating": 1,
+          "text": "Житель соответствие сравнение девка заявление угодный салон. Песня народ инструкция дорогой устройство. Трубка прелесть социалистический выбирать. Пол ставить достоинство пища кидать.",
+          "createdAt": "2025-03-31T08:03:18.189782Z",
+          "photos": [
+            "http://localhost:9000/goods/6010031348/review/photo_0",
+            "http://localhost:9000/goods/6010031348/review/photo_1"
+          ]
+        },
+        {
+          "id": 12,
+          "rating": 2,
+          "text": "Висеть пробовать избегать вытаскивать о. Покидать очутиться факультет при очко правление сутки. Невозможно мальчишка пасть научить.",
+          "createdAt": "2025-03-31T08:03:18.332222Z",
+          "photos": [
+            "http://localhost:9000/goods/6010031348/review/photo_0",
+            "http://localhost:9000/goods/6010031348/review/photo_1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "articleNumber": 8585341385,
+      "name": "Стикер парк легенда СГУ",
+      "price": 300.0,
+      "rating": 2.67,
+      "attributes": [
+        {
+          "attributeId": 14,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 15,
+          "attributeName": "Коллекция",
+          "value": "Воспоминания СГУ"
+        },
+        {
+          "attributeId": 16,
+          "attributeName": "Кол-во в наборе",
+          "value": "4"
+        }
+      ],
+      "categoryId": 4,
+      "categoryName": "Стикер",
+      "photos": [
+        "http://localhost:9000/goods/8585341385/product/photo_0"
+      ],
+      "reviews": [
+        {
+          "id": 13,
+          "rating": 3,
+          "text": "Изба сомнительный заплакать равнодушный идея реклама. Применяться левый эффект выраженный бегать промолчать фонарик. Потом подземный приходить.",
+          "createdAt": "2025-03-31T08:03:18.529083Z",
+          "photos": [
+            "http://localhost:9000/goods/8585341385/review/photo_0",
+            "http://localhost:9000/goods/8585341385/review/photo_1"
+          ]
+        },
+        {
+          "id": 14,
+          "rating": 3,
+          "text": "Вариант пол провал ответить естественный равнодушный.",
+          "createdAt": "2025-03-31T08:03:18.772383Z",
+          "photos": [
+            "http://localhost:9000/goods/8585341385/review/photo_0",
+            "http://localhost:9000/goods/8585341385/review/photo_1"
+          ]
+        },
+        {
+          "id": 15,
+          "rating": 2,
+          "text": "Народ деловой да бровь неожиданно факультет вчера. Неправда тревога жидкий лететь.",
+          "createdAt": "2025-03-31T08:03:18.918553Z",
+          "photos": [
+            "http://localhost:9000/goods/8585341385/review/photo_0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "articleNumber": 1632659445,
+      "name": "Полный стикерпарк СГУ",
+      "price": 500.0,
+      "rating": 2.0,
+      "attributes": [
+        {
+          "attributeId": 14,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 15,
+          "attributeName": "Коллекция",
+          "value": "Юбилей СГУ"
+        },
+        {
+          "attributeId": 16,
+          "attributeName": "Кол-во в наборе",
+          "value": "8"
+        }
+      ],
+      "categoryId": 4,
+      "categoryName": "Стикер",
+      "photos": [
+        "http://localhost:9000/goods/1632659445/product/photo_1"
+      ],
+      "reviews": [
+        {
+          "id": 16,
+          "rating": 3,
+          "text": "Издали выражение что за. Перебивать коробка счастье палец исследование скользить. Факультет даль ложиться мгновение бак плод.",
+          "createdAt": "2025-03-31T08:03:19.028420Z",
+          "photos": [
+            "http://localhost:9000/goods/1632659445/review/photo_0",
+            "http://localhost:9000/goods/1632659445/review/photo_1"
+          ]
+        },
+        {
+          "id": 17,
+          "rating": 1,
+          "text": "Слать изучить порядок монета пастух. Встать пламя пропадать рот юный.",
+          "createdAt": "2025-03-31T08:03:19.269700Z",
+          "photos": [
+            "http://localhost:9000/goods/1632659445/review/photo_0"
+          ]
+        },
+        {
+          "id": 18,
+          "rating": 2,
+          "text": "Вперед инвалид грудь что. Идея пропасть слишком ручей. Новый слишком нож инфекция устройство деньги функция.",
+          "createdAt": "2025-03-31T08:03:19.385711Z",
+          "photos": [
+            "http://localhost:9000/goods/1632659445/review/photo_0",
+            "http://localhost:9000/goods/1632659445/review/photo_1",
+            "http://localhost:9000/goods/1632659445/review/photo_2"
+          ]
+        }
+      ]
+    }
+  ],
+  "currentPage": 0,
+  "totalPages": 1,
+  "totalProducts": 3
+}

@@ -1,0 +1,18 @@
+URL: http://localhost:8080/api/products/search?minPrice=100&maxPrice=300
+Method: GET
+Params: [
+  [
+    "minPrice",
+    "100"
+  ],
+  [
+    "maxPrice",
+    "300"
+  ]
+]
+Headers: {
+  "User-Agent": "python-requests/2.32.3",
+  "Accept-Encoding": "gzip, deflate",
+  "Accept": "*/*",
+  "Connection": "keep-alive"
+}

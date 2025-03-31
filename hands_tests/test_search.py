@@ -48,7 +48,7 @@ def load_articles():
 def get_category_id(category_name, articles):
     for item in articles:
         if item["category"] == category_name:
-            return item["category_id"]  # Предполагаем, что category_id сохранен
+            return item["category_id"]
     return None
 
 
