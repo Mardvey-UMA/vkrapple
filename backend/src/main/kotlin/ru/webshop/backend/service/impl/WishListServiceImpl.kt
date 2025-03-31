@@ -2,6 +2,7 @@ package ru.webshop.backend.service.impl
 
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.webshop.backend.dto.WishListItemDTO
 import ru.webshop.backend.dto.WishListPageResponseDTO
 import ru.webshop.backend.entity.CartItem
@@ -19,7 +20,9 @@ class WishListServiceImpl(
     private val productRepository: ProductRepository,
     private val userRepository: UserRepository,
 ) : WishListService {
-    override fun addToWishList(telegramId: Long, articleNumber: Long) {
+
+    @Transactional
+    override fun addToWishList(telegramId: Long, articleNumber: Long) : WishListItemDTO{
         val user: User = userRepository.findByTelegramId(telegramId)
             ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
         val product = productRepository.findByArticleNumber(articleNumber)
@@ -27,18 +30,25 @@ class WishListServiceImpl(
 
         if (wishListItemRepository.findByUserAndProductArticleNumber(user, articleNumber) == null) {
             val item = WishListItem(product = product, user = user)
-            wishListItemRepository.save(item)
+            return wishListItemRepository.save(item).toDTO()
+        }else{
+            throw IllegalStateException("WishListService can only be added to a product")
         }
     }
 
-    override fun removeFromWishList(telegramId: Long, articleNumber: Long) {
+    @Transactional
+    override fun removeFromWishList(telegramId: Long, articleNumber: Long) : WishListItemDTO{
         val user: User = userRepository.findByTelegramId(telegramId)
             ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
         val product = productRepository.findByArticleNumber(articleNumber)
             ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found")
-        val wishListItem: WishListItem? = wishListItemRepository.findByUserAndProductArticleNumber(user, articleNumber)
-        wishListItem?.let { wishListItemRepository.deleteByUserAndProductArticleNumber(user, articleNumber) }
+        val wishListItem: WishListItem = wishListItemRepository.findByUserAndProductArticleNumber(user, articleNumber)
+            ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found")
+
+        wishListItem.let { wishListItemRepository.deleteByUserAndProductArticleNumber(user, articleNumber) }
         wishListItemRepository.deleteByUserAndProductArticleNumber(user, articleNumber)
+
+        return wishListItem.toDTO()
     }
 
     override fun getWishList(telegramId: Long, pageable: Pageable): WishListPageResponseDTO {

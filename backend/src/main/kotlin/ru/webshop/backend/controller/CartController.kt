@@ -17,15 +17,15 @@ class CartController(
 
     @PostMapping("/add")
     fun addToCart(@RequestBody request: AddToCartRequestDTO,
-                  @RequestHeader("X-Telegram-User-Id") telegramId: Long){
-        cartService.addToCart(telegramId, request)
-    } // Добавить возврат чего-то
+                  @RequestHeader("X-Telegram-User-Id") telegramId: Long) : CartItemDTO
+        = cartService.addToCart(telegramId, request)
+
 
     @DeleteMapping("/remove")
     fun removeFromCart(@RequestParam("article") articleNumber: Long,
-                       @RequestHeader("X-Telegram-User-Id") telegramId: Long){
-        cartService.removeFromCart(articleNumber, telegramId)
-    } // Добавить возврат чего-то
+                       @RequestHeader("X-Telegram-User-Id") telegramId: Long) : CartItemDTO
+        = cartService.removeFromCart(telegramId, articleNumber)
+
 
     @GetMapping("/list")
     fun getCart(@PageableDefault(size = 20) pageable: Pageable,

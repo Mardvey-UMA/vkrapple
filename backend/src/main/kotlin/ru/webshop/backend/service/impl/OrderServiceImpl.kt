@@ -2,6 +2,7 @@ package ru.webshop.backend.service.impl
 
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.webshop.backend.dto.CreateOrderRequestDTO
 import ru.webshop.backend.dto.OrderDTO
 import ru.webshop.backend.dto.OrderItemDTO
@@ -11,20 +12,22 @@ import ru.webshop.backend.entity.OrderProduct
 import ru.webshop.backend.entity.User
 import ru.webshop.backend.enums.OrderStatus
 import ru.webshop.backend.exception.GlobalExceptionHandler
-import ru.webshop.backend.repository.CartItemRepository
-import ru.webshop.backend.repository.OrderRepository
-import ru.webshop.backend.repository.ProductRepository
-import ru.webshop.backend.repository.UserRepository
+import ru.webshop.backend.repository.*
 import ru.webshop.backend.service.interfaces.OrderService
 import java.math.BigDecimal
+import java.time.Duration
+import java.time.Instant
 
 @Service
 class OrderServiceImpl(
     private val orderRepository: OrderRepository,
     private val cartItemRepository: CartItemRepository,
     private val productRepository: ProductRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val orderProductRepository: OrderProductRepository,
 ) : OrderService {
+
+    @Transactional
     override fun createOrder(telegramId: Long, request: CreateOrderRequestDTO): OrderDTO {
         val user: User = userRepository.findByTelegramId(telegramId)
             ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
@@ -48,15 +51,17 @@ class OrderServiceImpl(
             orderAmount = cartItems.sumOf { it.product.price * BigDecimal(it.quantity) },
             paymentMethod = request.paymentMethod,
             orderAddress = request.orderAddress,
-            expectedDate = request.expectedDate
+            expectedDate =  Instant.now().plus(Duration.ofDays(7))
         ).apply {
             orderProducts = cartItems.map { cartItem ->
-                OrderProduct(
+                val newOrderProducts = OrderProduct(
                     product = cartItem.product,
                     order = this,
                     quantity = cartItem.quantity.toLong(),
                     amount = cartItem.product.price * BigDecimal(cartItem.quantity)
                 )
+                orderProductRepository.save(newOrderProducts)
+                newOrderProducts
             }.toMutableList()
         }
 
@@ -66,7 +71,8 @@ class OrderServiceImpl(
         return savedOrder.toDTO()
     }
 
-    override fun cancelOrder(telegramId: Long, orderId: Long) {
+    @Transactional
+    override fun cancelOrder(telegramId: Long, orderId: Long) : OrderDTO {
         val user: User = userRepository.findByTelegramId(telegramId)
             ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
         val order = orderRepository.findByIdAndUser(orderId, user)
@@ -84,6 +90,7 @@ class OrderServiceImpl(
 
         order.status = OrderStatus.CANCELLED
         orderRepository.save(order)
+        return order.toDTO()
     }
 
     override fun getOrders(telegramId: Long, pageable: Pageable): OrderPageResponseDTO {
