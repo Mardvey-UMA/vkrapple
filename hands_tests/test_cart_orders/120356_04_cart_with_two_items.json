@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "articleNumber": 5249029654,
+      "productName": "Ручка черная СГУ",
+      "price": 150.0,
+      "quantity": 2,
+      "addDate": "2025-03-31T08:03:53.064080Z"
+    },
+    {
+      "id": 2,
+      "articleNumber": 6174911671,
+      "productName": "Ручка синяя СГУ",
+      "price": 150.0,
+      "quantity": 1,
+      "addDate": "2025-03-31T08:03:55.128513Z"
+    }
+  ],
+  "currentPage": 0,
+  "totalPages": 1,
+  "totalItems": 2
+}

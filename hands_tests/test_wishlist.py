@@ -31,6 +31,7 @@ def test_wishlist_flow(articles_data):
         f"{BASE_URL}/wishlist/add?article={article1}",
         headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
     )
+    print(response)
     save_response("add_to_wishlist1", response)
 
     # Просмотр списка

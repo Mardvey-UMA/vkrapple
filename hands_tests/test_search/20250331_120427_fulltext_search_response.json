@@ -1,0 +1,4 @@
+{
+  "business_error_description": "Very bad(",
+  "error": "Required request parameter 'categoryId' for method parameter type long is not present"
+}

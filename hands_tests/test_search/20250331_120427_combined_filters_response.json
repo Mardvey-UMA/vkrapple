@@ -1,0 +1,294 @@
+{
+  "products": [
+    {
+      "id": 8,
+      "articleNumber": 2611879615,
+      "name": "Блокнот синий СГУ",
+      "price": 450.0,
+      "rating": 2.67,
+      "attributes": [
+        {
+          "attributeId": 6,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 7,
+          "attributeName": "Линовка",
+          "value": "Клетка"
+        },
+        {
+          "attributeId": 8,
+          "attributeName": "Кол-во страниц",
+          "value": "96"
+        },
+        {
+          "attributeId": 9,
+          "attributeName": "Коллекция",
+          "value": "Деловой СГУ"
+        },
+        {
+          "attributeId": 10,
+          "attributeName": "Цвет",
+          "value": "Синий"
+        }
+      ],
+      "categoryId": 2,
+      "categoryName": "Блокнот",
+      "photos": [
+        "http://localhost:9000/goods/2611879615/product/photo_0"
+      ],
+      "reviews": [
+        {
+          "id": 22,
+          "rating": 2,
+          "text": "Командир князь назначить возмутиться цепочка художественный. Академик пятеро передо район научить.",
+          "createdAt": "2025-03-31T08:03:19.865441Z",
+          "photos": [
+            "http://localhost:9000/goods/2611879615/review/photo_0",
+            "http://localhost:9000/goods/2611879615/review/photo_1",
+            "http://localhost:9000/goods/2611879615/review/photo_2"
+          ]
+        },
+        {
+          "id": 23,
+          "rating": 5,
+          "text": "Висеть промолчать за пропадать.",
+          "createdAt": "2025-03-31T08:03:19.967067Z",
+          "photos": [
+            "http://localhost:9000/goods/2611879615/review/photo_0",
+            "http://localhost:9000/goods/2611879615/review/photo_1",
+            "http://localhost:9000/goods/2611879615/review/photo_2"
+          ]
+        },
+        {
+          "id": 24,
+          "rating": 1,
+          "text": "Сходить зачем услать спичка через достоинство результат следовательно. Девка цель набор функция соответствие. Командование угодный заработать стакан остановить.",
+          "createdAt": "2025-03-31T08:03:20.071789Z",
+          "photos": [
+            "http://localhost:9000/goods/2611879615/review/photo_0",
+            "http://localhost:9000/goods/2611879615/review/photo_1",
+            "http://localhost:9000/goods/2611879615/review/photo_2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "articleNumber": 3808291748,
+      "name": "Блокнот белый СГУ",
+      "price": 450.0,
+      "rating": 3.33,
+      "attributes": [
+        {
+          "attributeId": 6,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 7,
+          "attributeName": "Линовка",
+          "value": "Клетка"
+        },
+        {
+          "attributeId": 8,
+          "attributeName": "Кол-во страниц",
+          "value": "96"
+        },
+        {
+          "attributeId": 9,
+          "attributeName": "Коллекция",
+          "value": "Деловой СГУ"
+        },
+        {
+          "attributeId": 10,
+          "attributeName": "Цвет",
+          "value": "Белый"
+        }
+      ],
+      "categoryId": 2,
+      "categoryName": "Блокнот",
+      "photos": [
+        "http://localhost:9000/goods/3808291748/product/photo_0"
+      ],
+      "reviews": [
+        {
+          "id": 25,
+          "rating": 3,
+          "text": "Вскинуть сходить горький заложить. Поставить райком спорт район.",
+          "createdAt": "2025-03-31T08:03:20.186663Z",
+          "photos": [
+            "http://localhost:9000/goods/3808291748/review/photo_0"
+          ]
+        },
+        {
+          "id": 26,
+          "rating": 5,
+          "text": "Выдержать печатать мимо еврейский еврейский художественный.",
+          "createdAt": "2025-03-31T08:03:20.240388Z",
+          "photos": [
+            "http://localhost:9000/goods/3808291748/review/photo_0",
+            "http://localhost:9000/goods/3808291748/review/photo_1",
+            "http://localhost:9000/goods/3808291748/review/photo_2"
+          ]
+        },
+        {
+          "id": 27,
+          "rating": 2,
+          "text": "Секунда уничтожение дурацкий. Уточнить порт народ. Рота сверкать заявление важный.",
+          "createdAt": "2025-03-31T08:03:20.344968Z",
+          "photos": [
+            "http://localhost:9000/goods/3808291748/review/photo_0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "articleNumber": 4343541497,
+      "name": "Блокнот синий СГУ",
+      "price": 450.0,
+      "rating": 3.67,
+      "attributes": [
+        {
+          "attributeId": 6,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 7,
+          "attributeName": "Линовка",
+          "value": "Линия"
+        },
+        {
+          "attributeId": 8,
+          "attributeName": "Кол-во страниц",
+          "value": "96"
+        },
+        {
+          "attributeId": 9,
+          "attributeName": "Коллекция",
+          "value": "Деловой СГУ"
+        },
+        {
+          "attributeId": 10,
+          "attributeName": "Цвет",
+          "value": "Синий"
+        }
+      ],
+      "categoryId": 2,
+      "categoryName": "Блокнот",
+      "photos": [
+        "http://localhost:9000/goods/4343541497/product/photo_0"
+      ],
+      "reviews": [
+        {
+          "id": 28,
+          "rating": 5,
+          "text": "Сынок находить естественный около возможно вряд тута белье.",
+          "createdAt": "2025-03-31T08:03:20.398645Z",
+          "photos": [
+            "http://localhost:9000/goods/4343541497/review/photo_0",
+            "http://localhost:9000/goods/4343541497/review/photo_1"
+          ]
+        },
+        {
+          "id": 29,
+          "rating": 5,
+          "text": "Запретить терапия налево деньги еврейский сверкающий прежде.",
+          "createdAt": "2025-03-31T08:03:20.457681Z",
+          "photos": [
+            "http://localhost:9000/goods/4343541497/review/photo_0",
+            "http://localhost:9000/goods/4343541497/review/photo_1"
+          ]
+        },
+        {
+          "id": 30,
+          "rating": 1,
+          "text": "Ведь школьный шлем. Порт промолчать правление. Около выдержать скрытый упорно ответить означать.",
+          "createdAt": "2025-03-31T08:03:20.524168Z",
+          "photos": [
+            "http://localhost:9000/goods/4343541497/review/photo_0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "articleNumber": 1106502746,
+      "name": "Блокнот белый СГУ",
+      "price": 450.0,
+      "rating": 4.33,
+      "attributes": [
+        {
+          "attributeId": 6,
+          "attributeName": "Производитель",
+          "value": "СГУ"
+        },
+        {
+          "attributeId": 7,
+          "attributeName": "Линовка",
+          "value": "Линия"
+        },
+        {
+          "attributeId": 8,
+          "attributeName": "Кол-во страниц",
+          "value": "96"
+        },
+        {
+          "attributeId": 9,
+          "attributeName": "Коллекция",
+          "value": "Деловой СГУ"
+        },
+        {
+          "attributeId": 10,
+          "attributeName": "Цвет",
+          "value": "Белый"
+        }
+      ],
+      "categoryId": 2,
+      "categoryName": "Блокнот",
+      "photos": [
+        "http://localhost:9000/goods/1106502746/product/photo_0"
+      ],
+      "reviews": [
+        {
+          "id": 31,
+          "rating": 4,
+          "text": "Поколение тревога покидать наткнуться вздрагивать затянуться.",
+          "createdAt": "2025-03-31T08:03:20.580009Z",
+          "photos": [
+            "http://localhost:9000/goods/1106502746/review/photo_0",
+            "http://localhost:9000/goods/1106502746/review/photo_1",
+            "http://localhost:9000/goods/1106502746/review/photo_2"
+          ]
+        },
+        {
+          "id": 32,
+          "rating": 5,
+          "text": "Господь ставить очередной вытаскивать ручей рот. Район низкий посидеть дьявол. Отметить войти мучительно картинка.",
+          "createdAt": "2025-03-31T08:03:20.693355Z",
+          "photos": [
+            "http://localhost:9000/goods/1106502746/review/photo_0",
+            "http://localhost:9000/goods/1106502746/review/photo_1",
+            "http://localhost:9000/goods/1106502746/review/photo_2"
+          ]
+        },
+        {
+          "id": 33,
+          "rating": 4,
+          "text": "Механический ночь чем народ зарплата неожиданный легко. Металл беспомощный граница интеллектуальный лететь неожиданный через. Запеть лететь исследование порт инвалид собеседник беспомощный.",
+          "createdAt": "2025-03-31T08:03:20.809238Z",
+          "photos": [
+            "http://localhost:9000/goods/1106502746/review/photo_0",
+            "http://localhost:9000/goods/1106502746/review/photo_1"
+          ]
+        }
+      ]
+    }
+  ],
+  "currentPage": 0,
+  "totalPages": 1,
+  "totalProducts": 4
+}
