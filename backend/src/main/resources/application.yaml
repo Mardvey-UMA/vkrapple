@@ -2,8 +2,8 @@ server:
   port: 8080
 
 s3:
-  accessKeyId: KFzkrASGUVF0CPAYBI1u
-  secretAccessKey: gYkGKXl1r5b4TuJVc4kDMTitg63fT64aRfDWlnsI
+  accessKeyId: q9NlzKM1I24pjL3fev3B
+  secretAccessKey: B2iQx9CKk7Dd7X7QbiWcNSb2wE3iQSHBWV80o5ry
   minioUrl: http://localhost:9000
   region: us-east-1
   bucket: goods
@@ -37,7 +37,7 @@ spring:
   application:
     name: backend
   public-urls:
-    - "/api/**" # для тестирования
+    #- "/api/**" # для тестирования
     - "/v3/api-docs/**"
     - "/swagger-ui/**"
     - "/swagger-ui.html"
@@ -64,11 +64,11 @@ spring:
   security:
     jwt:
       secret-key: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
-      expiration: 3600
+      expiration: 360000
       refresh-expiration: 604800
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: false
     properties:
       hibernate:

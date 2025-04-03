@@ -36,8 +36,8 @@ class AttributeServiceImpl (
             attributeName = attributeName,
             category = category
         )
-        //logger.info("Creating new attribute with {}, {}", newAttribute.category.categoryName,
-            //newAttribute.attributeName )
+        logger.info("Creating new attribute with {}, {}", newAttribute.category.categoryName,
+            newAttribute.attributeName )
         return attributeRepository.save(newAttribute)
     }
 

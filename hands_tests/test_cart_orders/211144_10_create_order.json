@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "status": "IN_PROGRESS",
+  "order_amount": 0,
+  "payment_method": "CARD",
+  "order_address": "ул. Пушкина, 10",
+  "expected_date": "2025-04-10T17:11:44.361837513Z",
+  "created_at": "2025-04-03T17:11:44.361862068Z",
+  "items": []
+}
