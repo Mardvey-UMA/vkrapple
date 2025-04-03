@@ -1,6 +1,7 @@
 package ru.webshop.backend.service.impl
 
 import org.hibernate.Hibernate
+import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -23,7 +24,7 @@ class ProductServiceImpl (
     private val valueService: ValueService,
     private val idGeneratorService: IdGeneratorService,
 ): ProductService {
-
+    private val logger = LoggerFactory.getLogger(ProductServiceImpl::class.java)
     override fun getProduct(article: Long): ProductResponseDTO {
         val product: Product = productRepository.findByArticleNumber(article)
             ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found: $article")
@@ -43,6 +44,7 @@ class ProductServiceImpl (
 
     // Добавить товар
     override fun createProduct(request: ProductCreateRequestDTO): Long {
+        logger.info(request.toString())
         val category = categoryService.getCategoryById(request.categoryId)
 
         val product = productRepository.save(

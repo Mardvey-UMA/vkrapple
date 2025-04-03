@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
+import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Description
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -20,6 +21,7 @@ import ru.webshop.backend.service.interfaces.AuthenticationService
 class AuthController(
     private val authenticationService: AuthenticationService
 ) {
+    val logger = LoggerFactory.getLogger(AuthController::class.java)!!
     @Operation(summary = "Авторизировать пользователя получить токены",
         description = "Заголовок с X-Telegram-Init-Data для проверки подписи и выдачи токенов")
     @PostMapping("/authenticate")
@@ -27,6 +29,8 @@ class AuthController(
         @RequestHeader("X-Telegram-Init-Data") webAppData: String ,
         response: HttpServletResponse
     ): ResponseEntity<AuthResponseDTO> {
+
+        logger.info("РЕГА ПОШЛА")
         val authResponse = authenticationService.authenticate(webAppData, response)
         return ResponseEntity.ok(authResponse)
     }

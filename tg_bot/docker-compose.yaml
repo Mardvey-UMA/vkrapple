@@ -9,12 +9,12 @@ services:
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
   minio:
     image: minio/minio
     entrypoint: sh
     command: >
-      -c 'mkdir -p /data/goods_bucket 
+      -c 'mkdir -p /data 
       && minio server /data'
     ports:
       - 9000:9000

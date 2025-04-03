@@ -188,13 +188,12 @@ products = [
 
 def create_product(product_data):
     category_id = CATEGORIES[product_data["category"]]
-
     payload = {
         "name": product_data["name"],
         "price": product_data["price"],
-        "balanceInStock": product_data["balance"],
+        "balance_in_stock": product_data["balance"],
         "description": product_data["description"],
-        "categoryId": category_id,
+        "category_id": category_id,
         "attributes": product_data["attributes"]
     }
 

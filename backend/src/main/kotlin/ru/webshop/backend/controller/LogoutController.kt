@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.webshop.backend.service.LogoutService
 
 @RestController
-@RequestMapping("/logout")
+@RequestMapping("/api/logout")
 @Tag(name = "Security")
 class LogoutController(
     private val logoutService: LogoutService

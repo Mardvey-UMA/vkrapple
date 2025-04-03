@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": 2,
+      "article_number": 5763142399,
+      "product_name": "Ручка синяя СГУ",
+      "price": 150.0,
+      "quantity": 1,
+      "add_date": "2025-04-03T17:15:35.535565Z"
+    },
+    {
+      "id": 1,
+      "article_number": 7105184243,
+      "product_name": "Ручка черная СГУ",
+      "price": 150.0,
+      "quantity": 5,
+      "add_date": "2025-04-03T17:15:33.479087Z"
+    },
+    {
+      "id": 3,
+      "article_number": 1468826387,
+      "product_name": "Полный стикерпарк СГУ",
+      "price": 500.0,
+      "quantity": 2,
+      "add_date": "2025-04-03T17:15:38.583166Z"
+    }
+  ],
+  "current_page": 0,
+  "total_pages": 1,
+  "total_items": 3
+}

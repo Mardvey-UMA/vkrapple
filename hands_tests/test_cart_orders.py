@@ -37,7 +37,7 @@ def test_complex_cart_flow(articles):
 
     # Тест 1: Добавление первого товара
     print("Testing 01_add_first_item")
-    add_data = {"articleNumber": test_articles[0]["article"], "quantity": 2}
+    add_data = {"article_number": test_articles[0]["article"], "quantity": 2}
     response = requests.post(
         f"{BASE_URL}/cart/add",
         json=add_data,
@@ -57,7 +57,7 @@ def test_complex_cart_flow(articles):
     time.sleep(1)
     print("Testing 03_add_second_item")
     # Тест 3: Добавление второго товара
-    add_data = {"articleNumber": test_articles[1]["article"], "quantity": 1}
+    add_data = {"article_number": test_articles[1]["article"], "quantity": 1}
     response = requests.post(
         f"{BASE_URL}/cart/add",
         json=add_data,
@@ -75,7 +75,7 @@ def test_complex_cart_flow(articles):
     time.sleep(1)
     print("Testing 05_update_first_item")
     # Тест 5: Обновление количества первого товара
-    add_data = {"articleNumber": test_articles[0]["article"], "quantity": 3}
+    add_data = {"article_number": test_articles[0]["article"], "quantity": 3}
     response = requests.post(
         f"{BASE_URL}/cart/add",
         json=add_data,
@@ -85,7 +85,7 @@ def test_complex_cart_flow(articles):
     time.sleep(1)
     print("Testing 06_add_third_item")
     # Тест 6: Добавление третьего товара
-    add_data = {"articleNumber": test_articles[2]["article"], "quantity": 2}
+    add_data = {"article_number": test_articles[2]["article"], "quantity": 2}
     response = requests.post(
         f"{BASE_URL}/cart/add",
         json=add_data,
@@ -120,8 +120,8 @@ def test_complex_cart_flow(articles):
     print("Testing 10_create_order")
     # Тест 10: Создание заказа
     order_data = {
-        "paymentMethod": "CARD",
-        "orderAddress": "ул. Пушкина, 10"
+        "payment_method": "CARD",
+        "order_address": "ул. Пушкина, 10"
     }
     response = requests.post(
         f"{BASE_URL}/orders/create",
@@ -162,6 +162,63 @@ def test_complex_cart_flow(articles):
         headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
     )
     save_response("14_orders_list", response)
+
+    # Тест 1: Добавление первого товара
+    print("Testing 01_add_first_item")
+    add_data = {"article_number": test_articles[0]["article"], "quantity": 2}
+    response = requests.post(
+        f"{BASE_URL}/cart/add",
+        json=add_data,
+        headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
+    )
+
+    save_response("01_add_first_item", response)
+    time.sleep(1)
+    # Тест 2: Проверка корзины с одним товаром
+    print("Testing 02_cart_with_one_item")
+    response = requests.get(
+        f"{BASE_URL}/cart/list",
+        headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
+    )
+
+    save_response("02_cart_with_one_item", response)
+    time.sleep(1)
+    print("Testing 03_add_second_item")
+    # Тест 3: Добавление второго товара
+    add_data = {"article_number": test_articles[1]["article"], "quantity": 1}
+    response = requests.post(
+        f"{BASE_URL}/cart/add",
+        json=add_data,
+        headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
+    )
+    save_response("03_add_second_item", response)
+    time.sleep(1)
+    print("Testing 04_cart_with_two_items")
+    # Тест 4: Проверка корзины с двумя товарами
+    response = requests.get(
+        f"{BASE_URL}/cart/list",
+        headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
+    )
+    save_response("04_cart_with_two_items", response)
+    time.sleep(1)
+    print("Testing 05_update_first_item")
+    # Тест 5: Обновление количества первого товара
+    add_data = {"article_number": test_articles[0]["article"], "quantity": 3}
+    response = requests.post(
+        f"{BASE_URL}/cart/add",
+        json=add_data,
+        headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
+    )
+    save_response("05_update_first_item", response)
+    time.sleep(1)
+    print("Testing 06_add_third_item")
+    # Тест 6: Добавление третьего товара
+    add_data = {"article_number": test_articles[2]["article"], "quantity": 2}
+    response = requests.post(
+        f"{BASE_URL}/cart/add",
+        json=add_data,
+        headers={"X-Telegram-User-Id": TELEGRAM_USER_ID}
+    )
 if __name__ == "__main__":
     articles_data = load_articles()
 

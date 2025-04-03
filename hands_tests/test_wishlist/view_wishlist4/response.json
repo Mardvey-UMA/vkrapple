@@ -2,20 +2,20 @@
   "items": [
     {
       "id": 1,
-      "articleNumber": 1504194383,
-      "productName": "Ручка черная СГУ",
+      "article_number": 7105184243,
+      "product_name": "Ручка черная СГУ",
       "price": 150.0,
-      "addDate": "2025-03-31T08:13:29.012686Z"
+      "add_date": "2025-04-03T17:16:02.228989Z"
     },
     {
       "id": 2,
-      "articleNumber": 2055711778,
-      "productName": "Набор ручек СГУ 3 шт.",
+      "article_number": 2563467671,
+      "product_name": "Набор ручек СГУ 3 шт.",
       "price": 400.0,
-      "addDate": "2025-03-31T08:13:29.043911Z"
+      "add_date": "2025-04-03T17:16:02.280911Z"
     }
   ],
-  "currentPage": 0,
-  "totalPages": 1,
-  "totalItems": 2
+  "current_page": 0,
+  "total_pages": 1,
+  "total_items": 2
 }
