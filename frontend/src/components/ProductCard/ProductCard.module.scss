@@ -1,0 +1,83 @@
+.card {
+	background: white;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	transition: transform 0.3s;
+
+	&:hover {
+		transform: translateY(-4px);
+	}
+}
+
+.quantityControl {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	.quantity {
+		min-width: 24px;
+		text-align: center;
+		font-weight: 500;
+	}
+}
+
+.actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+
+	.ant-btn {
+		flex: 1;
+	}
+}
+
+.imageLink {
+	display: block;
+	height: 240px;
+	overflow: hidden;
+}
+
+.image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.3s;
+
+	&:hover {
+		transform: scale(1.05);
+	}
+}
+
+.content {
+	padding: 16px;
+}
+
+.title {
+	font-size: 16px;
+	margin-bottom: 8px;
+	color: rgba(0, 0, 0, 0.85);
+}
+
+.meta {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 16px;
+}
+
+.price {
+	font-size: 18px;
+	font-weight: 600;
+	color: #1890ff;
+}
+
+.actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 12px;
+
+	.ant-btn {
+		flex: 1;
+	}
+}

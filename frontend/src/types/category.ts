@@ -3,8 +3,8 @@ export interface CategoryResponse {
 }
 
 export interface CategoryAttributesResponse {
-	categoryId: number
-	categoryName: string
+	category_id: number
+	category_name: string
 	attributes: AttributeDTO[]
 }
 

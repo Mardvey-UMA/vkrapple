@@ -2,7 +2,7 @@ export interface ReviewDTO {
 	id?: number
 	rating: number
 	text: string
-	createdAt?: string
+	created_at?: string
 	photos?: string[]
 }
 
@@ -13,6 +13,6 @@ export interface ReviewResponse {
 }
 
 export interface PhotoReviewRequest {
-	reviewId: number
-	indexNumber: number
+	review_id: number
+	index_number: number
 }

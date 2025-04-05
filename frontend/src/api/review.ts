@@ -10,8 +10,8 @@ export const ReviewService = {
 	uploadPhoto: (data: PhotoReviewRequest, file: File) => {
 		const formData = new FormData()
 		formData.append('file', file)
-		formData.append('reviewId', data.reviewId.toString())
-		formData.append('indexNumber', data.indexNumber.toString())
+		formData.append('reviewId', data.review_id.toString())
+		formData.append('indexNumber', data.index_number.toString())
 		return api
 			.post<string>('/review/photo', formData, {
 				headers: { 'Content-Type': 'multipart/form-data' },

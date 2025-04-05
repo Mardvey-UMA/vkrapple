@@ -1,29 +1,29 @@
 export interface CreateOrderRequest {
-	paymentMethod: 'CASH' | 'CARD' | 'CRYPTO'
-	orderAddress: string
+	payment_method: 'CASH' | 'CARD' | 'CRYPTO'
+	order_address: string
 }
 
 export interface OrderDTO {
 	id: number
 	status: 'CREATED' | 'PROCESSING' | 'DELIVERED' | 'CANCELLED'
-	orderAmount: number
-	paymentMethod: string
-	orderAddress: string
-	expectedDate: string
-	createdAt: string
+	order_amount: number
+	payment_method: string
+	order_address: string
+	expected_date: string
+	created_at: string
 	items: OrderItemDTO[]
 }
 
 export interface OrderItemDTO {
-	articleNumber: number
-	productName: string
+	article_number: number
+	product_name: string
 	quantity: number
 	price: number
 }
 
 export interface OrderPageResponse {
 	orders: OrderDTO[]
-	currentPage: number
-	totalPages: number
-	totalOrders: number
+	current_page: number
+	total_pages: number
+	total_orders: number
 }

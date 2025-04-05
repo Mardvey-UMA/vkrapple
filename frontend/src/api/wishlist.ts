@@ -12,8 +12,17 @@ export const WishListService = {
 			.delete<WishListItem>(`/wishlist/remove?article=${article}`)
 			.then(res => res.data),
 
-	getList: (page: number, size: number = 20) =>
+	getList: (page: number = 0, size: number = 20) =>
 		api
 			.get<WishListPageResponse>(`/wishlist/list?page=${page}&size=${size}`)
+			.then(res => res.data),
+
+	getAllWishlistItems: () =>
+		api
+			.get<WishListPageResponse>('/wishlist/list?size=1000')
+			.then(res => res.data.items),
+	checkInWishlist: (article: number) =>
+		api
+			.get<boolean>(`/wishlist/checkin?article=${article}`)
 			.then(res => res.data),
 }

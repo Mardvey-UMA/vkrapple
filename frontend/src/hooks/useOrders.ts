@@ -7,7 +7,7 @@ import {
 import { OrderService } from '../api'
 import { OrderDTO, OrderPageResponse } from '../types/order'
 
-export const useOrders = (page: number = 1) => {
+export const useOrders = (page: number = 0) => {
 	return useQuery<OrderPageResponse, Error>({
 		queryKey: ['orders', page],
 		queryFn: () => OrderService.getOrders(page),
