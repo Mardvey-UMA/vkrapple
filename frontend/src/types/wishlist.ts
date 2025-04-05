@@ -1,14 +1,14 @@
 export interface WishListItem {
 	id: number
-	articleNumber: number
-	productName: string
+	article_number: number
+	product_name: string
 	price: number
-	addDate: string
+	add_date: string
 }
 
 export interface WishListPageResponse {
 	items: WishListItem[]
-	currentPage: number
-	totalPages: number
-	totalItems: number
+	current_page: number
+	total_pages: number
+	total_items: number
 }

@@ -1,8 +1,18 @@
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import 'antd/dist/reset.css'
 import { useEffect } from 'react'
 import { useAuth } from './hooks/useAuth'
 import { useInitialData } from './hooks/useInitialData'
 import initializeTelegramApp from './utils/initTelegram'
+
+//
+
+import { Route, Routes } from 'react-router-dom'
+import { NavbarContainer } from './containers/NavbarContainer/NavbarContainer'
+import { CartPage } from './pages/CartPage/CartPage'
+import { HomePage } from './pages/HomePage/HomePage'
+import { ProfilePage } from './pages/ProfilePage/ProfilePage'
+import { WishlistPage } from './pages/WishListPage/WishlistPage'
+import { ProductPage } from './pages/ProductPage/ProductPage'
 
 export default function App() {
 	useEffect(() => {
@@ -38,9 +48,15 @@ export default function App() {
 	}
 
 	return (
-		<div className='app'>
-			<header>My Store</header>
-			<ReactQueryDevtools initialIsOpen={false} />
-		</div>
+		<>
+			<Routes>
+				<Route path='/' element={<HomePage />} />
+				<Route path='/wishlist' element={<WishlistPage />} />
+				<Route path='/profile' element={<ProfilePage />} />
+				<Route path='/cart' element={<CartPage />} />
+				<Route path='/product/:article' element={<ProductPage />} />
+			</Routes>
+			<NavbarContainer />
+		</>
 	)
 }

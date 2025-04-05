@@ -1,20 +1,20 @@
 export interface AddToCartRequest {
-	articleNumber: number
+	article_number: number
 	quantity: number
 }
 
 export interface CartItem {
 	id: number
-	articleNumber: number
-	productName: string
+	article_number: number
+	product_name: string
 	price: number
 	quantity: number
-	addDate: string
+	add_date: string
 }
 
 export interface CartPageResponse {
 	items: CartItem[]
-	currentPage: number
-	totalPages: number
-	totalItems: number
+	current_page: number
+	total_pages: number
+	total_items: number
 }

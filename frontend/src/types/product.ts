@@ -2,26 +2,28 @@ import { ReviewDTO } from './review'
 
 export interface ProductResponse {
 	id: number
-	articleNumber: number // Совпадает с DTO
+	article_number: number
 	name: string
 	price: number
 	rating: number
 	attributes: ProductAttributeDTO[]
-	categoryId: number
-	categoryName: string
+	category_id: number
+	category_name: string
 	photos: string[]
 	reviews: ReviewDTO[]
+	inCart?: number
+	inWishlist?: boolean
 }
 
 export interface ProductAttributeDTO {
-	attributeId: number
-	attributeName: string
+	attribute_id: number
+	attribute_name: string
 	value: string
 }
 
 export interface ProductPageResponse {
 	products: ProductResponse[]
-	currentPage: number
-	totalPages: number
-	totalProducts: number
+	current_page: number
+	total_pages: number
+	total_products: number
 }

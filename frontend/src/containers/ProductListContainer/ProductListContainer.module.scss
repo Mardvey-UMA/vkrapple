@@ -1,0 +1,21 @@
+.container {
+	padding: 24px;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+	padding: 16px;
+}
+
+.loadMore {
+	display: flex;
+	justify-content: center;
+	margin: 24px 0;
+}
+
+.spinner {
+	display: block;
+	margin: 24px auto;
+}

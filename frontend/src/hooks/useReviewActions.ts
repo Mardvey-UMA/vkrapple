@@ -21,7 +21,7 @@ export const useReviewActions = () => {
 	const uploadPhoto = useMutation({
 		mutationFn: (data: { reviewId: number; index: number; file: File }) =>
 			ReviewService.uploadPhoto(
-				{ reviewId: data.reviewId, indexNumber: data.index },
+				{ review_id: data.reviewId, index_number: data.index },
 				data.file
 			),
 		onSuccess: () => {
