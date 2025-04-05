@@ -11,4 +11,5 @@ interface CartService {
     fun addToCart(telegramId: Long, request: AddToCartRequestDTO) : CartItemDTO
     fun removeFromCart(telegramId: Long, articleNumber: Long) : CartItemDTO
     fun getCart(telegramId: Long, pageable: Pageable): CartPageResponseDTO
+    fun productInCart(telegramId: Long, articleNumber: Long): CartItemDTO
 }

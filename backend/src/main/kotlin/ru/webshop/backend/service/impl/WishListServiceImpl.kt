@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 import ru.webshop.backend.dto.WishListItemDTO
 import ru.webshop.backend.dto.WishListPageResponseDTO
 import ru.webshop.backend.entity.CartItem
+import ru.webshop.backend.entity.Product
 import ru.webshop.backend.entity.User
 import ru.webshop.backend.entity.WishListItem
 import ru.webshop.backend.exception.GlobalExceptionHandler
@@ -61,6 +62,14 @@ class WishListServiceImpl(
             totalPages = page.totalPages,
             totalItems = page.totalElements
         )
+    }
+
+    override fun productInWishList(telegramId: Long, articleNumber: Long): Boolean{
+        val user = userRepository.findByTelegramId(telegramId)
+            ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
+        val wlitem = wishListItemRepository.findByUserAndProductArticleNumber(user, articleNumber)
+            ?: return false
+        return true
     }
 
     private fun WishListItem.toDTO() = WishListItemDTO(

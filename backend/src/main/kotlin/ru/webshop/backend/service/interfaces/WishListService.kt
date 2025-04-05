@@ -10,4 +10,5 @@ interface WishListService {
     fun addToWishList(telegramId: Long, articleNumber: Long) : WishListItemDTO
     fun removeFromWishList(telegramId: Long, articleNumber: Long) : WishListItemDTO
     fun getWishList(telegramId: Long, pageable: Pageable): WishListPageResponseDTO
+    fun productInWishList(telegramId: Long, articleNumber: Long): Boolean
 }
