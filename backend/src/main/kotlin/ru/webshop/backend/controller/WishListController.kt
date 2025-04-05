@@ -4,7 +4,10 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import ru.webshop.backend.dto.CartItemDTO
 import ru.webshop.backend.dto.WishListItemDTO
 import ru.webshop.backend.dto.WishListPageResponseDTO
 import ru.webshop.backend.service.interfaces.WishListService
@@ -15,6 +18,16 @@ import ru.webshop.backend.service.interfaces.WishListService
 class WishListController(
     private val wishListService: WishListService,
 ) {
+
+    @Operation(summary = "Проверить товар в списке желаний",
+        description = "Проверять есть ли товар в списке желаний")
+    @GetMapping("/checkin")
+    fun checkout(
+        @RequestParam("article") article: Long,
+        @RequestHeader("X-Telegram-User-Id") telegramId: Long
+    ): ResponseEntity<Boolean> {
+        return ResponseEntity(wishListService.productInWishList(article, telegramId), HttpStatus.OK)
+    }
 
     @Operation(summary = "Добавить в список желаний",
         description = "Пользователь добавляет товар в список желаний по артикулу")

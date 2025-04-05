@@ -18,6 +18,18 @@ import ru.webshop.backend.service.interfaces.CartService
 class CartController(
     private val cartService: CartService,
 ) {
+
+    @Operation(summary = "Проверка наличия в корзине",
+        description = "Проверять что товар находится у пользователя в корзине")
+    @GetMapping("/checkin")
+    fun checkout(
+        @RequestParam("article") article: Long,
+        @RequestHeader("X-Telegram-User-Id") telegramId: Long
+    ): CartItemDTO{
+        return cartService.productInCart(telegramId, article)
+    }
+
+
     @Operation(summary = "Добавить товар в корзину",
         description = "Добавлять товар, увеличивает/уменьшает количество в корзине по артикулу и пользователю")
     @PostMapping("/add")

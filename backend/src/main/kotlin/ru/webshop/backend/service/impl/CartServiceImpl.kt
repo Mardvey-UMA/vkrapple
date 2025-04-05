@@ -80,6 +80,14 @@ class CartServiceImpl(
         )
     }
 
+    override fun productInCart(telegramId: Long, articleNumber: Long): CartItemDTO{
+        val user = userRepository.findByTelegramId(telegramId)
+            ?: throw GlobalExceptionHandler.UserNotFoundException("User with telegram id $telegramId not found")
+
+        return cartItemRepository.findByUserAndProductArticleNumber(user, articleNumber)?.toDTO()
+            ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found")
+    }
+
     private fun CartItem.toDTO() = CartItemDTO(
         id = id,
         articleNumber = product.articleNumber,
