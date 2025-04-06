@@ -4,10 +4,11 @@ import {
 	HeartOutlined,
 	ShoppingCartOutlined,
 } from '@ant-design/icons'
-import { Button, Carousel, Rate, Spin, message } from 'antd'
+import { Button, Carousel, Rate, Space, Spin, message } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useCartActions } from '../../hooks/useCart'
 import { useProductDetails } from '../../hooks/useProducts'
+import { useProductStatus } from '../../hooks/useProductStatus'
 import { useWishlistActions } from '../../hooks/useWishList'
 import styles from './ProductPage.module.scss'
 
@@ -15,19 +16,44 @@ export const ProductPage = () => {
 	const { article } = useParams<{ article: string }>()
 	const navigate = useNavigate()
 	const { data: product, isLoading, error } = useProductDetails(Number(article))
-	const { mutate: addToCart } = useCartActions().addToCart
-	const { mutate: addToWishlist, mutate: removeFromWishlist } =
-		useWishlistActions()
+	const { cartMap, wishlistSet } = useProductStatus()
+	const { addToCart, removeFromCart } = useCartActions()
+	const { addToWishlist, removeFromWishlist } = useWishlistActions()
 
-	const handleCartAction = () => {
-		addToCart({ article_number: Number(article), quantity: 1 })
-		message.success('Товар добавлен в корзину')
+	const enrichedProduct = product
+		? {
+				...product,
+				inCart: cartMap.get(product.article_number) || 0,
+				inWishlist: wishlistSet.has(product.article_number),
+		  }
+		: null
+
+	const handleCartAction = (action: 'add' | 'remove') => {
+		if (!enrichedProduct) return
+
+		if (action === 'add') {
+			addToCart.mutate({
+				article_number: enrichedProduct.article_number,
+				quantity: 1,
+			})
+			message.success('Товар добавлен в корзину')
+		} else {
+			if (enrichedProduct.inCart === 1) {
+				removeFromCart.mutate(enrichedProduct.article_number)
+			} else {
+				addToCart.mutate({
+					article_number: enrichedProduct.article_number,
+					quantity: -1,
+				})
+			}
+			message.success('Количество товара изменено')
+		}
 	}
 
 	if (isLoading) return <Spin className={styles.spinner} />
 	if (error)
 		return <div className={styles.error}>Ошибка загрузки: {error.message}</div>
-	if (!product) return null
+	if (!enrichedProduct) return null
 
 	return (
 		<div className={styles.container}>
@@ -40,39 +66,61 @@ export const ProductPage = () => {
 				Назад
 			</Button>
 
-			<Carousel className={styles.carousel}>
-				{product.photos.map((photo, index) => (
+			<Carousel arrows autoplay className={styles.carousel}>
+				{enrichedProduct.photos.map((photo, index) => (
 					<div key={index}>
-						<img src={photo} alt={`${product.name} ${index + 1}`} />
+						<img src={photo} alt={`${enrichedProduct.name} ${index}`} />
 					</div>
 				))}
 			</Carousel>
 
 			<div className={styles.content}>
-				<h1 className={styles.title}>{product.name}</h1>
+				<h1 className={styles.title}>{enrichedProduct.name}</h1>
 
 				<div className={styles.meta}>
-					<Rate value={product.rating} disabled className={styles.rating} />
-					<span className={styles.price}>{product.price} ₽</span>
+					<Rate
+						value={enrichedProduct.rating}
+						disabled
+						className={styles.rating}
+					/>
+					<span className={styles.price}>{enrichedProduct.price} ₽</span>
 				</div>
 
 				<div className={styles.actions}>
-					<Button
-						type='primary'
-						icon={<ShoppingCartOutlined />}
-						onClick={handleCartAction}
-						className={styles.cartButton}
-					>
-						Добавить в корзину
-					</Button>
+					{enrichedProduct.inCart > 0 ? (
+						<Space className={styles.quantityControl}>
+							<Button
+								type='primary'
+								danger
+								onClick={() => handleCartAction('remove')}
+							>
+								-
+							</Button>
+							<span className={styles.quantity}>{enrichedProduct.inCart}</span>
+							<Button type='primary' onClick={() => handleCartAction('add')}>
+								+
+							</Button>
+						</Space>
+					) : (
+						<Button
+							type='primary'
+							icon={<ShoppingCartOutlined />}
+							onClick={() => handleCartAction('add')}
+							className={styles.cartButton}
+						>
+							Добавить в корзину
+						</Button>
+					)}
 
 					<Button
-						type={product.inWishlist ? 'primary' : 'default'}
-						icon={product.inWishlist ? <HeartFilled /> : <HeartOutlined />}
+						type={enrichedProduct.inWishlist ? 'primary' : 'default'}
+						icon={
+							enrichedProduct.inWishlist ? <HeartFilled /> : <HeartOutlined />
+						}
 						onClick={() =>
-							product.inWishlist
-								? removeFromWishlist(product.article_number)
-								: addToWishlist(product.article_number)
+							enrichedProduct.inWishlist
+								? removeFromWishlist.mutate(enrichedProduct.article_number)
+								: addToWishlist.mutate(enrichedProduct.article_number)
 						}
 					/>
 				</div>
