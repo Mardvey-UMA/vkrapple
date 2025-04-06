@@ -1,13 +1,32 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { CategoryService } from '../api/category'
-import { CategoryAttributesResponse, CategoryResponse } from '../types/category'
+import type {
+	CategoryAttributesResponse,
+	CategoryResponse,
+} from '../types/category'
 
 export const useCategoryFilters = () => {
-	const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
+	const [searchParams] = useSearchParams()
+	const initialCategory = Number(searchParams.get('categoryId')) || null
+
+	const [selectedCategory, setSelectedCategory] = useState<number | null>(
+		initialCategory
+	)
 	const [selectedFilters, setSelectedFilters] = useState<
 		Record<number, string[]>
-	>({})
+	>(() => {
+		const filters: Record<number, string[]> = {}
+		searchParams.forEach((value, key) => {
+			const match = key.match(/attributes\[(\d+)\]/)
+			if (match) {
+				const attrId = parseInt(match[1], 10)
+				filters[attrId] = [...(filters[attrId] || []), value]
+			}
+		})
+		return filters
+	})
 
 	const { data: categories } = useQuery<CategoryResponse>({
 		queryKey: ['categories'],
@@ -16,7 +35,10 @@ export const useCategoryFilters = () => {
 
 	const { data: attributes, isLoading } = useQuery<CategoryAttributesResponse>({
 		queryKey: ['categoryAttributes', selectedCategory],
-		queryFn: () => CategoryService.getAttributes(selectedCategory!),
+		queryFn: () => {
+			if (!selectedCategory) throw new Error('Category not selected')
+			return CategoryService.getAttributes(selectedCategory)
+		},
 		enabled: !!selectedCategory,
 	})
 

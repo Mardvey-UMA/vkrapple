@@ -22,22 +22,41 @@ export const SearchContainer = () => {
 	} = useCategoryFilters()
 
 	const handleSearch = (value: string) => {
-		console.log('Search value:', value)
+		const newParams = new URLSearchParams(searchParams)
+		if (value) {
+			newParams.set('search', value)
+		} else {
+			newParams.delete('search')
+		}
+		newParams.set('page', '0')
+		setSearchParams(newParams)
 	}
 
 	const handleApplyFilters = () => {
+		const newParams = new URLSearchParams()
+
 		if (selectedCategory) {
-			const newParams = new URLSearchParams()
 			newParams.set('categoryId', selectedCategory.toString())
+			newParams.set('page', '0')
 
 			Object.entries(selectedFilters).forEach(([attrId, values]) => {
 				values.forEach(value =>
 					newParams.append(`attributes[${attrId}]`, value)
 				)
 			})
-
-			setSearchParams(newParams)
 		}
+
+		// Сохраняем параметры поиска при применении фильтров
+		const searchQuery = searchParams.get('search')
+		if (searchQuery) newParams.set('search', searchQuery)
+
+		setSearchParams(newParams)
+		setIsModalOpen(false)
+	}
+
+	const handleResetFilters = () => {
+		resetFilters()
+		setSearchParams(new URLSearchParams({ page: '0' }))
 		setIsModalOpen(false)
 	}
 
@@ -53,15 +72,8 @@ export const SearchContainer = () => {
 				footer={null}
 				centered
 				width='90%'
-				style={{
-					top: '5vh',
-					maxWidth: '1440px',
-				}}
-				bodyStyle={{
-					height: '85vh',
-					overflowY: 'auto',
-					padding: '16px 24px',
-				}}
+				style={{ top: '5vh', maxWidth: '1440px' }}
+				bodyStyle={{ height: '85vh', overflowY: 'auto', padding: '16px 24px' }}
 			>
 				<div className={styles.modalContent}>
 					{isLoading ? (
@@ -75,7 +87,7 @@ export const SearchContainer = () => {
 							onCategoryChange={handleCategoryChange}
 							onFilterChange={handleFilterChange}
 							onApply={handleApplyFilters}
-							onReset={resetFilters}
+							onReset={handleResetFilters}
 						/>
 					)}
 				</div>

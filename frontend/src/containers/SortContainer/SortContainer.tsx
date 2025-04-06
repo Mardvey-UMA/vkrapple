@@ -12,9 +12,11 @@ export const SortContainer = () => {
 	)
 
 	const handleSortChange = (value: SortOption) => {
+		const newParams = new URLSearchParams(searchParams)
+		newParams.set('sort', value)
+		newParams.set('page', '0')
 		setCurrentSort(value)
-		searchParams.set('sort', value)
-		setSearchParams(searchParams)
+		setSearchParams(newParams)
 	}
 
 	return (
