@@ -1,5 +1,5 @@
 import { Button, Select, Typography } from 'antd'
-import { CategoryAttributesResponse } from '../../types/category'
+import type { CategoryAttributesResponse } from '../../types/category'
 import styles from './FilterForm.module.scss'
 
 const { Title } = Typography
@@ -43,7 +43,7 @@ export const FilterForm = ({
 				/>
 			</div>
 
-			{selectedCategory && (
+			{selectedCategory && attributes.length > 0 && (
 				<div className={styles.section}>
 					{attributes.map(attr => (
 						<div key={attr.id} className={styles.filterGroup}>
@@ -52,7 +52,7 @@ export const FilterForm = ({
 								mode='multiple'
 								placeholder={`Выберите ${attr.name}`}
 								value={selectedFilters[attr.id] || []}
-								onChange={values => onFilterChange(attr.id, values as string[])}
+								onChange={values => onFilterChange(attr.id, values)}
 								options={attr.values.map(value => ({
 									label: value,
 									value: value,

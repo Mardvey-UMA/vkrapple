@@ -1,42 +1,19 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { Button, Spin } from 'antd'
 import { useMemo } from 'react'
-import { ProductService } from '../../api/product'
 import { ProductCard } from '../../components/ProductCard/ProductCard'
 import { useCartActions } from '../../hooks/useCart'
-import { useProductStatus } from '../../hooks/useProductStatus'
+import { useProducts } from '../../hooks/useProducts'
 import { useWishlistActions } from '../../hooks/useWishList'
-import { ProductPageResponse, ProductResponse } from '../../types/product'
+import { ProductResponse } from '../../types/product'
 import styles from './ProductListContainer.module.scss'
 
 export const ProductListContainer = () => {
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useInfiniteQuery<ProductPageResponse>({
-			queryKey: ['products'],
-			queryFn: ({ pageParam = 0 }) =>
-				ProductService.getAll(pageParam as number),
-			initialPageParam: 0,
-			getNextPageParam: lastPage =>
-				lastPage.current_page < lastPage.total_pages
-					? lastPage.current_page + 1
-					: undefined,
-		})
+	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+		useProducts()
 
-	const { cartMap, wishlistSet } = useProductStatus()
 	const { addToCart, removeFromCart } = useCartActions()
 	const { addToWishlist, removeFromWishlist } = useWishlistActions()
-
-	const enrichedProducts = useMemo(
-		() =>
-			data?.pages.flatMap(page =>
-				page.products.map(product => ({
-					...product,
-					inCart: cartMap.get(product.article_number) || 0,
-					inWishlist: wishlistSet.has(product.article_number),
-				}))
-			) || [],
-		[data, cartMap, wishlistSet]
-	)
+	const enrichedProducts = useMemo(() => data?.products || [], [data])
 
 	const handleCartAction = (
 		product: ProductResponse,
