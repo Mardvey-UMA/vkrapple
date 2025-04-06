@@ -8,8 +8,7 @@ import { ProductResponse } from '../../types/product'
 import styles from './ProductListContainer.module.scss'
 
 export const ProductListContainer = () => {
-	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-		useProducts()
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useProducts()
 
 	const { addToCart, removeFromCart } = useCartActions()
 	const { addToWishlist, removeFromWishlist } = useWishlistActions()

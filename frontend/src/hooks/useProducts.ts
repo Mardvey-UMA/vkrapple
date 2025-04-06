@@ -1,4 +1,8 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import {
+	keepPreviousData,
+	useInfiniteQuery,
+	useQuery,
+} from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
 import { ProductService } from '../api/product'
 import type { ProductPageResponse, ProductResponse } from '../types/product'
@@ -6,25 +10,24 @@ import { useProductStatus } from './useProductStatus'
 
 export const useProducts = () => {
 	const [searchParams] = useSearchParams()
-	const page = Number(searchParams.get('page')) || 0
+	//const page = Number(searchParams.get('page')) || 0
 	const categoryId = Number(searchParams.get('categoryId')) || undefined
 	const sort = searchParams.get('sort') || undefined
 	const searchQuery = searchParams.get('search') || undefined
 
 	const { cartMap, wishlistSet, isLoading: statusLoading } = useProductStatus()
 
-	const productsQuery = useQuery<ProductPageResponse>({
+	const query = useInfiniteQuery<ProductPageResponse>({
 		queryKey: [
 			'products',
 			{
-				page,
 				categoryId,
 				sort,
 				search: searchQuery,
 				...Object.fromEntries(searchParams),
 			},
 		],
-		queryFn: () => {
+		queryFn: ({ pageParam = 0 }) => {
 			const filters = Array.from(searchParams.entries()).reduce(
 				(acc, [key, value]) => {
 					if (key.startsWith('attributes[')) {
@@ -39,20 +42,26 @@ export const useProducts = () => {
 			)
 
 			if (searchQuery) {
-				return ProductService.search(searchQuery, page)
+				return ProductService.search(searchQuery, pageParam as number)
 			}
 
 			if (categoryId) {
 				return ProductService.searchWithFilters(
 					categoryId,
 					filters,
-					page,
+					pageParam as number,
 					20,
 					sort
 				)
 			}
 
-			return ProductService.getAll(page, 20, sort)
+			return ProductService.getAll(pageParam as number, 20, sort)
+		},
+		initialPageParam: 0,
+		getNextPageParam: lastPage => {
+			return lastPage.current_page < lastPage.total_pages
+				? lastPage.current_page + 1
+				: undefined
 		},
 		placeholderData: keepPreviousData,
 		staleTime: 1000 * 60 * 5,
@@ -60,20 +69,21 @@ export const useProducts = () => {
 	})
 
 	const enrichedProducts =
-		productsQuery.data?.products?.map(product => ({
-			...product,
-			inCart: cartMap.get(product.article_number) || 0,
-			inWishlist: wishlistSet.has(product.article_number),
-		})) || []
+		query.data?.pages.flatMap(page =>
+			page.products.map(product => ({
+				...product,
+				inCart: cartMap.get(product.article_number) || 0,
+				inWishlist: wishlistSet.has(product.article_number),
+			}))
+		) || []
 
 	return {
-		...productsQuery,
-		data: productsQuery.data
-			? {
-					...productsQuery.data,
-					products: enrichedProducts,
-			  }
-			: undefined,
+		...query,
+		data: {
+			products: enrichedProducts,
+			current_page: query.data?.pages.at(-1)?.current_page || 0,
+			total_pages: query.data?.pages.at(-1)?.total_pages || 0,
+		},
 	}
 }
 export const useProductDetails = (article: number) => {
@@ -83,3 +93,4 @@ export const useProductDetails = (article: number) => {
 		enabled: !!article,
 	})
 }
+// *
