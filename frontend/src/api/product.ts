@@ -2,14 +2,14 @@ import { ProductPageResponse, ProductResponse } from '../types/product'
 import api from '../utils/api'
 
 const buildSortParams = (sortOption?: string) => {
-	if (!sortOption) return []
+	if (!sortOption) return undefined
 	const sortMapping: Record<string, string> = {
 		price_asc: 'price,asc',
 		price_desc: 'price,desc',
 		rating: 'rating,desc',
-		orders: 'number_of_orders,desc',
+		orders: 'numberOfOrders,desc',
 	}
-	return [sortMapping[sortOption] || '']
+	return sortMapping[sortOption] || undefined
 }
 
 export const ProductService = {
@@ -73,7 +73,10 @@ export const ProductService = {
 			size: size.toString(),
 		})
 
-		if (sort) params.append('sort', buildSortParams(sort)[0])
+		const sortParam = buildSortParams(sort)
+		if (sortParam) {
+			params.append('sort', sortParam)
+		}
 
 		Object.entries(filters).forEach(([attrId, values]) => {
 			values.forEach(value => params.append(`attributes[${attrId}]`, value))
