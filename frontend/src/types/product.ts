@@ -6,6 +6,7 @@ export interface ProductResponse {
 	name: string
 	price: number
 	rating: number
+	number_of_orders: number
 	attributes: ProductAttributeDTO[]
 	category_id: number
 	category_name: string
