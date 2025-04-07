@@ -879,7 +879,7 @@ def main():
                 "category": product["category"],
                 "category_id":CATEGORIES[product["category"]] ,
             })
-            time.sleep(3)
+            time.sleep(1)
 
     # Сохраняем артикулы в файл
     with open(ARTICLES_FILE, "w", encoding="utf-8") as f:

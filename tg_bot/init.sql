@@ -1,7 +1,0 @@
-CREATE TABLE "_user" (
-    id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(64) NOT NULL,
-    telegram_id BIGINT NOT NULL,
-    chat_id BIGINT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
