@@ -11,9 +11,11 @@ import { NavbarContainer } from './containers/NavbarContainer/NavbarContainer'
 import { CartPage } from './pages/CartPage/CartPage'
 import { CheckoutPage } from './pages/CheckoutPage/CheckoutPage'
 import { HomePage } from './pages/HomePage/HomePage'
+import { OrdersPage } from './pages/OrdersPage/OrdersPage'
 import { ProductPage } from './pages/ProductPage/ProductPage'
 import { ProfilePage } from './pages/ProfilePage/ProfilePage'
 import { WishlistPage } from './pages/WishListPage/WishlistPage'
+import { LogoutPage } from './pages/LogoutPage/LogoutPage'
 
 export default function App() {
 	useEffect(() => {
@@ -57,6 +59,8 @@ export default function App() {
 				<Route path='/cart' element={<CartPage />} />
 				<Route path='/product/:article' element={<ProductPage />} />
 				<Route path='/checkout' element={<CheckoutPage />} />
+				<Route path='/orders' element={<OrdersPage />} />
+				<Route path="/logout" element={<LogoutPage />} />
 			</Routes>
 			<NavbarContainer />
 		</>

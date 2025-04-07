@@ -2,10 +2,19 @@ export interface CreateOrderRequest {
 	payment_method: 'CASH' | 'CARD' | 'CRYPTO'
 	order_address: string
 }
+export type OrderStatus =
+	| 'CREATED'
+	| 'WAITING_FOR_PAYMENT'
+	| 'PAID'
+	| 'PROCESSING'
+	| 'IN_PROGRESS'
+	| 'IN_WAY'
+	| 'DELIVERED'
+	| 'CANCELLED'
 
 export interface OrderDTO {
 	id: number
-	status: 'CREATED' | 'PROCESSING' | 'DELIVERED' | 'CANCELLED'
+	status: OrderStatus
 	order_amount: number
 	payment_method: string
 	order_address: string

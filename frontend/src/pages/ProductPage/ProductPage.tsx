@@ -9,16 +9,25 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useCartActions } from '../../hooks/useCart'
 import { useProductDetails } from '../../hooks/useProducts'
 import { useProductStatus } from '../../hooks/useProductStatus'
+import { useReviewActions } from '../../hooks/useReviewActions'
+import { useTelegramUser } from '../../hooks/useTelegramAuth'
+import { useUserOrders } from '../../hooks/useUserOrders'
 import { useWishlistActions } from '../../hooks/useWishList'
+import { ReviewSection } from './components/ReviewSection'
 import styles from './ProductPage.module.scss'
 
 export const ProductPage = () => {
+	const { createReview, uploadReviewPhoto } = useReviewActions()
+	const { data: orders } = useUserOrders()
+
+	//
 	const { article } = useParams<{ article: string }>()
 	const navigate = useNavigate()
 	const { data: product, isLoading, error } = useProductDetails(Number(article))
 	const { cartMap, wishlistSet } = useProductStatus()
 	const { addToCart, removeFromCart } = useCartActions()
 	const { addToWishlist, removeFromWishlist } = useWishlistActions()
+	const user = useTelegramUser()
 	if (!product) return <div>Товар не найден</div>
 	const enrichedProduct = product
 		? {
@@ -55,6 +64,36 @@ export const ProductPage = () => {
 		return <div className={styles.error}>Ошибка загрузки: {error.message}</div>
 	if (!enrichedProduct) return null
 
+	const canReview =
+		orders?.orders?.some(order =>
+			order.items.some(item => item.article_number === product.article_number)
+		) && !product.reviews?.some(review => review?.telegram_id === user?.id)
+
+	const handleReviewSubmit = async (values: {
+		rating: number
+		text: string
+		photos: File[]
+	}) => {
+		const review = await createReview.mutateAsync({
+			article: product.article_number,
+			review: {
+				rating: values.rating,
+				text: values.text,
+			},
+		})
+
+		if (values.photos?.length) {
+			await Promise.all(
+				values.photos.map((file, i) =>
+					uploadReviewPhoto.mutateAsync({
+						reviewId: review.id,
+						index: i + 1,
+						file,
+					})
+				)
+			)
+		}
+	}
 	return (
 		<div className={styles.container}>
 			<Button
@@ -136,20 +175,13 @@ export const ProductPage = () => {
 						))}
 					</div>
 				)}
-
-				<div className={styles.reviews}>
-					<h3>Отзывы ({product.reviews?.length})</h3>
-					{product.reviews.map(review => (
-						<div key={review.id} className={styles.review}>
-							<Rate value={review.rating} disabled />
-							<p>{review.text}</p>
-							{review.photos?.map((photo, i) => (
-								<img key={i} src={photo} alt={`Фото отзыва ${i + 1}`} />
-							))}
-						</div>
-					))}
-				</div>
 			</div>
+			<ReviewSection
+				reviews={product.reviews}
+				productId={product.article_number}
+				canReview={canReview || false}
+				onReviewSubmit={handleReviewSubmit}
+			/>
 		</div>
 	)
 }

@@ -4,6 +4,7 @@ export interface ReviewDTO {
 	text: string
 	created_at?: string
 	photos?: string[]
+	telegram_id?: number
 }
 
 export interface ReviewResponse {

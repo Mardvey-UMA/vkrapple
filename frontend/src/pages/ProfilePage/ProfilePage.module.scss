@@ -1,5 +1,35 @@
+// src/pages/ProfilePage/ProfilePage.module.scss
 .container {
-	padding: 24px;
+	padding: 16px;
 	min-height: 100vh;
 	padding-bottom: 80px;
+}
+
+.title {
+	text-align: center;
+	margin-bottom: 24px !important;
+}
+
+.loading {
+	display: flex;
+	justify-content: center;
+	padding: 40px;
+}
+
+.listItem {
+	padding: 0 !important;
+}
+
+.menuButton {
+	text-align: left;
+	height: 48px;
+	font-size: 16px;
+}
+
+.logoutContainer {
+	margin-top: 32px;
+}
+
+.logoutButton {
+	height: 48px;
 }
