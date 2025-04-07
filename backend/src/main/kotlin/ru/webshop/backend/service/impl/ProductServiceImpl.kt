@@ -54,7 +54,9 @@ class ProductServiceImpl (
                 balanceInStock = request.balanceInStock,
                 description = request.description ?: throw IllegalArgumentException("Description cannot be empty"),
                 category = category,
-                articleNumber = idGeneratorService.generateArticleNumber()
+                articleNumber = idGeneratorService.generateArticleNumber(),
+                rating = request.rating,
+                numberOfOrders = request.numberOfOrders,
             )
         )
 
@@ -104,6 +106,7 @@ class ProductServiceImpl (
             name = name,
             price = price,
             rating = rating.toDouble(),
+            numberOfOrders = numberOfOrders,
             attributes = values.map {
                 ProductAttributeDTO(
                     attributeId = it.attribute.id,

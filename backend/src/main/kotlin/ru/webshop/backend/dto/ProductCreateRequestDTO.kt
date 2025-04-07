@@ -46,6 +46,10 @@ data class ProductCreateRequestDTO(
         description = "Атрибуты в формате: ID атрибута -> значение",
         example = "{\"3\": \"Синий\", \"5\": \"256 ГБ\"}"
     )
-    val attributes: Map<String, String>
+    val attributes: Map<String, String>,
+
+    val numberOfOrders: Long,
+
+    val rating : BigDecimal
 )
 

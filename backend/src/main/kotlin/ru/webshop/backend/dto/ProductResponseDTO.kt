@@ -15,6 +15,8 @@ data class ProductResponseDTO(
     @Schema(description = "Название товара", example = "Смартфон Xiaomi Redmi Note 12")
     val name: String,
 
+    val numberOfOrders: Long,
+
     @Schema(
         description = "Цена товара",
         example = "19999.99",
