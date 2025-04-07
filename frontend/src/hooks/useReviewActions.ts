@@ -29,5 +29,22 @@ export const useReviewActions = () => {
 		},
 	})
 
-	return { createReview, uploadPhoto }
+	const uploadReviewPhoto = useMutation({
+		mutationFn: (data: { reviewId: number; index: number; file: File }) => {
+			const formData = new FormData()
+			formData.append('file', data.file)
+			return ReviewService.uploadPhoto(
+				{
+					review_id: data.reviewId,
+					index_number: data.index,
+				},
+				data.file
+			)
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['product'] })
+		},
+	})
+
+	return { createReview, uploadPhoto, uploadReviewPhoto }
 }

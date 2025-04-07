@@ -7,12 +7,18 @@ import {
 import { OrderService } from '../api'
 import { OrderDTO, OrderPageResponse } from '../types/order'
 
-export const useOrders = (page: number = 0) => {
-	return useQuery<OrderPageResponse, Error>({
+export const useOrders = (page: number) => {
+	return useQuery<OrderPageResponse>({
 		queryKey: ['orders', page],
 		queryFn: () => OrderService.getOrders(page),
-		enabled: !!localStorage.getItem('accessToken'),
 		placeholderData: keepPreviousData,
+		select: data => ({
+			...data,
+			orders: data.orders.map(order => ({
+				...order,
+				key: order.id,
+			})),
+		}),
 	})
 }
 
