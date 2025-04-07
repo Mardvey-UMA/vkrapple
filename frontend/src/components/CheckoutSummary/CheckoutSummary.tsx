@@ -43,6 +43,7 @@ export const CheckoutSummary = ({
 							quantity={item.quantity}
 							onRemove={onRemove || (() => {})}
 							onQuantityChange={onQuantityChange || (() => {})}
+							editable={false}
 						/>
 					</div>
 				))}

@@ -40,7 +40,15 @@ export const ProductCard = ({
 				<h3 className={styles.title}>{product.name}</h3>
 
 				<div className={styles.meta}>
-					<Rate value={product.rating} disabled className={styles.rating} />
+					<Rate
+						value={product.rating}
+						disabled
+						style={{
+							fontSize: '0.875em',
+							gap: '0px',
+							margin: '0 -1px',
+						}}
+					/>
 					<span className={styles.price}>{product.price} ₽</span>
 				</div>
 

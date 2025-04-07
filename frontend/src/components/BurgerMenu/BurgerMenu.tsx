@@ -1,4 +1,4 @@
-import { MenuOutlined } from '@ant-design/icons'
+import { ControlOutlined } from '@ant-design/icons'
 import styles from './BurgerMenu.module.scss'
 
 type BurgerMenuProps = {
@@ -8,7 +8,10 @@ type BurgerMenuProps = {
 export const BurgerMenu = ({ onClick }: BurgerMenuProps) => {
 	return (
 		<button className={styles.burgerButton} onClick={onClick}>
-			<MenuOutlined className={styles.icon} />
+			<ControlOutlined
+				style={{ transform: 'rotate(90deg)' }}
+				className={styles.icon}
+			/>
 		</button>
 	)
 }

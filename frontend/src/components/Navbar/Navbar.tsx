@@ -1,6 +1,6 @@
 import {
 	HeartOutlined,
-	HomeOutlined,
+	SearchOutlined,
 	ShoppingCartOutlined,
 	UserOutlined,
 } from '@ant-design/icons'
@@ -14,10 +14,22 @@ type NavItem = {
 }
 
 const navItems: NavItem[] = [
-	{ path: '/', icon: <HomeOutlined />, label: 'Главная' },
-	{ path: '/wishlist', icon: <HeartOutlined />, label: 'Избранное' },
-	{ path: '/profile', icon: <UserOutlined />, label: 'Профиль' },
-	{ path: '/cart', icon: <ShoppingCartOutlined />, label: 'Корзина' },
+	{ path: '/', icon: <SearchOutlined title='Поиск' />, label: 'Поиск' },
+	{
+		path: '/wishlist',
+		icon: <HeartOutlined title='Список желаемого' />,
+		label: 'Избранное',
+	},
+	{
+		path: '/profile',
+		icon: <UserOutlined title='Профиль' />,
+		label: 'Профиль',
+	},
+	{
+		path: '/cart',
+		icon: <ShoppingCartOutlined title='Корзина' />,
+		label: 'Корзина',
+	},
 ]
 
 export const Navbar = ({ activePath }: { activePath: string }) => {

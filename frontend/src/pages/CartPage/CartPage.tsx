@@ -1,5 +1,5 @@
 // src/pages/CartPage/CartPage.tsx
-import { Button, Spin, Typography, message } from 'antd'
+import { Button, Empty, Spin, Typography, message } from 'antd'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CartItemComponent } from '../../components/CartItem/CartItemComponent'
@@ -101,12 +101,19 @@ export const CartPage = () => {
 			)}
 
 			{!isLoading && cartItems.length === 0 && (
-				<div className={styles.empty}>
-					<Text type='secondary'>Корзина пуста</Text>
-					<Link to='/'>
-						<Button type='primary'>Перейти к покупкам</Button>
-					</Link>
-				</div>
+				<Empty
+					image={Empty.PRESENTED_IMAGE_SIMPLE}
+					description={
+						<div className={styles.emptyContent}>
+							<Text type='secondary'>Корзина пуста</Text>
+							<Link to='/'>
+								<Button type='primary' style={{ marginTop: 16 }}>
+									Перейти к покупкам
+								</Button>
+							</Link>
+						</div>
+					}
+				/>
 			)}
 		</div>
 	)

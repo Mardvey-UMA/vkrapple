@@ -1,4 +1,8 @@
-// src/pages/ProfilePage/ProfilePage.tsx
+import {
+	HeartOutlined,
+	ShoppingCartOutlined,
+	ShoppingOutlined,
+} from '@ant-design/icons'
 import { Button, List, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { UserProfileCard } from '../../components/UserProfile/UserProfileCard'
@@ -8,9 +12,9 @@ import styles from './ProfilePage.module.scss'
 const { Title } = Typography
 
 const menuItems = [
-	{ label: 'Мои заказы', path: '/orders' },
-	{ label: 'Корзина', path: '/cart' },
-	{ label: 'Список желаний', path: '/wishlist' },
+	{ label: 'Мои заказы', path: '/orders', icon: <ShoppingOutlined /> },
+	{ label: 'Корзина', path: '/cart', icon: <ShoppingCartOutlined /> },
+	{ label: 'Список желаний', path: '/wishlist', icon: <HeartOutlined /> },
 ]
 
 export const ProfilePage = () => {
@@ -38,24 +42,13 @@ export const ProfilePage = () => {
 							block
 							onClick={() => navigate(item.path)}
 							className={styles.menuButton}
+							icon={item.icon}
 						>
 							{item.label}
 						</Button>
 					</List.Item>
 				)}
 			/>
-
-			<div className={styles.logoutContainer}>
-				<Button
-					type='primary'
-					danger
-					block
-					onClick={() => navigate('/logout')}
-					className={styles.logoutButton}
-				>
-					Выйти
-				</Button>
-			</div>
 		</div>
 	)
 }

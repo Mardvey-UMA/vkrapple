@@ -93,8 +93,7 @@ export const CheckoutPage = () => {
 				>
 					<Radio.Group>
 						<Radio.Button value='CASH'>Наличные</Radio.Button>
-						<Radio.Button value='CARD'>Карта</Radio.Button>
-						<Radio.Button value='CRYPTO'>Криптовалюта</Radio.Button>
+						<Radio.Button value='CARD'>Картой при получении</Radio.Button>
 					</Radio.Group>
 				</Form.Item>
 
