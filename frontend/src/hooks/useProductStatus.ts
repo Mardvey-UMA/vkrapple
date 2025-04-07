@@ -17,8 +17,8 @@ export const useProductStatus = () => {
 		refetchOnWindowFocus: true,
 	})
 
-	const cartItems = cartQuery.data || []
-	const wishlistItems = wishlistQuery.data || []
+	const cartItems = cartQuery.data?.items || []
+	const wishlistItems = wishlistQuery.data?.items || []
 
 	return {
 		cartMap: new Map(

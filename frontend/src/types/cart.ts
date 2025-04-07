@@ -10,6 +10,7 @@ export interface CartItem {
 	price: number
 	quantity: number
 	add_date: string
+	key?: string
 }
 
 export interface CartPageResponse {

@@ -1,3 +1,4 @@
+// src/components/CartItem/CartItemComponent.tsx
 import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Skeleton } from 'antd'
 import { Link } from 'react-router-dom'
@@ -23,7 +24,7 @@ export const CartItemComponent = ({
 
 	return (
 		<div className={styles.item}>
-			<Skeleton loading={isLoading} active>
+			<Skeleton loading={isLoading} active paragraph={{ rows: 3 }}>
 				{product && (
 					<>
 						<Link
@@ -41,21 +42,26 @@ export const CartItemComponent = ({
 							<h3 className={styles.title}>{product.name}</h3>
 							<div className={styles.price}>{product.price} ₽</div>
 
-							<div className={styles.quantityControl}>
-								<Button
-									shape='circle'
-									onClick={() => onQuantityChange(article, -1)}
-									disabled={quantity <= 1}
-								>
-									-
-								</Button>
-								<span className={styles.quantity}>{quantity}</span>
-								<Button
-									shape='circle'
-									onClick={() => onQuantityChange(article, 1)}
-								>
-									+
-								</Button>
+							<div className={styles.controls}>
+								<div className={styles.quantityControl}>
+									<Button
+										shape='circle'
+										onClick={() => onQuantityChange(article, -1)}
+										disabled={quantity <= 1}
+									>
+										-
+									</Button>
+									<span className={styles.quantity}>{quantity}</span>
+									<Button
+										shape='circle'
+										onClick={() => onQuantityChange(article, 1)}
+									>
+										+
+									</Button>
+								</div>
+								<div className={styles.total}>
+									Итого: {(product.price * quantity).toFixed(2)} ₽
+								</div>
 							</div>
 						</div>
 

@@ -17,10 +17,11 @@ export const WishListService = {
 			.get<WishListPageResponse>(`/wishlist/list?page=${page}&size=${size}`)
 			.then(res => res.data),
 
-	getAllWishlistItems: () =>
+	getAllWishlistItems: (): Promise<WishListPageResponse> =>
 		api
 			.get<WishListPageResponse>('/wishlist/list?size=1000')
-			.then(res => res.data.items),
+			.then(res => res.data),
+
 	checkInWishlist: (article: number) =>
 		api
 			.get<boolean>(`/wishlist/checkin?article=${article}`)
