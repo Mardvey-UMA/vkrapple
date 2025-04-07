@@ -33,5 +33,7 @@ data class ReviewDTO(
         description = "Ссылки на фотографии в отзыве",
         example = "['https://storage.example.com/review_photo1.jpg']"
     )
-    val photos: List<String>?
+    val photos: List<String>?,
+
+    val telegramId: Long? = null
 )

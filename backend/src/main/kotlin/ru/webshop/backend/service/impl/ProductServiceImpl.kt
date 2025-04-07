@@ -126,7 +126,8 @@ class ProductServiceImpl (
                     createdAt = review.createdAt,
                     photos = review.reviewPhotos
                         .sortedBy { it.indexNumber }
-                        .map { it.photo.photoUrl }
+                        .map { it.photo.photoUrl },
+                    telegramId = review.user.telegramId,
                 )
             }
         )
