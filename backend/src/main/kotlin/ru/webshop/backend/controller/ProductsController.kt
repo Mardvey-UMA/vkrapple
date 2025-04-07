@@ -29,29 +29,28 @@ class ProductsController(
         = productService.getProduct(article)
 
     @Operation(summary = "Получить все товары",
-        description = "Список всех товаров с пагинацией")
+        description = "Список всех товаров с пагинацией  и сортировкой. Примеры: ?sort=price,asc&sort=rating,desc\"")
     @GetMapping
     fun getAllProducts(
-        @PageableDefault(size = 20, sort = ["name"]) pageable: Pageable)
+        @PageableDefault(size = 10) pageable: Pageable)
     = productService.getAllProducts(pageable)
 
-
     @Operation(summary = "Товары по категории",
-        description = "Список всех товаров из конкретной категории по её id")
+        description = "Список всех товаров из конкретной категории по её id  и сортировкой. Примеры: ?sort=price,asc&sort=rating,desc\"")
     @GetMapping("/category/{categoryId}")
     fun getByCategory(
         @PathVariable categoryId: Long,
-        @PageableDefault(size = 20) pageable: Pageable)
+        @PageableDefault(size = 10) pageable: Pageable)
     = productService.getProductsByCategory(categoryId, pageable)
 
     @Operation(summary = "Поиск товаров с фильтром",
-        description = "Поиск товаров в конкретной категории с возможными значениями атрибутов")
+        description = "Поиск товаров в конкретной категории с возможными значениями атрибутов  и сортировкой. Примеры: ?sort=price,asc&sort=rating,desc\"")
     @GetMapping("/search")
     fun searchProducts(
         @RequestParam("categoryId") categoryId: Long,
         @RequestParam(required = false)
         params: MultiValueMap<String, String>,
-        @PageableDefault(size = 20) pageable: Pageable
+        @PageableDefault(size = 10) pageable: Pageable
     ): ProductPageResponseDTO {
 
         val attributes = params

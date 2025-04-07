@@ -34,10 +34,15 @@ spring:
     cookie:
       same-site: none
       secure: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   application:
     name: backend
   public-urls:
-    #- "/api/**" # для тестирования
+    - "/api/**" # для тестирования
+    - "/v3/api-docs.yaml"
     - "/v3/api-docs/**"
     - "/swagger-ui/**"
     - "/swagger-ui.html"
@@ -68,7 +73,7 @@ spring:
       refresh-expiration: 604800
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     show-sql: false
     properties:
       hibernate:
