@@ -94,15 +94,22 @@ export const OrderDetailsModal = ({
 				<Title level={5} className={styles.sectionTitle}>
 					Детали доставки
 				</Title>
-				<Text>{order.order_address}</Text>
-				<Text strong style={{ marginTop: 8 }}>
-					Способ оплаты:{' '}
-					{order.payment_method === 'CASH'
-						? 'Наличные'
-						: order.payment_method === 'CARD'
-						? 'Карта'
-						: 'Криптовалюта'}
-				</Text>
+				<div className={styles.detailsContainer}>
+					<div className={styles.detailRow}>
+						<Text strong>Адрес: </Text>
+						<Text>{order.order_address}</Text>
+					</div>
+					<div className={styles.detailRow}>
+						<Text strong>Способ оплаты: </Text>
+						<Text>
+							{order.payment_method === 'CASH'
+								? 'Наличные'
+								: order.payment_method === 'CARD'
+								? 'Картой при получении'
+								: 'Криптовалюта'}
+						</Text>
+					</div>
+				</div>
 			</div>
 
 			<div className={styles.section}>
