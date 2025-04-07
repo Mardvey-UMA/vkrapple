@@ -9,10 +9,11 @@ import initializeTelegramApp from './utils/initTelegram'
 import { Route, Routes } from 'react-router-dom'
 import { NavbarContainer } from './containers/NavbarContainer/NavbarContainer'
 import { CartPage } from './pages/CartPage/CartPage'
+import { CheckoutPage } from './pages/CheckoutPage/CheckoutPage'
 import { HomePage } from './pages/HomePage/HomePage'
+import { ProductPage } from './pages/ProductPage/ProductPage'
 import { ProfilePage } from './pages/ProfilePage/ProfilePage'
 import { WishlistPage } from './pages/WishListPage/WishlistPage'
-import { ProductPage } from './pages/ProductPage/ProductPage'
 
 export default function App() {
 	useEffect(() => {
@@ -55,6 +56,7 @@ export default function App() {
 				<Route path='/profile' element={<ProfilePage />} />
 				<Route path='/cart' element={<CartPage />} />
 				<Route path='/product/:article' element={<ProductPage />} />
+				<Route path='/checkout' element={<CheckoutPage />} />
 			</Routes>
 			<NavbarContainer />
 		</>

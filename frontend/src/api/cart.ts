@@ -10,10 +10,16 @@ export const CartService = {
 		api
 			.get<CartPageResponse>(`/cart/list?page=${page}&size=${size}`)
 			.then(res => res.data),
+
 	getAllCartItems: () =>
-		api
-			.get<CartPageResponse>('/cart/list?size=1000')
-			.then(res => res.data.items),
+		api.get<CartPageResponse>('/cart/list?size=1000').then(res => ({
+			...res.data,
+			items: res.data.items.map(item => ({
+				...item,
+				key: `${item.article_number}-${item.quantity}`,
+			})),
+		})),
+
 	checkInCart: (article: number) =>
 		api
 			.get<CartItem>(`/cart/checkin?article=${article}`)

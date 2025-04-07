@@ -1,35 +1,50 @@
-import { Button, Spin, Typography } from 'antd'
+// src/pages/CartPage/CartPage.tsx
+import { Button, Spin, Typography, message } from 'antd'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CartItemComponent } from '../../components/CartItem/CartItemComponent'
-import { useCart, useCartActions } from '../../hooks/useCart'
+import {
+	useAllCartItems,
+	useCart,
+	useCartActions,
+	useCartCheckout,
+} from '../../hooks/useCart'
 import styles from './CartPage.module.scss'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
 export const CartPage = () => {
 	const [page, setPage] = useState(0)
 	const { data, isLoading, isFetching } = useCart(page)
+	const { data: allItems } = useAllCartItems()
 	const { removeFromCart, addToCart } = useCartActions()
-	const [removedArticles, setRemovedArticles] = useState<number[]>([])
+	const { getCartSnapshot } = useCartCheckout()
 
 	const handleLoadMore = () => setPage(prev => prev + 1)
 	const handleRemove = (article: number) => {
-		setRemovedArticles(prev => [...prev, article])
-		removeFromCart.mutate(article)
+		removeFromCart.mutate(article, {
+			onSuccess: () => {
+				message.success('Товар удален из корзины')
+			},
+		})
 	}
 
 	const handleQuantityChange = (article: number, delta: number) => {
-		addToCart.mutate({ article_number: article, quantity: delta })
+		addToCart.mutate(
+			{ article_number: article, quantity: delta },
+			{
+				onSuccess: () => {
+					message.success('Количество товара изменено')
+				},
+			}
+		)
 	}
 
-	const totalAmount =
-		data?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0
-
-	const filteredItems =
-		data?.items.filter(
-			item => !removedArticles.includes(item.article_number)
-		) || []
+	const cartItems = allItems?.items || data?.items || []
+	const totalAmount = cartItems.reduce(
+		(sum, item) => sum + item.price * item.quantity,
+		0
+	)
 
 	return (
 		<div className={styles.container}>
@@ -39,9 +54,18 @@ export const CartPage = () => {
 
 			{totalAmount > 0 && (
 				<div className={styles.summary}>
-					<span>Итого: {totalAmount.toFixed(2)} ₽</span>
-					<Link to='/checkout'>
-						<Button type='primary'>Оформить заказ</Button>
+					<div className={styles.summaryContent}>
+						<Text strong className={styles.totalText}>
+							Итого: {totalAmount.toFixed(2)} ₽
+						</Text>
+						<Text type='secondary' className={styles.itemsCount}>
+							{cartItems.length} товаров
+						</Text>
+					</div>
+					<Link to='/checkout' state={{ cartSnapshot: getCartSnapshot() }}>
+						<Button type='primary' size='large' block>
+							Оформить заказ
+						</Button>
 					</Link>
 				</div>
 			)}
@@ -51,7 +75,7 @@ export const CartPage = () => {
 			) : (
 				<>
 					<div className={styles.list}>
-						{filteredItems.map(item => (
+						{cartItems.map(item => (
 							<CartItemComponent
 								key={item.article_number}
 								article={item.article_number}
@@ -62,7 +86,7 @@ export const CartPage = () => {
 						))}
 					</div>
 
-					{data && data?.current_page < data?.total_pages && (
+					{data && data.current_page < data.total_pages && (
 						<div className={styles.loadMore}>
 							<Button
 								type='primary'
@@ -76,8 +100,13 @@ export const CartPage = () => {
 				</>
 			)}
 
-			{!isLoading && filteredItems.length === 0 && (
-				<div className={styles.empty}>Корзина пуста</div>
+			{!isLoading && cartItems.length === 0 && (
+				<div className={styles.empty}>
+					<Text type='secondary'>Корзина пуста</Text>
+					<Link to='/'>
+						<Button type='primary'>Перейти к покупкам</Button>
+					</Link>
+				</div>
 			)}
 		</div>
 	)
