@@ -8,14 +8,14 @@ export default defineConfig({
 		host: '0.0.0.0',
 		port: 5173,
 		strictPort: true,
-		allowedHosts: ['frontend.localhost'],
+		//allowedHosts: ['frontend.localhost'],
 
-		proxy: {
-			'/api': {
-				target: 'https://backend.localhost',
-				changeOrigin: true,
-				secure: false,
-			},
-		},
+		// proxy: {
+		// 	'/api': {
+		// 		target: 'https://backend.localhost',
+		// 		changeOrigin: true,
+		// 		secure: false,
+		// 	},
+		// },
 	},
 })

@@ -1,277 +1,277 @@
 [
   {
     "name": "Тетрадь в клетку 12 листов",
-    "article": 4796904829,
+    "article": 5682820164,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Тетрадь в клетку 24 листа",
-    "article": 3481788964,
+    "article": 8832234022,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Тетрадь в клетку 48 листов",
-    "article": 6196825067,
+    "article": 6186893127,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Тетрадь в линейку 12 листов",
-    "article": 9252095046,
+    "article": 8555273950,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Тетрадь в линейку 24 листа",
-    "article": 2989183390,
+    "article": 5986473818,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Тетрадь в линейку 48 листов",
-    "article": 3128945807,
+    "article": 3514410861,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Набор тетрадей в клетку 12 листов",
-    "article": 4734982953,
+    "article": 6010691015,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Набор тетрадей в клетку 24 листа",
-    "article": 8013434135,
+    "article": 4210318712,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Набор тетрадей в клетку 48 листов",
-    "article": 6102697502,
+    "article": 6564128516,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Набор тетрадей в линейку 12 листов",
-    "article": 4069968077,
+    "article": 2613260963,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Набор тетрадей в линейку 24 листа",
-    "article": 6178296895,
+    "article": 1557868430,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Набор тетрадей в линейку 48 листов",
-    "article": 8475740414,
+    "article": 5304771618,
     "category": "Тетрадь",
     "category_id": 1
   },
   {
     "name": "Ежедневник синий",
-    "article": 4844192543,
+    "article": 7088745811,
     "category": "Ежедневник",
     "category_id": 2
   },
   {
     "name": "Ежедневник белый",
-    "article": 4383903976,
+    "article": 2685173875,
     "category": "Ежедневник",
     "category_id": 2
   },
   {
     "name": "Набор ежедневников",
-    "article": 1804380045,
+    "article": 7919297564,
     "category": "Ежедневник",
     "category_id": 2
   },
   {
     "name": "Ластик мягкий",
-    "article": 8720651981,
+    "article": 5838796206,
     "category": "Ластик",
     "category_id": 3
   },
   {
     "name": "Ластик твердый",
-    "article": 1243741538,
+    "article": 4853233518,
     "category": "Ластик",
     "category_id": 3
   },
   {
     "name": "Ластик для стирания чернил",
-    "article": 7788361168,
+    "article": 3749029191,
     "category": "Ластик",
     "category_id": 3
   },
   {
     "name": "Набор мягких ластиков",
-    "article": 7358807501,
+    "article": 8802672468,
     "category": "Ластик",
     "category_id": 3
   },
   {
     "name": "Набор твердых ластиков",
-    "article": 3258386664,
+    "article": 9402722571,
     "category": "Ластик",
     "category_id": 3
   },
   {
     "name": "Ланъярд розовый",
-    "article": 3633840016,
+    "article": 8978248746,
     "category": "Ланъярд",
     "category_id": 4
   },
   {
     "name": "Ланъярд синий",
-    "article": 4005181683,
+    "article": 5179053504,
     "category": "Ланъярд",
     "category_id": 4
   },
   {
     "name": "Блокнот А6 60 листов",
-    "article": 7355785302,
+    "article": 5960652427,
     "category": "Блокнот",
     "category_id": 5
   },
   {
     "name": "Блокнот А6 100 листов",
-    "article": 7613513042,
+    "article": 8346404178,
     "category": "Блокнот",
     "category_id": 5
   },
   {
     "name": "Блокнот А5 40 листов",
-    "article": 1470203029,
+    "article": 9136309361,
     "category": "Блокнот",
     "category_id": 5
   },
   {
     "name": "Блокнот А5 80 листов",
-    "article": 7882329330,
+    "article": 1188268662,
     "category": "Блокнот",
     "category_id": 5
   },
   {
     "name": "Блокнот А5 80 листов",
-    "article": 3514005627,
+    "article": 7084553446,
     "category": "Блокнот",
     "category_id": 5
   },
   {
     "name": "Ручка бирюзовая, синие чернила",
-    "article": 6512802398,
+    "article": 6350435808,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Ручка фиолетовая, синие чернила",
-    "article": 9011832910,
+    "article": 2925947555,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Ручка желтая, синие чернила",
-    "article": 1047135706,
+    "article": 2898638520,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Набор ручек, синие чернила",
-    "article": 5362435680,
+    "article": 2530438326,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Ручка бирюзовая, черные чернила",
-    "article": 5675051899,
+    "article": 9867026106,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Ручка фиолетовая, черные чернила",
-    "article": 5044438268,
+    "article": 7525868915,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Ручка желтая, черные чернила",
-    "article": 9070671825,
+    "article": 6646208634,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Набор ручек, черные чернила",
-    "article": 6801095090,
+    "article": 9103949463,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Набор ручек «Юбилей СГУ», черные чернила",
-    "article": 9103168922,
+    "article": 2946886095,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Набор ручек «Юбилей СГУ», синие чернила",
-    "article": 3251998246,
+    "article": 7504637466,
     "category": "Ручка",
     "category_id": 6
   },
   {
     "name": "Значок синий",
-    "article": 6509011023,
+    "article": 3285649998,
     "category": "Значок",
     "category_id": 7
   },
   {
     "name": "Значок белый",
-    "article": 2688028141,
+    "article": 8970473052,
     "category": "Значок",
     "category_id": 7
   },
   {
     "name": "Набор значков",
-    "article": 6116201272,
+    "article": 8426196245,
     "category": "Значок",
     "category_id": 7
   },
   {
     "name": "Набор ежедневник + ручка, синий цвет",
-    "article": 7537061121,
+    "article": 3143551693,
     "category": "Набор",
     "category_id": 8
   },
   {
     "name": "Набор ежедневник + ручка, белый цвет",
-    "article": 5541357933,
+    "article": 2118009369,
     "category": "Набор",
     "category_id": 8
   },
   {
     "name": "Набор стикеров «Виды СГУ»",
-    "article": 3497342273,
+    "article": 1665934294,
     "category": "Набор",
     "category_id": 8
   },
   {
     "name": "Набор стикеров «Наш СГУ»",
-    "article": 3477017852,
+    "article": 5604821536,
     "category": "Набор",
     "category_id": 8
   },
   {
     "name": "Набор стикеров «Любимый СГУ»",
-    "article": 6470589291,
+    "article": 6856440624,
     "category": "Набор",
     "category_id": 8
   },
   {
     "name": "Полный набор стикеров",
-    "article": 7360993786,
+    "article": 1512064666,
     "category": "Набор",
     "category_id": 8
   }
