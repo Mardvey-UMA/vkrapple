@@ -40,7 +40,7 @@ export const WishlistPage = () => {
 						))}
 					</div>
 
-					{data?.current_page < data?.total_pages && (
+					{data && data.current_page < data.total_pages && (
 						<div className={styles.loadMore}>
 							<Button
 								type='primary'

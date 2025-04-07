@@ -19,7 +19,7 @@ export const ProductPage = () => {
 	const { cartMap, wishlistSet } = useProductStatus()
 	const { addToCart, removeFromCart } = useCartActions()
 	const { addToWishlist, removeFromWishlist } = useWishlistActions()
-
+	if (!product) return <div>Товар не найден</div>
 	const enrichedProduct = product
 		? {
 				...product,
@@ -125,7 +125,7 @@ export const ProductPage = () => {
 					/>
 				</div>
 
-				{product.attributes.length > 0 && (
+				{product.attributes?.length > 0 && (
 					<div className={styles.attributes}>
 						<h3>Характеристики:</h3>
 						{product.attributes.map(attr => (
@@ -138,7 +138,7 @@ export const ProductPage = () => {
 				)}
 
 				<div className={styles.reviews}>
-					<h3>Отзывы ({product.reviews.length})</h3>
+					<h3>Отзывы ({product.reviews?.length})</h3>
 					{product.reviews.map(review => (
 						<div key={review.id} className={styles.review}>
 							<Rate value={review.rating} disabled />
