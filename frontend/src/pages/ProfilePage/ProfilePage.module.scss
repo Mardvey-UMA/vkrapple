@@ -1,8 +1,6 @@
-// src/pages/ProfilePage/ProfilePage.module.scss
 .container {
 	padding: 16px;
 	min-height: 100vh;
-	padding-bottom: 80px;
 }
 
 .title {
@@ -18,18 +16,33 @@
 
 .listItem {
 	padding: 0 !important;
+	border-bottom: 1px solid #f0f0f0 !important;
+
+	&:last-child {
+		border-bottom: none !important;
+	}
 }
 
 .menuButton {
-	text-align: left;
+	text-align: left !important;
 	height: 48px;
 	font-size: 16px;
-}
+	display: flex !important;
+	align-items: center;
+	padding: 0 16px !important;
+	margin: 0 !important;
+	justify-content: flex-start !important;
 
-.logoutContainer {
-	margin-top: 32px;
-}
+	.ant-btn-icon {
+		margin-right: 12px;
+		font-size: 18px;
+	}
 
-.logoutButton {
-	height: 48px;
+	&:hover {
+		color: #1890ff !important;
+
+		.ant-btn-icon {
+			color: #1890ff !important;
+		}
+	}
 }

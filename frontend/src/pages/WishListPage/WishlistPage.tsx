@@ -1,10 +1,11 @@
-import { Button, Spin, Typography } from 'antd'
+import { Button, Empty, Spin, Typography } from 'antd'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { WishListItem } from '../../components/WishListItem/WishListItemComponent'
 import { useWishlist } from '../../hooks/useWishList'
 import styles from './WishlistPage.module.scss'
 
-const { Title } = Typography
+const { Title, Text } = Typography
 
 export const WishlistPage = () => {
 	const [page, setPage] = useState(0)
@@ -55,8 +56,28 @@ export const WishlistPage = () => {
 			)}
 
 			{!isLoading && filteredItems.length === 0 && (
-				<div className={styles.empty}>В списке желаний пока нет товаров</div>
+				<Empty
+					image={Empty.PRESENTED_IMAGE_DEFAULT}
+					description={
+						<div className={styles.emptyContent}>
+							<Text type='secondary'>В списке желаний пока нет товаров</Text>
+							<Link to='/'>
+								<Button type='primary' style={{ marginTop: 16 }}>
+									Перейти к покупкам
+								</Button>
+							</Link>
+						</div>
+					}
+				/>
 			)}
 		</div>
 	)
 }
+// {!isLoading && cartItems.length === 0 && (
+// 	<div className={styles.empty}>
+// 		<Text type='secondary'>Корзина пуста</Text>
+// 		<Link to='/'>
+// 			<Button type='primary'>Перейти к покупкам</Button>
+// 		</Link>
+// 	</div>
+// )}

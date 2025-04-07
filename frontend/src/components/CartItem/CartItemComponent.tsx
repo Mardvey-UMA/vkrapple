@@ -1,4 +1,3 @@
-// src/components/CartItem/CartItemComponent.tsx
 import { DeleteOutlined } from '@ant-design/icons'
 import { Button, Skeleton } from 'antd'
 import { Link } from 'react-router-dom'
@@ -10,6 +9,7 @@ type CartItemProps = {
 	quantity: number
 	onRemove: (article: number) => void
 	onQuantityChange: (article: number, delta: number) => void
+	editable?: boolean // Новый необязательный пропс
 }
 
 export const CartItemComponent = ({
@@ -17,6 +17,7 @@ export const CartItemComponent = ({
 	quantity,
 	onRemove,
 	onQuantityChange,
+	editable = true, // Значение по умолчанию true
 }: CartItemProps) => {
 	const { data: product, isLoading } = useProductDetails(article)
 
@@ -43,35 +44,43 @@ export const CartItemComponent = ({
 							<div className={styles.price}>{product.price} ₽</div>
 
 							<div className={styles.controls}>
-								<div className={styles.quantityControl}>
-									<Button
-										shape='circle'
-										onClick={() => onQuantityChange(article, -1)}
-										disabled={quantity <= 1}
-									>
-										-
-									</Button>
-									<span className={styles.quantity}>{quantity}</span>
-									<Button
-										shape='circle'
-										onClick={() => onQuantityChange(article, 1)}
-									>
-										+
-									</Button>
-								</div>
+								{editable ? (
+									<div className={styles.quantityControl}>
+										<Button
+											shape='circle'
+											onClick={() => onQuantityChange(article, -1)}
+											disabled={quantity <= 1}
+										>
+											-
+										</Button>
+										<span className={styles.quantity}>{quantity}</span>
+										<Button
+											shape='circle'
+											onClick={() => onQuantityChange(article, 1)}
+										>
+											+
+										</Button>
+									</div>
+								) : (
+									<div className={styles.quantityText}>
+										Количество: {quantity}
+									</div>
+								)}
 								<div className={styles.total}>
 									Итого: {(product.price * quantity).toFixed(2)} ₽
 								</div>
 							</div>
 						</div>
 
-						<Button
-							type='text'
-							danger
-							icon={<DeleteOutlined />}
-							onClick={() => onRemove(article)}
-							className={styles.removeButton}
-						/>
+						{editable && (
+							<Button
+								type='text'
+								danger
+								icon={<DeleteOutlined />}
+								onClick={() => onRemove(article)}
+								className={styles.removeButton}
+							/>
+						)}
 					</>
 				)}
 			</Skeleton>
