@@ -7,7 +7,7 @@ from config.config import settings
 def main_markup():
     builder = InlineKeyboardBuilder()
     builder.button(
-        text="Open Mini App",
+        text="Запустить приложение",
         web_app=WebAppInfo(url=settings.WEBAPP_URL)
     )
     return builder.as_markup()

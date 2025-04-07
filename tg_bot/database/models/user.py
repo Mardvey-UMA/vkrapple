@@ -6,7 +6,6 @@ from database.database import Base
 class User(Base):
     __tablename__ = '_user'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    username: Mapped[str] = mapped_column(String(64))
     telegram_id: Mapped[int] = mapped_column(BigInteger())
     chat_id: Mapped[int] = mapped_column(BigInteger())
     created_at: Mapped[datetime] = mapped_column(server_default=text("TIMEZONE('utc', now())"))
