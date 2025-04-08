@@ -17,11 +17,11 @@ services:
   # MinIO
   minio:
     image: minio/minio
-    command: server --certs-dir /certs /data --console-address ":9001" 
+    command: server --certs-dir /certs /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-      MINIO_SERVER_URL: "https://www.ssushop.ru:9000" 
+      MINIO_SERVER_URL: "https://www.ssushop.ru:9000"
     volumes:
       - ~/minio/certs:/certs
       - minio_data:/data
@@ -58,7 +58,6 @@ services:
 
   # Frontend
 
-
   # Telegram Bot
   telegram-bot:
     build:
@@ -71,25 +70,26 @@ services:
       DB_URL: postgresql://postgres:postgres@postgres:5432/goods_db
     networks:
       - app-network
-      
+
   nginx:
     image: nginx:alpine
     container_name: nginx_proxy
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
+      - minio
       - frontend
       - backend
     networks:
       - app-network
-    
+
 volumes:
-    postgres_data:
-    minio_data:
+  postgres_data:
+  minio_data:
 
 networks:
   app-network:
