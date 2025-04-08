@@ -4,7 +4,7 @@ server:
 s3:
   accessKeyId: E59DuR6wUMZKqZytoLRs
   secretAccessKey: FPsYRYvw1063DbV7y8tDxbloaMM4S3oUfp133253
-  minioUrl: http://minio:9000
+  minioUrl: https://www.ssushop.ru/minio
   region: us-east-1
   bucket: goods
 logging:
