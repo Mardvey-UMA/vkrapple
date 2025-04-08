@@ -15,32 +15,32 @@ services:
       - app-network
 
   # MinIO
-  minio:
-    image: minio/minio
-    command: server --certs-dir /certs /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: makulatura
-      MINIO_ROOT_PASSWORD: makulatura
-      MINIO_SERVER_URL: 'https://www.ssushop.ru/minio'
-      MINIO_BROWSER_REDIRECT_URL: 'https://www.ssushop.ru/minio-console'
-    volumes:
-      - ~/minio/certs:/certs
-      - minio_data:/data
-    ports:
-      - '9000:9000'
-      - '9001:9001'
-    expose:
-      - '9000'
-      - '9001'
-    networks:
-      - app-network
+  # minio:
+  #   image: minio/minio
+  #   command: server --certs-dir /certs /data --console-address ":9001"
+  #   environment:
+  #     MINIO_ROOT_USER: makulatura
+  #     MINIO_ROOT_PASSWORD: makulatura
+  #     MINIO_SERVER_URL: 'https://www.ssushop.ru/minio'
+  #     MINIO_BROWSER_REDIRECT_URL: 'https://www.ssushop.ru/minio-console'
+  #   volumes:
+  #     - ~/minio/certs:/certs
+  #     - minio_data:/data
+  #   ports:
+  #     - '9000:9000'
+  #     - '9001:9001'
+  #   expose:
+  #     - '9000'
+  #     - '9001'
+  #   networks:
+  #     - app-network
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
       - '3000:3000'
-    restart: unless-stopped
+    restart: always
     networks:
       - app-network
   # Backend
@@ -59,8 +59,6 @@ services:
       - '8080:8080'
     networks:
       - app-network
-
-  # Frontend
 
   # Telegram Bot
   telegram-bot:
@@ -85,7 +83,7 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
-      - minio
+      #- minio
       - frontend
       - backend
     networks:
@@ -93,7 +91,7 @@ services:
 
 volumes:
   postgres_data:
-  minio_data:
+  #minio_data:
 
 networks:
   app-network:
