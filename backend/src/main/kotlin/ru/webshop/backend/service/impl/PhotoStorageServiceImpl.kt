@@ -34,7 +34,7 @@ class PhotoStorageServiceImpl(
 
         s3Client.putObject(request, RequestBody.fromBytes(content))
 
-        val url = "$minioUrl/$bucketName/$objectKey"
+        val url = "http://www.ssushop.ru:9000/$bucketName/$objectKey"
 
         return url
     }
