@@ -34,59 +34,58 @@ export const ProductCard = ({
 					alt={product.name}
 					className={styles.image}
 				/>
+			</Link>
+			<div className={styles.content}>
+				<h3 className={styles.title}>{product.name}</h3>
 
-				<div className={styles.content}>
-					<h3 className={styles.title}>{product.name}</h3>
+				<div className={styles.meta}>
+					<Rate
+						value={product.rating}
+						disabled
+						style={{
+							fontSize: '0.875em',
+							gap: '0px',
+							margin: '0 -1px',
+						}}
+					/>
+					<span className={styles.price}>{product.price} ₽</span>
+				</div>
 
-					<div className={styles.meta}>
-						<Rate
-							value={product.rating}
-							disabled
-							style={{
-								fontSize: '0.875em',
-								gap: '0px',
-								margin: '0 -1px',
-							}}
-						/>
-						<span className={styles.price}>{product.price} ₽</span>
-					</div>
-
-					<div className={styles.actions}>
-						{cartQuantity > 0 ? (
-							<Space className={styles.quantityControl}>
-								<Button
-									type='primary'
-									danger
-									onClick={() => onCartAction(product, 'remove')}
-								>
-									-
-								</Button>
-								<span className={styles.quantity}>{cartQuantity}</span>
-								<Button
-									type='primary'
-									onClick={() => onCartAction(product, 'add')}
-								>
-									+
-								</Button>
-							</Space>
-						) : (
+				<div className={styles.actions}>
+					{cartQuantity > 0 ? (
+						<Space className={styles.quantityControl}>
 							<Button
 								type='primary'
-								icon={<ShoppingCartOutlined />}
+								danger
+								onClick={() => onCartAction(product, 'remove')}
+							>
+								-
+							</Button>
+							<span className={styles.quantity}>{cartQuantity}</span>
+							<Button
+								type='primary'
 								onClick={() => onCartAction(product, 'add')}
 							>
-								В корзину
+								+
 							</Button>
-						)}
-
+						</Space>
+					) : (
 						<Button
-							type={isInWishlist ? 'primary' : 'default'}
-							icon={isInWishlist ? <HeartFilled /> : <HeartOutlined />}
-							onClick={() => onWishlistAction(product.article_number)}
-						/>
-					</div>
+							type='primary'
+							icon={<ShoppingCartOutlined />}
+							onClick={() => onCartAction(product, 'add')}
+						>
+							В корзину
+						</Button>
+					)}
+
+					<Button
+						type={isInWishlist ? 'primary' : 'default'}
+						icon={isInWishlist ? <HeartFilled /> : <HeartOutlined />}
+						onClick={() => onWishlistAction(product.article_number)}
+					/>
 				</div>
-			</Link>
+			</div>
 		</div>
 	)
 }
