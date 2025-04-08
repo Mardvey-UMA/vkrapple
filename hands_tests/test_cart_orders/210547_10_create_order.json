@@ -1,4 +1,0 @@
-{
-  "business_error_description": "Very bad(",
-  "error": "JSON parse error: Instantiation of [simple type, class ru.webshop.backend.dto.CreateOrderRequestDTO] value failed for JSON property payment_method due to missing (therefore NULL) value for creator parameter paymentMethod which is a non-nullable type"
-}

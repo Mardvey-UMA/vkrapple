@@ -28,16 +28,25 @@ services:
       - '9001:9001'
     networks:
       - app-network
-
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+    networks:
+      - app-network
   # Backend
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    restart: unless-stopped
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/goods_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://goods_db:5432/goods_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
@@ -46,16 +55,7 @@ services:
       - app-network
 
   # Frontend
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    depends_on:
-      - backend
-    ports:
-      - '3000:3000'
-    networks:
-      - app-network
+
 
   # Telegram Bot
   telegram-bot:
@@ -69,10 +69,25 @@ services:
       DB_URL: postgresql://postgres:postgres@postgres:5432/goods_db
     networks:
       - app-network
-
+      
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+    
 volumes:
-  postgres_data:
-  minio_data:
+    postgres_data:
+    minio_data:
 
 networks:
   app-network:

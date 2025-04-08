@@ -19,13 +19,13 @@ data class User (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(name = "username_telegram", length = 64, nullable = true, unique = true)
+    @Column(name = "username_telegram", length = 64, nullable = true)
     var usernameTelegram: String = "",
 
     @Column(name = "telegram_id", nullable = false, unique = true)
     val telegramId: Long,
 
-    @Column(name = "chat_id", nullable = false, unique = true)
+    @Column(name = "chat_id", nullable = false)
     val chatId: Long,
 
     @Column(name = "phone_number", nullable = true, unique = true)
