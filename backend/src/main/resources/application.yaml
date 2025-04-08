@@ -62,8 +62,8 @@ spring:
     - "/swagger-ui/index.html"
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/goods_db
-    #url: jdbc:postgresql://goods_db/goods_db
+    #url: jdbc:postgresql://localhost:5432/goods_db
+    url: jdbc:postgresql://goods_db/goods_db
     username: postgres
     password: postgres
   security:
@@ -73,7 +73,7 @@ spring:
       refresh-expiration: 604800
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:

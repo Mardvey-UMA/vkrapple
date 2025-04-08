@@ -21,11 +21,11 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL_ASYNCPG_DB(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}/{self.DB_NAME}"
+        return f"postgresql+asyncpg://postgres:postgres@goods_db:5432/goods_db"
 
     @property
     def DATABASE_URL_ASYNCPG_DOCKER_DB(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST_DOCKER}/{self.DB_NAME}"
+        return f"postgresql+asyncpg://postgres:postgres@goods_db:5432/goods_db"
 
     model_config = SettingsConfigDict(
         env_file=ROOT_DIR / ".env",

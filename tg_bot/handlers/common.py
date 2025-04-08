@@ -9,11 +9,11 @@ router = Router(name="common")
 
 @router.message(CommandStart())
 async def handle_start(message: Message, user_service: IUserService):
-    _ = await user_service.register_user(
-        telegram_id=message.from_user.id,
-        chat_id=message.chat.id,
-        username=message.from_user.username or ""
-    )
+    #_ = await user_service.register_user(
+    #    telegram_id=message.from_user.id,
+    #    chat_id=message.chat.id,
+    #    username=message.from_user.username or ""
+    #)
     await message.answer(
         "🎓 <b>Добро пожаловать в магазин мерча СГУ!</b> 🎓\n\n"
         "✨ Здесь вы найдете <i>стильные и полезные</i> товары с символикой <b>Саратовского Государственного Университета</b>:\n\n"
