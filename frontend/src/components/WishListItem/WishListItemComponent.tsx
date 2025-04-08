@@ -35,14 +35,13 @@ export const WishListItem = ({ article, onRemove }: WishListItemProps) => {
 								alt={product.name}
 								className={styles.image}
 							/>
+
+							<div className={styles.content}>
+								<h3 className={styles.title}>{product.name}</h3>
+								<Rate value={product.rating} disabled className={styles.rate} />
+								<div className={styles.price}>{product.price} ₽</div>
+							</div>
 						</Link>
-
-						<div className={styles.content}>
-							<h3 className={styles.title}>{product.name}</h3>
-							<Rate value={product.rating} disabled className={styles.rate} />
-							<div className={styles.price}>{product.price} ₽</div>
-						</div>
-
 						<Button
 							type='primary'
 							danger

@@ -9,7 +9,7 @@ type CartItemProps = {
 	quantity: number
 	onRemove: (article: number) => void
 	onQuantityChange: (article: number, delta: number) => void
-	editable?: boolean // Новый необязательный пропс
+	editable?: boolean
 }
 
 export const CartItemComponent = ({
@@ -17,7 +17,7 @@ export const CartItemComponent = ({
 	quantity,
 	onRemove,
 	onQuantityChange,
-	editable = true, // Значение по умолчанию true
+	editable = true,
 }: CartItemProps) => {
 	const { data: product, isLoading } = useProductDetails(article)
 

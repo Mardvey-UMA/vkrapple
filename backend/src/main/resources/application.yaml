@@ -72,7 +72,7 @@ spring:
       refresh-expiration: 604800
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: false
     properties:
       hibernate:
