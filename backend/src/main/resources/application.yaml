@@ -2,9 +2,9 @@ server:
   port: 8080
 
 s3:
-  accessKeyId: q9NlzKM1I24pjL3fev3B
-  secretAccessKey: B2iQx9CKk7Dd7X7QbiWcNSb2wE3iQSHBWV80o5ry
-  minioUrl: http://localhost:9000
+  accessKeyId: E59DuR6wUMZKqZytoLRs
+  secretAccessKey: FPsYRYvw1063DbV7y8tDxbloaMM4S3oUfp133253
+  minioUrl: http://minio:9000
   region: us-east-1
   bucket: goods
 logging:
@@ -25,7 +25,6 @@ springdoc:
   cache:
     disabled: true
 
-
 spring:
   mvc:
     pathmatch:
@@ -41,25 +40,25 @@ spring:
   application:
     name: backend
   public-urls:
-    - "/api/products/**"
-    - "/v3/api-docs.yaml"
-    - "/v3/api-docs/**"
-    - "/swagger-ui/**"
-    - "/swagger-ui.html"
-    - "/api/auth/**"
-    - "/api/password/**"
-    - "/api/token/**"
-    - "/api/activate-account"
-    - "/v3/api-docs/**"
-    - "/swagger-ui.html"
-    - "/swagger-ui/**"
-    - "/swagger-resources/**"
-    - "/webjars/**"
-    - "/v2/api-docs"
-    - "/v2/api-docs/**"
-    - "/webjars/swagger-ui/**"
-    - "/v3/api-docs"
-    - "/swagger-ui/index.html"
+    - '/api/products/**'
+    - '/v3/api-docs.yaml'
+    - '/v3/api-docs/**'
+    - '/swagger-ui/**'
+    - '/swagger-ui.html'
+    - '/api/auth/**'
+    - '/api/password/**'
+    - '/api/token/**'
+    - '/api/activate-account'
+    - '/v3/api-docs/**'
+    - '/swagger-ui.html'
+    - '/swagger-ui/**'
+    - '/swagger-resources/**'
+    - '/webjars/**'
+    - '/v2/api-docs'
+    - '/v2/api-docs/**'
+    - '/webjars/swagger-ui/**'
+    - '/v3/api-docs'
+    - '/swagger-ui/index.html'
   datasource:
     driver-class-name: org.postgresql.Driver
     #url: jdbc:postgresql://localhost:5432/goods_db
