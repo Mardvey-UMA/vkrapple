@@ -19,9 +19,10 @@ services:
     image: minio/minio
     command: server --certs-dir /certs /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-      MINIO_SERVER_URL: "https://www.ssushop.ru:9000"
+      MINIO_ROOT_USER: makulatura
+      MINIO_ROOT_PASSWORD: makulatura
+      MINIO_SERVER_URL: 'https://www.ssushop.ru/minio'
+      MINIO_BROWSER_REDIRECT_URL: 'https://www.ssushop.ru/minio-console'
     volumes:
       - ~/minio/certs:/certs
       - minio_data:/data
