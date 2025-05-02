@@ -13,36 +13,63 @@ services:
       - '5432:5432'
     networks:
       - app-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
-  # MinIO
-  # minio:
-  #   image: minio/minio
-  #   command: server --certs-dir /certs /data --console-address ":9001"
-  #   environment:
-  #     MINIO_ROOT_USER: makulatura
-  #     MINIO_ROOT_PASSWORD: makulatura
-  #     MINIO_SERVER_URL: 'https://www.ssushop.ru/minio'
-  #     MINIO_BROWSER_REDIRECT_URL: 'https://www.ssushop.ru/minio-console'
-  #   volumes:
-  #     - ~/minio/certs:/certs
-  #     - minio_data:/data
-  #   ports:
-  #     - '9000:9000'
-  #     - '9001:9001'
-  #   expose:
-  #     - '9000'
-  #     - '9001'
-  #   networks:
-  #     - app-network
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+  # Elasticsearch
+  elasticsearch:
+    image: elasticsearch:8.17.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms2g -Xmx2g
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=elastic_password
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
     ports:
-      - '3000:3000'
-    restart: always
+      - '9200:9200'
+      - '9300:9300'
     networks:
       - app-network
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'curl -u elastic:elastic_password -f http://localhost:9200/_cluster/health || exit 1',
+        ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
+
+  # Logstash
+  logstash:
+    image: logstash:8.17.1
+    container_name: logstash
+    depends_on:
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      LS_JAVA_OPTS: '-Xmx1g -Xms1g'
+      ELASTICSEARCH_HOSTS: 'http://elasticsearch:9200'
+      ELASTICSEARCH_USERNAME: 'elastic'
+      ELASTICSEARCH_PASSWORD: 'elastic_password'
+    volumes:
+      - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./conf/postgresql-42.6.0.jar:/usr/share/logstash/postgresql-42.6.0.jar
+    networks:
+      - app-network
+
   # Backend
   backend:
     build:
@@ -50,17 +77,39 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://goods_db:5432/goods_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
+      SPRING_ELASTICSEARCH_USERNAME: elastic
+      SPRING_ELASTICSEARCH_PASSWORD: elastic_password
     ports:
       - '8080:8080'
     networks:
       - app-network
 
-  # Telegram Bot
+  # Kibana
+  kibana:
+    image: kibana:8.17.1
+    container_name: kibana
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: elastic_password
+    ports:
+      - '5601:5601'
+    networks:
+      - app-network
+
+  #Telegram Bot
   telegram-bot:
     build:
       context: ./tg_bot
@@ -83,15 +132,24 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
-      #- minio
       - frontend
       - backend
     networks:
       - app-network
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    restart: always
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
-  #minio_data:
+  elasticsearch_data:
 
 networks:
   app-network:
