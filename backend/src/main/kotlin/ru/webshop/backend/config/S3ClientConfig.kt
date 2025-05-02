@@ -35,5 +35,4 @@ class S3ClientConfig(
             .region(Region.of(region))
             .build()
     }
-
 }
