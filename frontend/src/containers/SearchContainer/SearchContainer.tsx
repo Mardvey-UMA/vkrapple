@@ -62,7 +62,10 @@ export const SearchContainer = () => {
 
 	return (
 		<div className={styles.container}>
-			<SearchBar onSearch={handleSearch} />
+			<SearchBar
+				initialValue={searchParams.get('search') || ''}
+				onSearch={handleSearch}
+			/>
 			<BurgerMenu onClick={() => setIsModalOpen(true)} />
 
 			<Modal
