@@ -14,32 +14,31 @@ class ProductDocumentRepository(
     private val elasticsearchClient: ElasticsearchClient
 ){
 
-    fun weightedSearch(query: String): List<ProductDocument> {
-        val searchRequest = SearchRequest.of { s ->
+    fun weightedSearch(query: String,
+                       from: Int = 0,
+                       size: Int = 10): List<ProductDocument> {
+
+        val request = SearchRequest.of { s ->
             s.index("products")
-                .query(
-                    Query.of { q ->
-                        q.multiMatch(
-                            MultiMatchQuery.of { m ->
-                                m.query(query)
-                                    .fields(
-                                        "name^3",
-                                        "values.value^2",
-                                        "description^1"
-                                    )
+                .from(from)
+                .size(size)
+                .query { q ->
+                    q.bool { b ->
+                        b.must { m ->
+                            m.multiMatch {
+                                it.query(query)
+                                    .fields("name^5", "name.ngr^2", "values.value^2", "description")
+                                    .fuzziness("AUTO")
+                                    .prefixLength(1)
+                                    .maxExpansions(50)
                             }
-                        )
+                        }
                     }
-                )
-                .from(0)
-                .size(10)
+                }
         }
-        try {
-            val response = elasticsearchClient.search(searchRequest, ProductDocument::class.java)
-        } catch (e: Exception){
-            println(e.stackTrace)
-        }
-        val response = elasticsearchClient.search(searchRequest, ProductDocument::class.java)
+
+        val response = elasticsearchClient.search(request, ProductDocument::class.java)
         return response.hits().hits().mapNotNull { it.source() }
     }
+
 }

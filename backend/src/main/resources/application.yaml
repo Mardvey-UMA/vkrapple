@@ -40,7 +40,7 @@ spring:
   application:
     name: backend
   public-urls:
-    - '/api/**'
+    #- '/api/**'
     - '/api/products/**'
     - '/v3/api-docs.yaml'
     - '/v3/api-docs/**'
