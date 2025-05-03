@@ -28,3 +28,28 @@ export interface ProductPageResponse {
 	total_pages: number
 	total_products: number
 }
+export interface ProductDocument {
+	id: number
+	name: string
+	articleNumber: number
+	balanceInStock?: number
+	category?: string
+	categoryId?: number
+	description?: string
+	numberOfOrders?: number
+	price?: number
+	rating?: number
+	totalReviews?: number
+	values: { id?: number; value?: string }[]
+	photos?: string[] | null
+}
+
+export interface ElasticPage<T> {
+	content: T[]
+	pageable: { pageNumber: number; pageSize: number }
+	totalPages: number
+	totalElements: number
+	numberOfElements: number
+	first: boolean
+	last: boolean
+}
