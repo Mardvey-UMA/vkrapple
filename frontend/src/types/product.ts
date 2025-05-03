@@ -28,6 +28,14 @@ export interface ProductPageResponse {
 	total_pages: number
 	total_products: number
 }
+
+export interface PhotoElascticResponse {
+	photo_id: number
+	indexNumber: number
+	created_at: string
+	photo_url: string
+	id: number
+}
 export interface ProductDocument {
 	id: number
 	name: string
@@ -41,7 +49,7 @@ export interface ProductDocument {
 	rating?: number
 	totalReviews?: number
 	values: { id?: number; value?: string }[]
-	photos?: string[] | null
+	photos?: PhotoElascticResponse[] | null
 }
 
 export interface ElasticPage<T> {

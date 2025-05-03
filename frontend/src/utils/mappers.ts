@@ -11,7 +11,7 @@ export const mapDocToProduct = (doc: ProductDocument): ProductResponse => {
 			attribute_name: '',
 			value: v.value ?? '',
 		})) ?? []
-
+	const photos = doc.photos ? doc.photos.map(p => p.photo_url) : []
 	return {
 		id: doc.id,
 		article_number: doc.articleNumber,
@@ -21,7 +21,7 @@ export const mapDocToProduct = (doc: ProductDocument): ProductResponse => {
 		number_of_orders: doc.numberOfOrders ?? 0,
 		category_id: doc.categoryId ?? 0,
 		category_name: doc.category ?? '',
-		photos: (doc.photos ?? []) as string[],
+		photos,
 		attributes,
 		reviews: [],
 	}
