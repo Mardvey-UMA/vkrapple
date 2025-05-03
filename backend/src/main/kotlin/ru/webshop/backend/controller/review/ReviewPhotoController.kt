@@ -1,4 +1,4 @@
-package ru.webshop.backend.controller
+package ru.webshop.backend.controller.review
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import ru.webshop.backend.dto.PhotoReviewRequestDTO
-import ru.webshop.backend.dto.PhotoUploadRequestDTO
 import ru.webshop.backend.service.interfaces.PhotoUploadService
 
 @RestController
