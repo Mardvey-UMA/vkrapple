@@ -22,5 +22,7 @@ interface UserRepository: JpaRepository<User, Long> {
     fun existsByTelegramId(@Param("telegramId") telegramId: Long): Boolean
 
     fun existsByLogin(login: String): Boolean
-    fun findByLogin(login: String): User?
+
+    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.login = :login")
+    fun findByLogin(@Param("login") login: String): User?
 }

@@ -10,17 +10,20 @@ import ru.webshop.backend.repository.UserRepository
 @Service
 class UserDetailServiceImpl(
     private val userRepository: UserRepository
-): UserDetailsService {
+) : UserDetailsService {
 
     @Transactional
     @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(loginOrTelegramId: String): UserDetails {
-        val user = if (loginOrTelegramId.all { it.isDigit() }) {
-            userRepository.findByTelegramId(loginOrTelegramId.toLong())
-        } else {
-            userRepository.findByLogin(loginOrTelegramId)
-        } ?: throw UsernameNotFoundException("User not found")
+    override fun loadUserByUsername(username: String): UserDetails {
+        val user = when {
+            username.all { it.isDigit() } ->
+                userRepository.findByTelegramId(username.toLong())
+            else ->
+                userRepository.findByLogin(username)
+        } ?: throw UsernameNotFoundException("User $username not found")
 
-        return user
+        return user.apply {
+            println("Loaded user: ${this.login ?: this.telegramId} with roles: ${this.roles.joinToString { it.roleName }}")
+        }
     }
 }
