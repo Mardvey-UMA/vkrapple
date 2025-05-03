@@ -1,5 +1,5 @@
 import { Modal, Spin } from 'antd'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { BurgerMenu } from '../../components/BurgerMenu/BurgerMenu'
 import { FilterForm } from '../../components/FilterForm/FilterForm'
@@ -21,16 +21,21 @@ export const SearchContainer = () => {
 		resetFilters,
 	} = useCategoryFilters()
 
-	const handleSearch = (value: string) => {
-		const newParams = new URLSearchParams(searchParams)
-		if (value) {
-			newParams.set('search', value)
-		} else {
-			newParams.delete('search')
-		}
-		newParams.set('page', '0')
-		setSearchParams(newParams)
-	}
+	const handleSearch = useCallback(
+		(value: string) => {
+			setSearchParams(prev => {
+				const next = new URLSearchParams(prev)
+				if (value) {
+					next.set('search', value)
+				} else {
+					next.delete('search')
+				}
+				next.set('page', '0')
+				return next
+			})
+		},
+		[setSearchParams]
+	)
 
 	const handleApplyFilters = () => {
 		const newParams = new URLSearchParams()
