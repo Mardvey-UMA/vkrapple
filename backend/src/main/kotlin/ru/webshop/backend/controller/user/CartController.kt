@@ -1,11 +1,9 @@
-package ru.webshop.backend.controller
+package ru.webshop.backend.controller.user
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.context.annotation.Description
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.webshop.backend.dto.AddToCartRequestDTO
 import ru.webshop.backend.dto.CartItemDTO
