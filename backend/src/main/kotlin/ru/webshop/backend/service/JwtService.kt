@@ -75,14 +75,19 @@ class JwtService(
 
     fun generateAccessToken(user: UserDetails): String {
         val userEntity = user as User
-        val claims = ("telegram_id" to userEntity.telegramId).let {
-            mapOf(
-                "telegram_id" to user.telegramId,
-                "roles" to user.authorities.map { it.authority },
-                "token_type" to "ACCESS",
-                "sub" to userEntity.telegramId.toString()
-            )
+        val subject = userEntity.login ?: userEntity.telegramId.toString()
+
+        val claims = mutableMapOf(
+            "telegram_id" to userEntity.telegramId,
+            "roles" to user.authorities.map { it.authority },
+            "token_type" to "ACCESS",
+            "sub" to subject
+        )
+
+        userEntity.login?.let {
+            claims["login"] = it
         }
+
         return buildToken(claims, user, jwtConfig.expiration)
     }
 
