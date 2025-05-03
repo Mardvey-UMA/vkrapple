@@ -24,22 +24,17 @@ import { defineConfig } from 'vite'
 export default defineConfig({
 	plugins: [react()],
 	server: {
-		host: true,
+		host: '0.0.0.0',
+		port: 5173,
+		strictPort: true,
+		allowedHosts: ['frontend.localhost'],
+
 		proxy: {
 			'/api': {
 				target: 'https://backend.localhost',
 				changeOrigin: true,
+				secure: false,
 			},
 		},
-	},
-	preview: {
-		host: true,
-		port: 5173,
-		allowedHosts: [
-			'www.ssushop.ru',
-			'ssushop.ru',
-			'localhost',
-			'backend.localhost',
-		],
 	},
 })

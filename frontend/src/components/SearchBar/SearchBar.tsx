@@ -11,12 +11,14 @@ type SearchBarProps = {
 
 export const SearchBar = ({ initialValue = '', onSearch }: SearchBarProps) => {
 	const [value, setValue] = useState(initialValue)
-	const debounced = useDebounce(value, 400)
 
+	useEffect(() => {
+		setValue(initialValue)
+	}, [initialValue])
+	const debounced = useDebounce(value, 400)
 	useEffect(() => {
 		onSearch(debounced.trim())
 	}, [debounced, onSearch])
-
 	return (
 		<Input
 			placeholder='Поиск товаров…'
