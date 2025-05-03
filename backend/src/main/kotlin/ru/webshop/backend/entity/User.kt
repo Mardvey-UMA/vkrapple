@@ -19,6 +19,12 @@ data class User (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    @Column(name = "login", unique = true)
+    var login: String? = null,
+
+    @Column(name = "password_hash")
+    var passwordHash: String? = null,
+
     @Column(name = "username_telegram", length = 64, nullable = true)
     var usernameTelegram: String = "",
 
@@ -61,7 +67,7 @@ data class User (
 
         // Роли
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @ManyToMany(fetch = FetchType.LAZY)
         var roles: MutableSet<Role> = mutableSetOf(),
 
     @OneToMany(mappedBy = "user")
@@ -92,7 +98,7 @@ data class User (
 
     override fun isAccountNonLocked(): Boolean = !accountLocked
 
-    override fun getPassword() = null
+    override fun getPassword() = passwordHash
 
     override fun getUsername(): String = telegramId.toString()
 

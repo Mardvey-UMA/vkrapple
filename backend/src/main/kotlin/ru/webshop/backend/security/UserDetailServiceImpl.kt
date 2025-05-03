@@ -14,10 +14,13 @@ class UserDetailServiceImpl(
 
     @Transactional
     @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(telegramId: String): UserDetails {
-        val lltelegramId = telegramId.toLong()
-        val user = userRepository.findByTelegramId(lltelegramId)
-            ?: throw UsernameNotFoundException("User with email $telegramId not found")
+    override fun loadUserByUsername(loginOrTelegramId: String): UserDetails {
+        val user = if (loginOrTelegramId.all { it.isDigit() }) {
+            userRepository.findByTelegramId(loginOrTelegramId.toLong())
+        } else {
+            userRepository.findByLogin(loginOrTelegramId)
+        } ?: throw UsernameNotFoundException("User not found")
+
         return user
     }
 }

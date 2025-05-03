@@ -31,6 +31,10 @@ class SecurityConfig(
                 publicRoutersConfig.publicUrls.forEach { url ->
                     auth.requestMatchers(url).permitAll()
                 }
+                auth.requestMatchers("/api/admin/auth/**").permitAll()
+
+                auth.requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+
                 auth.anyRequest().authenticated()
             }
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)

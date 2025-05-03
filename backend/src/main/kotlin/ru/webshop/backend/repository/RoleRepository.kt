@@ -5,4 +5,5 @@ import ru.webshop.backend.entity.Role
 
 interface RoleRepository: JpaRepository<Role, Long> {
     fun existsByRoleName(name: String): Boolean
+    fun findRoleByRoleName(name: String): Role?
 }

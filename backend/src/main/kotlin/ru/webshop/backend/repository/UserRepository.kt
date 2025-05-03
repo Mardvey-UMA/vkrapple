@@ -7,12 +7,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface UserRepository: JpaRepository<User, Long> {
-    //@EntityGraph(attributePaths = ["roles"])
-    //fun findByTelegramId(telegramId: Long): User?
-
-    //@EntityGraph(attributePaths = ["roles"])
-    //fun existsByTelegramId(telegramId: Long): Boolean
-
     @Query("""
         SELECT u FROM User u 
         LEFT JOIN FETCH u.roles 
@@ -26,4 +20,7 @@ interface UserRepository: JpaRepository<User, Long> {
         WHERE u.telegramId = :telegramId
     """)
     fun existsByTelegramId(@Param("telegramId") telegramId: Long): Boolean
+
+    fun existsByLogin(login: String): Boolean
+    fun findByLogin(login: String): User?
 }

@@ -40,7 +40,6 @@ spring:
   application:
     name: backend
   public-urls:
-    #- '/api/**'
     - '/api/products/**'
     - '/v3/api-docs.yaml'
     - '/v3/api-docs/**'
@@ -80,7 +79,7 @@ spring:
         FAIL_ON_UNKNOWN_PROPERTIES: false
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: false
     properties:
       hibernate:
