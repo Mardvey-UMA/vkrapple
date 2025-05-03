@@ -1,5 +1,11 @@
-import { ProductPageResponse, ProductResponse } from '../types/product'
+import {
+	ElasticPage,
+	ProductDocument,
+	ProductPageResponse,
+	ProductResponse,
+} from '../types/product'
 import api from '../utils/api'
+import { mapDocToProduct } from '../utils/mappers'
 
 const buildSortParams = (sortOption?: string) => {
 	if (!sortOption) return undefined
@@ -46,19 +52,23 @@ export const ProductService = {
 	search: (
 		searchQuery: string,
 		page: number,
-		size: number = 20,
-		sort?: string
-	) =>
+		size: number = 20
+	): Promise<ProductPageResponse> =>
 		api
-			.get<ProductPageResponse>('/products/search', {
-				params: {
-					query: searchQuery,
-					page,
-					size,
-					sort: buildSortParams(sort),
-				},
+			.get<ElasticPage<ProductDocument>>('/products/search/elastic', {
+				params: { query: searchQuery, page, size },
 			})
-			.then(res => res.data),
+			.then(res => {
+				const data = res.data
+				const products = data.content.map(mapDocToProduct)
+
+				return {
+					products,
+					current_page: data.pageable.pageNumber,
+					total_pages: data.totalPages,
+					total_products: data.totalElements,
+				}
+			}),
 
 	searchWithFilters: (
 		categoryId: number,
