@@ -23,7 +23,7 @@ data class Role(
 
         // Роли
 
-        @ManyToMany(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], mappedBy = "roles")
+        @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
         @JsonIgnore
         private var users: MutableList<User> = mutableListOf(),
 )
