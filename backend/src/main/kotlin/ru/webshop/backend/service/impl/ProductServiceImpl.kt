@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 import ru.webshop.backend.dto.*
 import ru.webshop.backend.entity.Product
 import ru.webshop.backend.exception.GlobalExceptionHandler
+import ru.webshop.backend.repository.PhotoProductRepository
 import ru.webshop.backend.repository.ProductRepository
 import ru.webshop.backend.service.IdGeneratorService
 import ru.webshop.backend.service.interfaces.AttributeService
@@ -23,6 +24,7 @@ class ProductServiceImpl (
     private val attributeService: AttributeService,
     private val valueService: ValueService,
     private val idGeneratorService: IdGeneratorService,
+    private val photoProductRepository: PhotoProductRepository,
 ): ProductService {
     private val logger = LoggerFactory.getLogger(ProductServiceImpl::class.java)
     override fun getProduct(article: Long): ProductResponseDTO {
@@ -131,5 +133,20 @@ class ProductServiceImpl (
                 )
             }
         )
+    }
+
+    override fun deleteProduct(articleNumber: Long) {
+        val product = productRepository.findByArticleNumber(articleNumber)
+            ?: throw GlobalExceptionHandler.ProductNotFoundException("Product not found")
+
+        if (product.orderProducts.isNotEmpty()) {
+            throw IllegalStateException("Нельзя удалить товар – он уже фигурирует в заказах")
+        }
+
+        valueService.getValuesByProduct(product.id).forEach { valueService.deleteValue(it.id) }
+
+        product.photos.forEach { photoProductRepository.delete(it)}
+
+        productRepository.delete(product)
     }
 }

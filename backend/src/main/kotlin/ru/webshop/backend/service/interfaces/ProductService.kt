@@ -21,4 +21,5 @@ interface ProductService {
 
     fun getProductsByCategory(categoryId: Long, pageable: Pageable): ProductPageResponseDTO
 
+    fun deleteProduct(articleNumber: Long)
 }

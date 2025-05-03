@@ -20,4 +20,6 @@ interface ProductRepository : JpaRepository<Product, Long>, JpaSpecificationExec
     fun findByArticleNumber(articleNumber: Long): Product?
 
     fun existsByArticleNumber(articleNumber: Long): Boolean
+
+    fun deleteByArticleNumber(articleNumber: Long)
 }

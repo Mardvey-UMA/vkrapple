@@ -1,4 +1,4 @@
-package ru.webshop.backend.controller
+package ru.webshop.backend.controller.user
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -7,7 +7,6 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import ru.webshop.backend.dto.CartItemDTO
 import ru.webshop.backend.dto.WishListItemDTO
 import ru.webshop.backend.dto.WishListPageResponseDTO
 import ru.webshop.backend.service.interfaces.WishListService
