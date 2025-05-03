@@ -66,6 +66,7 @@ services:
       ELASTICSEARCH_PASSWORD: 'elastic_password'
     volumes:
       - ./conf/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./conf/products_template.json:/usr/share/logstash/templates/products_template.json
       - ./conf/postgresql-42.6.0.jar:/usr/share/logstash/postgresql-42.6.0.jar
     networks:
       - app-network
@@ -93,59 +94,66 @@ services:
     networks:
       - app-network
 
-  # Kibana
-  kibana:
-    image: kibana:8.17.1
-    container_name: kibana
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    environment:
-      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
-      ELASTICSEARCH_USERNAME: elastic
-      ELASTICSEARCH_PASSWORD: elastic_password
-    ports:
-      - '5601:5601'
-    networks:
-      - app-network
+  # # Kibana
+  # kibana:
+  #   image: kibana:8.17.1
+  #   container_name: kibana
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   environment:
+  #     ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+  #     ELASTICSEARCH_USERNAME: elastic
+  #     ELASTICSEARCH_PASSWORD: elastic_password
+  #   ports:
+  #     - '5601:5601'
+  #   networks:
+  #     - app-network
 
   #Telegram Bot
-  telegram-bot:
-    build:
-      context: ./tg_bot
-      dockerfile: Dockerfile
-    depends_on:
-      - backend
-      - postgres
-    environment:
-      DB_URL: postgresql://postgres:postgres@postgres:5432/goods_db
-    networks:
-      - app-network
+  # telegram-bot:
+  #   build:
+  #     context: ./tg_bot
+  #     dockerfile: Dockerfile
+  #   depends_on:
+  #     - backend
+  #     - postgres
+  #   environment:
+  #     DB_URL: postgresql://postgres:postgres@postgres:5432/goods_db
+  #   networks:
+  #     - app-network
 
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_proxy
-    ports:
-      - '80:80'
-      - '443:443'
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - /etc/letsencrypt:/etc/letsencrypt
-    depends_on:
-      - frontend
-      - backend
-    networks:
-      - app-network
+  # Frontend
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '3000:3000'
+  #   restart: always
+  #   networks:
+  #     - app-network
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - '3000:3000'
-    restart: always
-    networks:
-      - app-network
+  # # Reverse Proxy
+  # nginx:
+  #   image: nginx:alpine
+  #   container_name: nginx_proxy
+  #   ports:
+  #     - '80:80'
+  #     - '443:443'
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #     - /etc/letsencrypt:/etc/letsencrypt
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #   networks:
+  #     - app-network
+  #   healthcheck:
+  #     test: ['CMD-SHELL', 'nc -z localhost 80 && nc -z localhost 443 || exit 1']
+  #     interval: 30s
+  #     timeout: 5s
+  #     retries: 3
 
 volumes:
   postgres_data:

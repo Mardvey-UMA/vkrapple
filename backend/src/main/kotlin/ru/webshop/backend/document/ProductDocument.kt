@@ -13,8 +13,7 @@ data class ProductDocument(
     @Field(type = FieldType.Long)
     val id: Long? = null,
 
-    @field:JsonProperty("name")
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "ru_text", searchAnalyzer = "ru_text")
     val name: String? = null,
 
     @field:JsonProperty("articleNumber")
