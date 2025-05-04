@@ -10,15 +10,15 @@ export interface ProductCreateRequestDTO {
 	/** цена (любая валюта в backend – у нас число) */
 	price: number
 	/** остаток на складе */
-	balanceInStock: number
+	balance_in_stock: number
 	/** описание – опционально */
 	description?: string
 	/** ID категории (должна существовать) */
-	categoryId: number
+	category_id: number
 	/** карта: ID-атрибута → выбранное значение */
 	attributes: Record<string, string>
 	/** сервисные поля (можно 0) */
-	numberOfOrders: number
+	number_of_orders: number
 	rating: number
 }
 
