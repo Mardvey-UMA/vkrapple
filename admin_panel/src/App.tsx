@@ -2,6 +2,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthProvider'
 import { PrivateRoute } from './auth/PrivateRoute'
+
+import AdminLayout from './components/AdminLayout/AdminLayout'
 import AnalyticsPage from './pages/AnalyticsPage'
 import CategoriesPage from './pages/CategoriesPage'
 import CreateProductPage from './pages/CreateProductPage'
@@ -17,13 +19,20 @@ export default function App() {
 			<BrowserRouter>
 				<AuthProvider>
 					<Routes>
+						{/* публичный */}
 						<Route path='/login' element={<LoginPage />} />
+
+						{/* всё, что ниже – только для авторизованных */}
 						<Route element={<PrivateRoute />}>
-							<Route path='/*' element={<DashboardPage />} />
-							<Route path='categories' element={<CategoriesPage />} />
-							<Route path='products/new' element={<CreateProductPage />} />
-							<Route path='products/delete' element={<DeleteProductPage />} />
-							<Route path='analytics' element={<AnalyticsPage />} />
+							<Route element={<AdminLayout />}>
+								<Route index element={<DashboardPage />} />
+								<Route path='categories' element={<CategoriesPage />} />
+								<Route path='products'>
+									<Route path='new' element={<CreateProductPage />} />
+									<Route path='delete' element={<DeleteProductPage />} />
+								</Route>
+								<Route path='analytics' element={<AnalyticsPage />} />
+							</Route>
 						</Route>
 					</Routes>
 				</AuthProvider>
