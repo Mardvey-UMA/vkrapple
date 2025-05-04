@@ -1,3 +1,4 @@
+// src/pages/CreateProductPage.tsx
 import { PlusOutlined } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -14,21 +15,26 @@ import {
 	UploadFile,
 } from 'antd'
 import { RcFile } from 'antd/es/upload'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { CategoryService } from '../api/category'
 import {
 	useCreateProduct,
 	useUploadPhoto,
 } from '../hooks/admin/useAdminProducts'
 import { ProductCreateRequestDTO } from '../types/product'
+
 const { Title } = Typography
 
 export default function CreateProductPage() {
-	/* ─────────── загрузка категорий ─────────── */
+	/* ─────────── формы ─────────── */
+	const [form] = Form.useForm()
+
+	/* ─────────── категории (селект) ─────────── */
 	const { data: categoriesResp } = useQuery({
 		queryKey: ['categories'],
 		queryFn: CategoryService.getAll,
 	})
+
 	const categoriesOptions = useMemo(
 		() =>
 			categoriesResp
@@ -40,22 +46,18 @@ export default function CreateProductPage() {
 		[categoriesResp]
 	)
 
-	/* ─────────── реактивные атрибуты ─────────── */
-	const [selectedCategoryId, setSelectedCategoryId] = useState<number>()
-	const {
-		data: attrsResp,
-		refetch: refetchAttrs,
-		isFetching: attrsLoading,
-	} = useQuery({
-		queryKey: ['category-attrs', selectedCategoryId],
-		queryFn: () => CategoryService.getAttributes(selectedCategoryId!),
-		enabled: false,
-	})
-	useEffect(() => {
-		if (selectedCategoryId) refetchAttrs()
-	}, [selectedCategoryId, refetchAttrs])
+	/* ─────────── динамические атрибуты ─────────── */
+	/** текущее значение categoryId прямо из формы  */
+	const categoryId: number | undefined = Form.useWatch('categoryId', form)
 
-	/* ─────────── снимок файлов ─────────── */
+	const { data: attrsResp, isFetching: attrsLoading } = useQuery({
+		queryKey: ['category-attrs', categoryId],
+		queryFn: () => CategoryService.getAttributes(categoryId!), // ! безопасно: enabled гарантирует
+		enabled: !!categoryId,
+		staleTime: Infinity,
+	})
+
+	/* ─────────── файлы ─────────── */
 	const [fileList, setFileList] = useState<UploadFile<RcFile>[]>([])
 
 	const beforeUpload = (file: RcFile) => {
@@ -67,37 +69,38 @@ export default function CreateProductPage() {
 		return false // отменяем авто-загрузку
 	}
 
-	const removeFile = (file: UploadFile) => {
+	const removeFile = (file: UploadFile) =>
 		setFileList(prev => prev.filter(f => f.uid !== file.uid))
-	}
 
 	/* ─────────── мутации ─────────── */
 	const createMut = useCreateProduct()
 	const uploadMut = useUploadPhoto()
 
-	// src/pages/CreateProductPage.tsx
+	/* ─────────── submit ─────────── */
 	const onFinish = async (values: Record<string, unknown>) => {
 		try {
-			const attrMap: Record<string, string> = {}
+			/* мапа attrId → value */
+			const attributes: Record<string, string> = {}
 			attrsResp?.attributes.forEach(a => {
 				const v = values[`attr_${a.id}`] as string | undefined
-				if (v) attrMap[a.id.toString()] = v
+				if (v) attributes[a.id.toString()] = v
 			})
 
 			const dto: ProductCreateRequestDTO = {
 				name: values.name as string,
 				price: Number(values.price),
-				balanceInStock: Number(values.balance),
+				balance_in_stock: Number(values.balance),
 				description: values.description as string | undefined,
-				categoryId: selectedCategoryId!,
-				attributes: attrMap,
-				numberOfOrders: 0,
+				category_id: values.categoryId as number, // ← гарантированно валидный
+				attributes,
+				number_of_orders: 0,
 				rating: 0,
 			}
 
+			/* создаём товар */
 			const article = await createMut.mutateAsync(dto)
 
-			/* upload photos */
+			/* грузим фото (параллельно) */
 			await Promise.all(
 				fileList.map((f, i) =>
 					uploadMut.mutateAsync({
@@ -115,16 +118,15 @@ export default function CreateProductPage() {
 		}
 	}
 
-	const [form] = Form.useForm()
-
+	/* ─────────── UI ─────────── */
 	return (
 		<div style={{ padding: 24, maxWidth: 800 }}>
 			<Title level={3}>Новый товар</Title>
 
 			<Card>
 				<Form
-					layout='vertical'
 					form={form}
+					layout='vertical'
 					onFinish={onFinish}
 					disabled={createMut.isPending || uploadMut.isPending}
 				>
@@ -133,11 +135,7 @@ export default function CreateProductPage() {
 						label='Категория'
 						rules={[{ required: true, message: 'Выберите категорию' }]}
 					>
-						<Select
-							options={categoriesOptions}
-							onChange={val => setSelectedCategoryId(val)}
-							placeholder='—'
-						/>
+						<Select options={categoriesOptions} placeholder='—' />
 					</Form.Item>
 
 					<Form.Item
