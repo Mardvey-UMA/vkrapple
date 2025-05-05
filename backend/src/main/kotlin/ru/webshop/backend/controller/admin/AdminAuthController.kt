@@ -20,11 +20,11 @@ class AdminAuthController(
     private val jwtService: JwtService,
     private val jwtConfig: JwtConfig
 ) {
-
     data class LoginRequest(val login: String, val password: String)
 
     @PostMapping("/login")
     fun login(@RequestBody body: LoginRequest, response: HttpServletResponse): AuthResponseDTO {
+
         val authentication = authManager.authenticate(
             UsernamePasswordAuthenticationToken(body.login, body.password)
         )
