@@ -1,4 +1,7 @@
 package ru.webshop.backend.dto.admin
 
-class AttributeIdDTO {
-}
+data class AttributeIdDTO(
+    val id: Long,
+    val name: String,
+    val created: Boolean
+)

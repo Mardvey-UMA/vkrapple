@@ -30,6 +30,7 @@ import {
 } from '../hooks/admin/useAdminAnalytics'
 
 type Mode = 'summary' | 'product' | 'status'
+type ProductMetric = 'units' | 'revenue'
 
 const KPI_COLORS = ['#1890ff', '#13c2c2', '#ffc53d']
 const STATUS_COLORS = [
@@ -44,29 +45,41 @@ const STATUS_COLORS = [
 export default function AnalyticsPage() {
 	const [mode, setMode] = useState<Mode>('summary')
 	const [article, setArticle] = useState<number>()
+	const [productMetric, setProductMetric] = useState<ProductMetric>('units')
 
 	/* hooks */
 	const summaryQ = useSalesSummary()
 	const statusQ = useOrderStatus()
 	const productQ = useProductAnalytics(article)
+
 	const { error: summaryError } = summaryQ
 	const { error: statusError } = statusQ
 	const { error: productError } = productQ
+
 	useEffect(() => {
 		;[summaryError, statusError, productError]
 			.filter(Boolean)
 			.forEach(err => message.error((err as Error).message))
 	}, [summaryError, statusError, productError])
 
-	/* memoized chart data */
-	const summaryChartData = useMemo(
+	/* ------- Сводка: данные для графиков ------- */
+	const ordersUnitsChartData = useMemo(
 		() =>
 			summaryQ.data
 				? [
-						{ kpi: 'Заказы', value: summaryQ.data.total_orders },
-						{ kpi: 'Единицы', value: summaryQ.data.total_units_sold },
+						{ metric: 'Заказы', value: summaryQ.data.total_orders },
+						{ metric: 'Единицы', value: summaryQ.data.total_units_sold },
+				  ]
+				: [],
+		[summaryQ.data]
+	)
+
+	const revenueChartData = useMemo(
+		() =>
+			summaryQ.data
+				? [
 						{
-							kpi: 'Выручка, ₽',
+							metric: 'Выручка, ₽',
 							value: Number(summaryQ.data.total_sales_amount),
 						},
 				  ]
@@ -74,27 +87,27 @@ export default function AnalyticsPage() {
 		[summaryQ.data]
 	)
 
-	const productChartData = useMemo(
-		() =>
-			productQ.data
-				? [
-						{ type: 'Шт', value: productQ.data.total_units_sold },
-						{ type: '₽', value: Number(productQ.data.total_sales_amount) },
-				  ]
-				: [],
-		[productQ.data]
-	)
+	/* ------- По товару: данные для графика ------- */
+	const productChartData = useMemo(() => {
+		if (!productQ.data) return []
+		return productMetric === 'units'
+			? [{ type: 'Шт', value: productQ.data.total_units_sold }]
+			: [
+					{
+						type: '₽',
+						value: Number(productQ.data.total_sales_amount),
+					},
+			  ]
+	}, [productQ.data, productMetric])
 
-	/**
-	 * Обратите внимание: status_counts может отсутствовать в ответе бекенда.
-	 * Поэтому используем safe‑guard с nullish‑coalescing, чтобы исключить
-	 * «can't convert undefined to object» при Object.entries().
-	 */
+	/* ------- Статусы ------- */
 	const status_counts = statusQ.data?.status_counts ?? {}
-
 	const statusChartData = useMemo(
 		() =>
-			Object.entries(status_counts).map(([status, cnt]) => ({ status, cnt })),
+			Object.entries(status_counts).map(([status, cnt]) => ({
+				status,
+				cnt,
+			})),
 		[status_counts]
 	)
 
@@ -114,7 +127,7 @@ export default function AnalyticsPage() {
 				]}
 			/>
 
-			{/* ------- Сводка ------- */}
+			{/* ------- СВОДКА ------- */}
 			{mode === 'summary' &&
 				(summaryQ.isLoading ? (
 					<Spin />
@@ -139,37 +152,70 @@ export default function AnalyticsPage() {
 							</Col>
 						</Row>
 
-						<Card title='Сравнение ключевых метрик'>
-							<ResponsiveContainer width='100%' height={300}>
-								<BarChart data={summaryChartData}>
-									<XAxis dataKey='kpi' tick={{ fontSize: 12 }} />
-									<YAxis allowDecimals={false} />
-									<Tooltip />
-									<Bar dataKey='value'>
-										{summaryChartData.map((_, idx) => (
-											<Cell
-												key={`cell-${idx}`}
-												fill={KPI_COLORS[idx % KPI_COLORS.length]}
-											/>
-										))}
-									</Bar>
-								</BarChart>
-							</ResponsiveContainer>
-						</Card>
+						<Row gutter={16}>
+							{/* Заказы + Единицы */}
+							<Col xs={24} md={12}>
+								<Card title='Заказы и единицы'>
+									<ResponsiveContainer width='100%' height={260}>
+										<BarChart data={ordersUnitsChartData}>
+											<XAxis dataKey='metric' tick={{ fontSize: 12 }} />
+											<YAxis allowDecimals={false} />
+											<Tooltip />
+											<Bar dataKey='value'>
+												{ordersUnitsChartData.map((_, idx) => (
+													<Cell
+														key={`cell-ou-${idx}`}
+														fill={KPI_COLORS[idx % KPI_COLORS.length]}
+													/>
+												))}
+											</Bar>
+										</BarChart>
+									</ResponsiveContainer>
+								</Card>
+							</Col>
+
+							{/* Выручка */}
+							<Col xs={24} md={12}>
+								<Card title='Выручка, ₽'>
+									<ResponsiveContainer width='100%' height={260}>
+										<BarChart data={revenueChartData}>
+											<XAxis dataKey='metric' tick={{ fontSize: 12 }} />
+											<YAxis allowDecimals={false} />
+											<Tooltip />
+											<Bar dataKey='value' fill={KPI_COLORS[2]}>
+												<Cell key='cell-revenue' fill={KPI_COLORS[2]} />
+											</Bar>
+										</BarChart>
+									</ResponsiveContainer>
+								</Card>
+							</Col>
+						</Row>
 					</>
 				) : (
 					<Empty />
 				))}
 
-			{/* ------- По товару ------- */}
+			{/* ------- ПО ТОВАРУ ------- */}
 			{mode === 'product' && (
 				<>
-					<InputNumber
-						placeholder='Артикул товара'
-						value={article}
-						onChange={val => setArticle(val ?? undefined)}
-						style={{ width: 200 }}
-					/>
+					<Space size='middle'>
+						<InputNumber
+							placeholder='Артикул товара'
+							value={article}
+							onChange={val => setArticle(val ?? undefined)}
+							style={{ width: 200 }}
+						/>
+
+						{/* переключатель ₽ / Шт */}
+						<Segmented
+							value={productMetric}
+							onChange={val => setProductMetric(val as ProductMetric)}
+							options={[
+								{ label: 'Шт', value: 'units' },
+								{ label: '₽', value: 'revenue' },
+							]}
+						/>
+					</Space>
 
 					{productQ.isFetching ? (
 						<Spin />
@@ -190,7 +236,7 @@ export default function AnalyticsPage() {
 				</>
 			)}
 
-			{/* ------- Статусы ------- */}
+			{/* ------- СТАТУСЫ ------- */}
 			{mode === 'status' &&
 				(statusQ.isLoading ? (
 					<Spin />
@@ -209,7 +255,7 @@ export default function AnalyticsPage() {
 								>
 									{statusChartData.map((_, idx) => (
 										<Cell
-											key={`cell-${idx}`}
+											key={`cell-status-${idx}`}
 											fill={STATUS_COLORS[idx % STATUS_COLORS.length]}
 										/>
 									))}

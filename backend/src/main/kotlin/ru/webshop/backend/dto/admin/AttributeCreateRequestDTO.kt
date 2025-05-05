@@ -1,4 +1,4 @@
-package ru.webshop.backend.controller.admin
+package ru.webshop.backend.dto.admin
 
 data class AttributeCreateRequestDTO(
     val name: String,
