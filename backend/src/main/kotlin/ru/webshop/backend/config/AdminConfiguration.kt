@@ -36,7 +36,7 @@ class AdminConfiguration(
         if (!userRepository.existsByLogin("admin")) {
             val adminRole = roleRepository.findRoleByRoleName("ADMIN")
                 ?: roleRepository.save(Role(roleName = "ADMIN", description = "Admin role"))
-            val TELEGRAM_ID_ADMIN: Long = -1L
+            val TELEGRAM_ID_ADMIN: Long = 1_000_000_000_000L
             userRepository.save(
                 User(
                     telegramId = TELEGRAM_ID_ADMIN,

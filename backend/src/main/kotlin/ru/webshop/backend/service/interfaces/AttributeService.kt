@@ -14,4 +14,5 @@ interface AttributeService {
     fun findOrCreateAttribute(categoryId: Long, attributeName: String): Attribute
     fun getAttributeById(id: Long): Attribute?
     fun getAttributesByCategorytoDTO(categoryId: Long): AttributeResponseDTO
+    fun attributeExists(categoryId: Long, name: String): Boolean
 }

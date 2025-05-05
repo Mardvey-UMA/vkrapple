@@ -2,16 +2,13 @@ package ru.webshop.backend.service.impl
 
 import org.springframework.stereotype.Service
 import ru.webshop.backend.dto.AttributeResponseDTO
-import ru.webshop.backend.dto.CategoryResponseDTO
 import ru.webshop.backend.entity.Attribute
-import ru.webshop.backend.entity.Category
 import ru.webshop.backend.entity.Product
 import ru.webshop.backend.entity.Value
 import ru.webshop.backend.repository.AttributeRepository
 import ru.webshop.backend.repository.CategoryRepository
 import ru.webshop.backend.repository.ValueRepository
 import ru.webshop.backend.service.interfaces.AttributeService
-import java.util.*
 import kotlin.NoSuchElementException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -88,4 +85,7 @@ class AttributeServiceImpl (
         return attributeRepository.findAttributeById(id)
             ?: throw NoSuchElementException("Attribute not found")
     }
+
+    override fun attributeExists(categoryId: Long, name: String): Boolean =
+        attributeRepository.existsByAttributeNameAndCategoryId(name, categoryId)
 }

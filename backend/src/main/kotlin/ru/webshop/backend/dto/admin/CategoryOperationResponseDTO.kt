@@ -1,4 +1,7 @@
 package ru.webshop.backend.dto.admin
 
-class CategoryOperationResponseDTO {
-}
+data class CategoryOperationResponseDTO(
+    val categoryId: Long,
+    val categoryCreated: Boolean,
+    val attributes: List<AttributeIdDTO>
+)
