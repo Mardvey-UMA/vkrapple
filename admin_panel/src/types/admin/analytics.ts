@@ -12,24 +12,24 @@ export type OrderStatus =
 
 export interface SalesSummaryDTO {
 	/** оформленных (НЕ отменённых) заказов */
-	totalOrders: number
+	total_orders: number
 	/** сколько единиц товара продано в сумме */
-	totalUnitsSold: number
+	total_units_sold: number
 	/** итоговая выручка (decimal на backend, число у нас) */
-	totalSalesAmount: number
+	total_sales_amount: number
 }
 
 /* ───────────────────── ProductSalesDTO ──────────────────── */
 
 export interface ProductSalesDTO {
 	/** артикул */
-	articleNumber: number
+	article_number: number
 	/** название */
-	productName: string
+	product_name: string
 	/** сколько штук продано */
-	totalUnitsSold: number
+	total_units_sold: number
 	/** выручка по данному товару */
-	totalSalesAmount: number
+	total_sales_amount: number
 }
 
 /* ────────────────── OrderStatusAnalyticsDTO ─────────────── */
@@ -39,5 +39,5 @@ export interface OrderStatusAnalyticsDTO {
 	 * карта статус ⇒ количество.
 	 * пример: { IN_PROGRESS: 45, PAID: 32, CANCELLED: 8 }
 	 */
-	statusCounts: Record<OrderStatus, number>
+	status_counts: Record<OrderStatus, number>
 }
