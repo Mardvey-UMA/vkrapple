@@ -27,7 +27,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-
+    implementation("org.springframework:spring-test")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation ("org.springframework.boot:spring-boot-configuration-processor")
@@ -36,10 +36,12 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
 
+    implementation("org.flywaydb:flyway-core:10.14.0")
+    runtimeOnly("org.postgresql:postgresql:42.7.3")
     // S3
     implementation("software.amazon.awssdk:s3:2.20.0")
 
-    runtimeOnly("org.postgresql:postgresql")
+    // runtimeOnly("org.postgresql:postgresql")
 
     annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.4.Final")
 

@@ -21,15 +21,12 @@ class PhotoUploadServiceImpl(
     private val reviewRepository: ReviewRepository,
 ) : PhotoUploadService {
 
-    // Загрузить фотку продукта по артиклю продукта
     override fun uploadPhotoForProduct(articleNumber: Long, file: MultipartFile, indexNumber: Int): String {
         
         val product = productRepository.findByArticleNumber(articleNumber)
             ?: throw GlobalExceptionHandler.ProductNotFoundException(articleNumber.toString())
 
         val objectKey = "${articleNumber}/product/photo_$indexNumber"
-
-        // TODO (Добавить логику для порядка фото)
 
         val photoUrl = photoStorageService.uploadPhoto(
             objectKey = objectKey,
@@ -61,8 +58,6 @@ class PhotoUploadServiceImpl(
             ?: throw IllegalArgumentException("Review with id $reviewId not found")
 
         val objectKey = "${review.product.articleNumber}/review/photo_$indexNumber"
-
-        // TODO (Добавить логику для порядка фото)
 
         val photoUrl = photoStorageService.uploadPhoto(
             objectKey = objectKey,

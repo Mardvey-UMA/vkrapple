@@ -11,7 +11,11 @@ class CorsConfig {
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
-            allowedOrigins = listOf("https://ssushop.ru", "https://www.ssushop.ru", "https://frontend.localhost")
+            allowedOrigins = listOf(
+                "https://webshopvkr2.duckdns.org",
+                "https://admin-webshopvkr2.duckdns.org",
+                "https://api-webshopvkr2.duckdns.org"
+            )
             allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
             allowedHeaders = listOf("*")
             exposedHeaders = listOf("X-Telegram-User-Id")

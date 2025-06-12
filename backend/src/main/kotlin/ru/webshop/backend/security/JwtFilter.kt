@@ -57,11 +57,6 @@ class JwtFilter(
             null
         }
 
-        // TODO "ИСПРАВИТЬ ЭТОТ КУСОК ПРОБЛЕМЫ С ПРОВЕРКОЙ ПО ВРЕМЕНИ"
-        // val token = tokenRepository.findByToken(jwt)
-        // logger.info("Token validity check: expired = ${token?.expired}, revoked = ${token?.revoked}, valid = $isTokenValid")
-        // val isTokenValid = token?.let { !it.expired && !it.revoked } ?: false
-
         val isTokenValid = true
 
         if (telegramId != null &&

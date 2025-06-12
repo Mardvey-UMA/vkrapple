@@ -9,7 +9,6 @@ class ElasticsearchConfig {
     fun elasticsearchCustomConversions(): ElasticsearchCustomConversions {
         return ElasticsearchCustomConversions(
             listOf(
-                // Конвертер для LocalDateTime, если используется
                 Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE,
                 Jsr310Converters.DateToLocalDateTimeConverter.INSTANCE
             )
