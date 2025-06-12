@@ -21,19 +21,19 @@
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 
+// vite.config.js  (клиент)
 export default defineConfig({
 	plugins: [react()],
 	server: {
 		host: '0.0.0.0',
 		port: 5173,
 		strictPort: true,
-		allowedHosts: ['frontend.localhost'],
-
+		allowedHosts: ['webshopvkr2.duckdns.org'],
 		proxy: {
 			'/api': {
-				target: 'https://backend.localhost',
+				target: 'https://api-webshopvkr2.duckdns.org',
 				changeOrigin: true,
-				secure: false,
+				secure: true,
 			},
 		},
 	},

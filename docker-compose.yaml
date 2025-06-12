@@ -71,44 +71,28 @@ services:
     networks:
       - app-network
 
-  # # Backend
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   restart: unless-stopped
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   environment:
-  #     SPRING_DATASOURCE_URL: jdbc:postgresql://goods_db:5432/goods_db
-  #     SPRING_DATASOURCE_USERNAME: postgres
-  #     SPRING_DATASOURCE_PASSWORD: postgres
-  #     SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
-  #     SPRING_ELASTICSEARCH_USERNAME: elastic
-  #     SPRING_ELASTICSEARCH_PASSWORD: elastic_password
-  #   ports:
-  #     - '8080:8080'
-  #   networks:
-  #     - app-network
-
-  # # Kibana
-  # kibana:
-  #   image: kibana:8.17.1
-  #   container_name: kibana
-  #   depends_on:
-  #     elasticsearch:
-  #       condition: service_healthy
-  #   environment:
-  #     ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
-  #     ELASTICSEARCH_USERNAME: elastic
-  #     ELASTICSEARCH_PASSWORD: elastic_password
-  #   ports:
-  #     - '5601:5601'
-  #   networks:
-  #     - app-network
+  # Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://goods_db:5432/goods_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_ELASTICSEARCH_URIS: http://elasticsearch:9200
+      SPRING_ELASTICSEARCH_USERNAME: elastic
+      SPRING_ELASTICSEARCH_PASSWORD: elastic_password
+    ports:
+      - '8080:8080'
+    networks:
+      - app-network
 
   # Telegram Bot
   telegram-bot:
@@ -124,40 +108,41 @@ services:
       - app-network
 
   # Frontend
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - '3000:3000'
-  #   restart: always
-  #   networks:
-  #     - app-network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    restart: always
+    networks:
+      - app-network
 
-  # # Reverse Proxy
-  # nginx:
-  #   image: nginx:alpine
-  #   container_name: nginx_proxy
-  #   ports:
-  #     - '80:80'
-  #     - '443:443'
-  #   volumes:
-  #     - ./nginx/conf.d:/etc/nginx/conf.d
-  #     - /etc/letsencrypt:/etc/letsencrypt
-  #   depends_on:
-  #     - frontend
-  #     - backend
-  #   networks:
-  #     - app-network
-  #   healthcheck:
-  #     test: ['CMD-SHELL', 'nc -z localhost 80 && nc -z localhost 443 || exit 1']
-  #     interval: 30s
-  #     timeout: 5s
-  #     retries: 3
+  # Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_proxy
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+    healthcheck:
+      test: ['CMD-SHELL', 'nc -z localhost 80 && nc -z localhost 443 || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 volumes:
   postgres_data:
   elasticsearch_data:
+  letsencrypt:
 
 networks:
   app-network:
