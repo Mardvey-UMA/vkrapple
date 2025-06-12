@@ -12,9 +12,8 @@ class CorsConfig {
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration().apply {
             allowedOrigins = listOf(
-                "https://webshopvkr2.duckdns.org",
-                "https://admin-webshopvkr2.duckdns.org",
-                "https://api-webshopvkr2.duckdns.org"
+                "https://webshop.online",
+                "https://frontend"
             )
             allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
             allowedHeaders = listOf("*")

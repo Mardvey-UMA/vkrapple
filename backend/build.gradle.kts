@@ -6,6 +6,11 @@ plugins {
     kotlin("plugin.jpa") version "1.9.25"
 }
 
+tasks.jar {
+    archiveFileName.set("app.jar")
+}
+
+
 group = "ru.webshop"
 version = "0.0.1-SNAPSHOT"
 
