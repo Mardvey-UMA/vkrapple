@@ -13,7 +13,6 @@ RUN gradle build --no-daemon -x test
 
 RUN ls /app/build/libs/
 
-
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 #COPY --from=build /app/build/libs/*.jar app.jar
